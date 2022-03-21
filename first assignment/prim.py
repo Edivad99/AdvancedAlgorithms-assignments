@@ -49,11 +49,17 @@ class Graph:
         assert int(vertices) == len(self.V), f"The list of vertices has a different size compared to the number read from file ({int(vertices)}!={len(self.V)})"
         assert int(edges) == len(self.E), f"The list of edges has a different size compared to the number read from file ({int(edges)}!={len(self.E)})"
 
-def Prim(G, s):
+def Prim(G: Graph, s: Vertex):
     """G is the graph, s is the starting node"""
+    for key, vertex in G.V.items():
+        vertex.key = float('+inf')
+        vertex.parent = None
+    s.key = 0
 
 graph = Graph()
 #graph.load_from_file('mst_dataset/input_random_01_10.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')
 graph.load_from_file('mst_dataset/input_random_68_100000.txt')
 
+starting_node = graph.V['1']
+Prim(graph, starting_node)

@@ -8,6 +8,7 @@ class Vertex:
         self.key = key
         self.parent = parent
         self.vertices_adjacent: List[Vertex]= []
+        self.visited = False
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.name == other.name
@@ -38,6 +39,8 @@ class Graph:
         return new_vertex
 
     def _add_edge(self, new_edge: Edge) -> None:
+        if new_edge.u == new_edge.v:
+            print(f"**SELF LOOP DETECTED (Vertex: {new_edge.u.name})**")
         self.E[(new_edge.u.name, new_edge.v.name)] = new_edge
 
     def get_weight(self, u: Vertex, v: Vertex) -> int:
@@ -70,27 +73,29 @@ def Prim(G: Graph, s: Vertex):
         vertex.key = float('+inf')
         vertex.parent = None
     s.key = 0
-    vertex_heap = list(G.V.values())
-    heapq.heapify(vertex_heap)
 
-    bar = Bar('Processing', max=len(vertex_heap), suffix='%(index)d/%(max)d - ETA: %(eta)ds')
+    vertex_heap = [s]
+    #heapq.heapify(vertex_heap)
+
+    bar = Bar('Processing', max=len(G.V.values()), suffix='%(index)d/%(max)d - ETA: %(eta)ds')
     while len(vertex_heap) != 0:
+        print([x.name for x in vertex_heap])
         u: Vertex = heapq.heappop(vertex_heap)
-        # print(f"Estratto vertice: {u.name}")
+        u.visited = True
+        #print(f"Estratto vertice: {u.name}")
         for v in u.vertices_adjacent:
             weight = G.get_weight(u,v)
-            if vertex_heap.count(v) == 1 and weight < v.key:
-                vertex_heap.remove(v)
+            if not v.visited and weight < v.key:
                 v.key = weight
                 v.parent = u
+                #v.visited = True
                 heapq.heappush(vertex_heap, v)
-                #heapq._siftdown(vertex_heap, 0, vertex_heap.index(v))
-        bar.next()
-    bar.finish()
+        #bar.next()
+    #bar.finish()
 
 
 graph = Graph()
-graph.load_from_file('mst_dataset/input_random_02_10.txt')
+graph.load_from_file('mst_dataset/input_random_03_10.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')
 #graph.load_from_file('mst_dataset/input_random_53_20000.txt')
 #graph.load_from_file('mst_dataset/input_random_68_100000.txt')
@@ -101,8 +106,8 @@ s = perf_counter_ns()
 Prim(graph, starting_node)
 f = perf_counter_ns()
 print(f"Time: {f-s}")
-sum = 0
+
+sum_result = sum(x.key for x in graph.V.values())
+print(f"MSP: {sum_result}")
 for x in graph.V.values():
-    sum += x.key
-    # print(f"Nodo: {x.name}, parent: {x.parent.name if x.parent else x.name}")
-print(f"MSP: {sum}")
+    print(f"Nodo: {x.name}, parent: {x.parent.name if x.parent else x.name}")

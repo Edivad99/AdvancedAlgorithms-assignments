@@ -9,6 +9,7 @@ class Vertex:
         self.parent = parent
         self.vertices_adjacent: List[Vertex]= []
         self.visited = False
+        self.inserted=False
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.name == other.name
@@ -51,6 +52,8 @@ class Graph:
         raise Exception("NOT FOUND")
 
     def load_from_file(self, file_path: str) -> None:
+        self.E.clear()
+        self.V.clear()
         with open(file_path, 'r') as file:
             vertices, edges = file.readline().split(' ')
             remain_lines = file.readlines()
@@ -75,11 +78,10 @@ def Prim(G: Graph, s: Vertex):
     s.key = 0
 
     vertex_heap = [s]
-    #heapq.heapify(vertex_heap)
 
     bar = Bar('Processing', max=len(G.V.values()), suffix='%(index)d/%(max)d - ETA: %(eta)ds')
     while len(vertex_heap) != 0:
-        print([x.name for x in vertex_heap])
+        #print([x.name for x in vertex_heap])
         u: Vertex = heapq.heappop(vertex_heap)
         u.visited = True
         #print(f"Estratto vertice: {u.name}")
@@ -88,10 +90,11 @@ def Prim(G: Graph, s: Vertex):
             if not v.visited and weight < v.key:
                 v.key = weight
                 v.parent = u
-                #v.visited = True
-                heapq.heappush(vertex_heap, v)
-        #bar.next()
-    #bar.finish()
+                if not v.inserted:
+                    v.inserted = True
+                    heapq.heappush(vertex_heap, v)
+        bar.next()
+    bar.finish()
 
 
 graph = Graph()

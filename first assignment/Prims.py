@@ -83,6 +83,8 @@ def Prim(G: Graph, s: Vertex):
     while len(vertex_heap) != 0:
         #print([x.name for x in vertex_heap])
         u: Vertex = heapq.heappop(vertex_heap)
+        #if u.visited:
+        #    continue
         u.visited = True
         #print(f"Estratto vertice: {u.name}")
         for v in u.vertices_adjacent:
@@ -101,7 +103,7 @@ graph = Graph()
 graph.load_from_file('mst_dataset/input_random_05_20.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')
 #graph.load_from_file('mst_dataset/input_random_53_20000.txt')
-#graph.load_from_file('mst_dataset/input_random_68_100000.txt')
+graph.load_from_file('mst_dataset/input_random_68_100000.txt')
 
 starting_node = graph.V['1']
 from time import perf_counter_ns

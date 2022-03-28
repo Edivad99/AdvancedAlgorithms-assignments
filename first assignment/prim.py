@@ -78,6 +78,7 @@ def Prim(G: Graph, s: Vertex):
     s.key = 0
 
     vertex_heap = [s]
+    s.inserted = True
 
     bar = Bar('Processing', max=len(G.V.values()), suffix='%(index)d/%(max)d - ETA: %(eta)ds')
     while len(vertex_heap) != 0:

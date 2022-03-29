@@ -10,7 +10,7 @@ def Kruskal(G: Graph):
 
     A = list()
     #print([(x.u.name,x.v.name) for x in temp])
-    bar = Bar('Processing', max=len(temp), suffix='%(index)d/%(max)d - ETA: %(eta)ds')
+    bar = Bar('Processing', max=len(temp), suffix='%(index)d/%(max)d - ETA: %(eta_td)s, AVG: %(avg)s')
     for edge in temp:
         if not is_cyclic(A, edge):
             #print(f"Aggiungo {edge.u.name}-{edge.v.name}")
@@ -43,8 +43,8 @@ def is_cyclic(edges: List[Edge], new_edge: Edge):
     return False
 
 graph = Graph()
-#graph.load_from_file('mst_dataset/input_random_17_1000.txt')
-graph.load_from_file('mst_dataset/input_random_03_10.txt')
+graph.load_from_file('mst_dataset/input_random_33_1000.txt')
+#graph.load_from_file('mst_dataset/input_random_03_10.txt')
 #graph.load_from_file('mst_dataset/input_random_05_20.txt')
 #graph.load_from_file('mst_dataset/input_random_11_40.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')

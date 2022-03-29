@@ -92,7 +92,8 @@ def Prim(G: Graph, s: Vertex):
             if not v.visited and weight < v.key:
                 v.key = weight
                 v.parent = u
-                vertex_heap.remove(v)
+                #vertex_heap.remove(v)
+                heapq.heapify(vertex_heap)
                 heapq.heappush(vertex_heap, v)
         bar.next()
     bar.finish()
@@ -100,16 +101,15 @@ def Prim(G: Graph, s: Vertex):
 
 graph = Graph()
 #graph.load_from_file('mst_dataset/input_random_03_10.txt')
-graph.load_from_file('mst_dataset/input_random_05_20.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')
-#graph.load_from_file('mst_dataset/input_random_53_20000.txt')
-graph.load_from_file('mst_dataset/input_random_68_100000.txt')
+graph.load_from_file('mst_dataset/input_random_53_20000.txt')
+#graph.load_from_file('mst_dataset/input_random_68_100000.txt')
 
 starting_node = graph.V['1']
-from time import perf_counter_ns
-s = perf_counter_ns()
+from time import perf_counter
+s = perf_counter()
 Prim(graph, starting_node)
-f = perf_counter_ns()
+f = perf_counter()
 print(f"Time: {f-s}")
 
 sum_result = sum(x.key for x in graph.V.values())

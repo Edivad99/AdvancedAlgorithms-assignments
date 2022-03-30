@@ -12,27 +12,21 @@ def Prim(G: Graph, s: Vertex):
 
     vertex_heap = [s]
 
-    #bar = Bar('Processing', max=len(G.V.values()), suffix='%(index)d/%(max)d - ETA: %(eta)ds')
+    bar = Bar('Processing', max=len(G.V.values()), suffix='%(index)d/%(max)d - ETA: %(eta)ds')
     while len(vertex_heap) != 0:
-        '''stampa = ''
-        for x in vertex_heap:
-            stampa = stampa + str(x.key) + ' '
-        print(stampa.strip())'''
         u: Vertex = heapq.heappop(vertex_heap)
         if u.visited:
-            #bar.next()
+            bar.next()
             continue
         u.visited = True
-        print(f"Estratto vertice: {u.name}, key: {u.key}")
-        print("------");
         for v in u.vertices_adjacent:
             weight = G.get_weight(u,v)
             if not v.visited and weight < v.key:
                 v.key = weight
                 v.parent = u
                 heapq.heappush(vertex_heap, v)
-        #bar.next()
-    #bar.finish()
+        bar.next()
+    bar.finish()
 
 
 graph = Graph()

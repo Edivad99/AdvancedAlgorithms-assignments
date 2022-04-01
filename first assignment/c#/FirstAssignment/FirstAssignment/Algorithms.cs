@@ -74,5 +74,25 @@ public static class Algorithms
             if (entry.Value == oldpid)
                 vertices[entry.Key] = newpid;
     }
+
+    public static List<Edge> KruskalUnionFind(Graph G)
+    {
+        var edges = G.E.Values.ToList();
+        edges.Sort();
+
+        var U = new UnionFind<Vertex>();
+        G.V.Values.ToList().ForEach(v => U.MakeSet(v));
+
+        var A = new List<Edge>();
+        foreach (var edge in edges)
+        {
+            if(U.FindSet(edge.U) != U.FindSet(edge.V))
+            {
+                A.Add(edge);
+                U.Union(edge.U, edge.V);
+            }
+        }
+        return A;
+    }
 }
 

@@ -36,26 +36,34 @@ public static class Testing
     {
         var files = Directory.EnumerateFiles(folderPath);
 
-        var csv = new ConcurrentBag<string>();
-
-        Parallel.ForEach(files, async file =>
+        var csv = new List<string>()
+        {
+            "file;vertices;edges;MST;time (ms)\n"
+        };
+        foreach(var file in files)
         {
             var graph = new Graph();
             await graph.LoadFromFileAsync(file);
+            int edgesCount = graph.E.Count;
+            int verticesCount = graph.V.Count;
 
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-            var edges = Algorithms.Kruskal(graph);
-            stopWatch.Stop();
+            if (verticesCount < 4000)
+            {
+                Console.WriteLine($"Start {verticesCount}-{edgesCount}");
 
-            int sum = edges.Sum(x => x.Weigth);
-            var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds}\n";
-            csv.Add(res);
-            Console.WriteLine("{0} on {1}", res, Environment.CurrentManagedThreadId);
-        });
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
+                var edges = Algorithms.Kruskal(graph);
+                stopWatch.Stop();
 
-        string raw_csv = "file;vertices;edges;MST;time\n";
+                int sum = edges.Sum(x => x.Weigth);
+                var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds}\n";
+                csv.Add(res);
+                Console.WriteLine($"Finish {verticesCount}-{edgesCount}");
+            }
+        };
 
+        var raw_csv = "";
         foreach (var raw in csv)
         {
             raw_csv += raw;

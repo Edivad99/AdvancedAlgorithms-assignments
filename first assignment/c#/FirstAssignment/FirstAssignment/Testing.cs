@@ -5,31 +5,29 @@ namespace FirstAssignment;
 
 public static class Testing
 {
-    public static TimeSpan Test(Action algorithm)
-    {
-        var stopWatch = new Stopwatch();
-        stopWatch.Start();
-        algorithm.Invoke();
-        stopWatch.Stop();
-        return stopWatch.Elapsed;
-    }
-
     public async static void ExportPrimCSV(string folderPath)
     {
-        var csv = "file;vertices;edges;MST;time\n";
+        var csv = new List<string>()
+        {
+            "file;vertices;edges;MST;time (ms)"
+        };
+
         foreach (var file in Directory.EnumerateFiles(folderPath))
         {
             var graph = new Graph();
             await graph.LoadFromFileAsync(file);
             var startingNode = graph.V["1"];
-            var result = Test(() => Algorithms.Prim(graph, startingNode));
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            Algorithms.Prim(graph, startingNode);
+            stopWatch.Stop();
 
             int sum = graph.V.Sum(x => x.Value.Key);
-            var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{result.TotalMilliseconds}";
-            Console.WriteLine(res);
-            csv += res + "\n";
+            var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
+            csv.Add(res);
         }
-        await File.WriteAllTextAsync("result.csv", csv);
+        var raw_csv = string.Join("\n", csv);
+        await File.WriteAllTextAsync("result.csv", raw_csv);
     }
 
     public async static void ExportKruskalCSV(string folderPath)
@@ -38,7 +36,7 @@ public static class Testing
 
         var csv = new List<string>()
         {
-            "file;vertices;edges;MST;time (ms)\n"
+            "file;vertices;edges;MST;time (ms)"
         };
         foreach(var file in files)
         {
@@ -47,7 +45,7 @@ public static class Testing
             int edgesCount = graph.E.Count;
             int verticesCount = graph.V.Count;
 
-            if (verticesCount < 4000)
+            if (verticesCount == 4000)
             {
                 Console.WriteLine($"Start {verticesCount}-{edgesCount}");
 
@@ -57,19 +55,45 @@ public static class Testing
                 stopWatch.Stop();
 
                 int sum = edges.Sum(x => x.Weigth);
-                var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds}\n";
+                var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
                 csv.Add(res);
                 Console.WriteLine($"Finish {verticesCount}-{edgesCount}");
             }
         };
 
-        var raw_csv = "";
-        foreach (var raw in csv)
-        {
-            raw_csv += raw;
-        }
+        var raw_csv = string.Join("\n", csv);
+        await File.WriteAllTextAsync("result_kruskal_4000.csv", raw_csv);
+    }
 
-        await File.WriteAllTextAsync("result_kruskal.csv", raw_csv);
+    public async static void ExportKruskalUFCSV(string folderPath)
+    {
+        var files = Directory.EnumerateFiles(folderPath);
+
+        var csv = new List<string>()
+        {
+            "file;vertices;edges;MST;time (ms)"
+        };
+        foreach (var file in files)
+        {
+            var graph = new Graph();
+            await graph.LoadFromFileAsync(file);
+            int edgesCount = graph.E.Count;
+            int verticesCount = graph.V.Count;
+            Console.WriteLine($"Start {verticesCount}-{edgesCount}");
+
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var edges = Algorithms.KruskalUnionFind(graph);
+            stopWatch.Stop();
+
+            int sum = edges.Sum(x => x.Weigth);
+            var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
+            csv.Add(res);
+            Console.WriteLine($"Finish {verticesCount}-{edgesCount}");
+        };
+
+        var raw_csv = string.Join("\n", csv);
+        await File.WriteAllTextAsync("result_kruskal_union_find.csv", raw_csv);
     }
 }
 

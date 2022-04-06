@@ -19,9 +19,18 @@ public class Graph
 		return newVertex;
 	}
 
-	private void AddEdge(Edge newEdge)
+	public void AddEdge(Edge newEdge)
 	{
 		E.Add((newEdge.U.Name, newEdge.V.Name), newEdge);
+		newEdge.U.AddIncidentEdge(newEdge);
+		newEdge.V.AddIncidentEdge(newEdge);
+	}
+
+	public void RemoveEdge(Edge removeEdge)
+	{
+		E.Remove((removeEdge.U.Name, removeEdge.V.Name));
+		removeEdge.U.RemoveIncidentEdge(removeEdge);
+		removeEdge.V.RemoveIncidentEdge(removeEdge);
 	}
 
 	public int GetWeight(Vertex u, Vertex v)

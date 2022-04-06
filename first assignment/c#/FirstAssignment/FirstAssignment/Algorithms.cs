@@ -18,7 +18,7 @@ public static class Algorithms
             Vertex u = vertexHeap.Dequeue();
             if (u.IsVisited())
                 continue;
-            u.MarkVisited();
+            u.SetVisited(true);
             foreach (Vertex v in u.VerticesAdjacent)
             {
                 int weigth = G.GetWeight(u, v);
@@ -37,42 +37,62 @@ public static class Algorithms
         var edges = G.E.Values.ToList();
         edges.Sort();
 
-        var A = new List<Edge>();
+        Graph graph = new();
+        graph.V = G.V;
+        graph.E.Clear();
+        foreach (var x in graph.V.Values)
+            x.ClearIncidentEdge();
+
         foreach (var edge in edges)
-            if (!IsCyclic(A, edge))
-                A.Add(edge);
-        return A;
+            if (!IsCyclicBFS(graph, edge))
+                graph.AddEdge(edge);
+                
+        return graph.E.Values.ToList();
     }
 
-    private static bool IsCyclic(List<Edge> edges, Edge new_edge)
-    {
-        var vertices = new Dictionary<string, Vertex>();
+    private static bool IsCyclicBFS(Graph graph, Edge current)
+    { 
+        foreach (var x in graph.V)
+            x.Value.SetVisited(false);
+        foreach (var x in graph.E)
+            x.Value.Label = string.Empty;
 
-        var _edges = new List<Edge>(edges);
-        _edges.Add(new_edge);
+        graph.AddEdge(current);
 
-        foreach (var edge in _edges)
+        var s = current.U;
+        s.SetVisited(true);
+        var l0 = new List<Vertex>() { s };
+
+        while(l0.Any())
         {
-            if (!vertices.ContainsKey(edge.U.Name))
-                vertices[edge.U.Name] = edge.U;
-            if (!vertices.ContainsKey(edge.V.Name))
-                vertices[edge.V.Name] = edge.V;
-
-            if (vertices[edge.U.Name].Equals(vertices[edge.V.Name]))
-                return true;
-            Unite(vertices, edge.U.Name, edge.V.Name);
+            var l1 = new List<Vertex>();
+            foreach(var vertex in l0)
+            {
+                foreach (var vertexEdge in vertex.EdgesIncident.Values)
+                {
+                    if(string.IsNullOrEmpty(vertexEdge.Label))
+                    {
+                        var w = vertexEdge.GetOpposite(vertex);
+                        if(!w.IsVisited())
+                        {
+                            vertexEdge.Label = "DISCOVERY";
+                            w.SetVisited(true);
+                            l1.Add(w);
+                        }
+                        else
+                        {
+                            vertexEdge.Label = "CROSS";
+                            graph.RemoveEdge(current);
+                            return true;
+                        }
+                    }
+                }
+            }
+            l0.Clear();
+            l0.AddRange(l1);
         }
+        graph.RemoveEdge(current);
         return false;
-    }
-
-    private static void Unite(Dictionary<string, Vertex> vertices, string v1, string v2)
-    {
-        var newpid = vertices[v1];
-        var oldpid = vertices[v2];
-
-        foreach (var entry in vertices)
-            if (entry.Value == oldpid)
-                vertices[entry.Key] = newpid;
     }
 
     public static List<Edge> KruskalUnionFind(Graph G)

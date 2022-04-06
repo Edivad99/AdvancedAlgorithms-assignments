@@ -1,6 +1,6 @@
+from vertex import Vertex
 from edge import Edge
 from typing import Dict
-from vertex import Vertex
 
 class Graph:
     def __init__(self) -> None:
@@ -14,9 +14,14 @@ class Graph:
         return new_vertex
 
     def _add_edge(self, new_edge: Edge) -> None:
-        if new_edge.u == new_edge.v:
-            print(f"**SELF LOOP DETECTED (Vertex: {new_edge.u.name})**")
         self.E[(new_edge.u.name, new_edge.v.name)] = new_edge
+        new_edge.u.add_incident_edge(new_edge)
+        new_edge.v.add_incident_edge(new_edge)
+
+    def remove_edge(self, remove_edge: Edge) -> None:
+        del self.E[(remove_edge.u.name, remove_edge.v.name)]
+        remove_edge.u.remove_incident_edge(remove_edge)
+        remove_edge.v.remove_incident_edge(remove_edge)
 
     def get_weight(self, u: Vertex, v: Vertex) -> int:
         if (u.name, v.name) in self.E:

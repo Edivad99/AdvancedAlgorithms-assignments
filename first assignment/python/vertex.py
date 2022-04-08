@@ -17,7 +17,9 @@ class Vertex:
         return self.key < other.key
 
     def add_incident_edge(self, edge) -> None:
-        self.edges_incident[(edge.u.name, edge.v.name)] = edge
+        if not (edge.u.name, edge.v.name) in self.edges_incident:
+            self.edges_incident[(edge.u.name, edge.v.name)] = edge
 
     def remove_incident_edge(self, edge) -> None:
-        del self.edges_incident[(edge.u.name, edge.v.name)]
+        if (edge.u.name, edge.v.name) in self.edges_incident:
+            del self.edges_incident[(edge.u.name, edge.v.name)]

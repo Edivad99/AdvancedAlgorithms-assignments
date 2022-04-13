@@ -57,7 +57,8 @@ public static class Testing
                 int sum = edges.Sum(x => x.Weigth);
                 var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
                 csv.Add(res);
-                Console.WriteLine($"Finish {verticesCount}-{edgesCount}");
+                var readableTime = new DateTime(stopWatch.Elapsed.Ticks).ToString("HH:mm:ss.fff");
+                Console.WriteLine($"Finish {verticesCount}-{edgesCount} {readableTime}");
             }
         };
 

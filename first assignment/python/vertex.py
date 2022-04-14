@@ -6,11 +6,20 @@ class Vertex:
         self.key = key
         self.parent = parent
         self.vertices_adjacent: List[Vertex]= []
+        self.edges_incident = {}
         self.visited = False
-        self.inserted=False
+        self.inserted = False
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.name == other.name
 
     def __lt__(self, other: object) -> bool:
         return self.key < other.key
+
+    def add_incident_edge(self, edge) -> None:
+        if not (edge.u.name, edge.v.name) in self.edges_incident:
+            self.edges_incident[(edge.u.name, edge.v.name)] = edge
+
+    def remove_incident_edge(self, edge) -> None:
+        if (edge.u.name, edge.v.name) in self.edges_incident:
+            del self.edges_incident[(edge.u.name, edge.v.name)]

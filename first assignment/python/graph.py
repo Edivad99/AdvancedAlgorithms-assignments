@@ -13,7 +13,7 @@ class Graph:
         self.V[new_vertex.name] = new_vertex
         return new_vertex
 
-    def _add_edge(self, new_edge: Edge) -> None:
+    def add_edge(self, new_edge: Edge) -> None:
         self.E[(new_edge.u.name, new_edge.v.name)] = new_edge
         new_edge.u.add_incident_edge(new_edge)
         new_edge.v.add_incident_edge(new_edge)
@@ -44,7 +44,7 @@ class Graph:
             v = self._add_vertex(Vertex(v2, float('+inf'), None))
             u.vertices_adjacent.append(v)
             v.vertices_adjacent.append(u)
-            self._add_edge(Edge(u, v, int(w)))
+            self.add_edge(Edge(u, v, int(w)))
 
         assert int(vertices) == len(self.V), f"The list of vertices has a different size compared to the number read from file ({int(vertices)}!={len(self.V)})"
         assert int(edges) == len(self.E), f"The list of edges has a different size compared to the number read from file ({int(edges)}!={len(self.E)})"

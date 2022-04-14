@@ -17,7 +17,7 @@ def Kruskal(G: Graph):
     bar = Bar('Processing', max=len(edges), suffix='%(index)d/%(max)d - ETA: %(eta_td)s, AVG: %(avg)s')
     for edge in edges:
         if not is_cyclic(graph, edge):
-            graph._add_edge(edge)
+            graph.add_edge(edge)
         bar.next()
     bar.finish()
     return graph.E.values()
@@ -29,7 +29,7 @@ def is_cyclic(graph: Graph, current: Edge):
     for x in graph.E.values():
         x.label = ''
 
-    graph._add_edge(current)
+    graph.add_edge(current)
 
     s = current.u
     s.visited = True

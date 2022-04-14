@@ -5,50 +5,65 @@ from graph import Graph
 from progress.bar import Bar
 
 def Kruskal(G: Graph):
-    temp = list(G.E.values())
-    temp.sort(key= lambda x: x.weight)
+    edges = list(G.E.values())
+    edges.sort(key= lambda x: x.weight)
 
-    A = list()
-    #print([(x.u.name,x.v.name) for x in temp])
-    bar = Bar('Processing', max=len(temp), suffix='%(index)d/%(max)d - ETA: %(eta_td)s, AVG: %(avg)s')
-    for edge in temp:
-        if not is_cyclic(A, edge):
-            #print(f"Aggiungo {edge.u.name}-{edge.v.name}")
-            A.append(edge)
+    graph = Graph()
+    graph.V = G.V
+    graph.E.clear()
+    for x in graph.V.values():
+        x.edges_incident.clear()
+
+    bar = Bar('Processing', max=len(edges), suffix='%(index)d/%(max)d - ETA: %(eta_td)s, AVG: %(avg)s')
+    for edge in edges:
+        if not is_cyclic(graph, edge):
+            graph._add_edge(edge)
         bar.next()
     bar.finish()
-    return A
+    return graph.E.values()
 
-Vertices = {}
-def unite(v1: str, v2: str) -> None:
-    newpid = Vertices[v1]
-    oldpid = Vertices[v2]
-    for k, v in Vertices.items():
-        if v == oldpid:
-            Vertices[k] = newpid
 
-def is_cyclic(edges: List[Edge], new_edge: Edge):
-    Vertices.clear()
-    _edges = edges.copy() # shallow copy
-    _edges.append(new_edge)
-    for edge in _edges:
-        if not edge.u.name in Vertices.keys():
-            Vertices[edge.u.name] = edge.u
-        if not edge.v.name in Vertices.keys():
-            Vertices[edge.v.name] = edge.v
+def is_cyclic(graph: Graph, current: Edge):
+    for x in graph.V.values():
+        x.visited = False
+    for x in graph.E.values():
+        x.label = ''
 
-        if Vertices[edge.v.name] == Vertices[edge.u.name]:
-            return True
-        unite(edge.u.name, edge.v.name)
+    graph._add_edge(current)
+
+    s = current.u
+    s.visited = True
+    l0: List[Vertex] = [s]
+    #print(f"({current.u.name}-{current.v.name})")
+    while l0:
+        #print([x.name for x in l0])
+        l1: List[Vertex] = []
+        for vertex in l0:
+            #for vertexEdge in graph.get_incident(vertex):
+            for vertexEdge in vertex.edges_incident.values():
+                if vertexEdge.label == '':
+                    w = vertexEdge.get_opposite(vertex)
+                    if not w.visited:
+                        vertexEdge.label = 'DISCOVERY'
+                        w.visited = True
+                        l1.append(w)
+                    else:
+                        vertexEdge.label = 'CROSS'
+                        graph.remove_edge(current)
+                        #print(f"!!!!!({current.u.name}-{current.v.name})")
+                        return True
+        l0.clear()
+        l0.extend(l1)
+    graph.remove_edge(current)
     return False
 
 graph = Graph()
-graph.load_from_file('mst_dataset/input_random_33_1000.txt')
+#graph.load_from_file('mst_dataset/input_random_45_8000.txt')
 #graph.load_from_file('mst_dataset/input_random_03_10.txt')
 #graph.load_from_file('mst_dataset/input_random_05_20.txt')
 #graph.load_from_file('mst_dataset/input_random_11_40.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')
-#graph.load_from_file('mst_dataset/input_random_53_20000.txt')
+graph.load_from_file('mst_dataset/input_random_59_40000.txt')
 #graph.load_from_file('mst_dataset/input_random_68_100000.txt')
 
 

@@ -34,12 +34,9 @@ def is_cyclic(graph: Graph, current: Edge):
     s = current.u
     s.visited = True
     l0: List[Vertex] = [s]
-    #print(f"({current.u.name}-{current.v.name})")
     while l0:
-        #print([x.name for x in l0])
         l1: List[Vertex] = []
         for vertex in l0:
-            #for vertexEdge in graph.get_incident(vertex):
             for vertexEdge in vertex.edges_incident.values():
                 if vertexEdge.label == '':
                     w = vertexEdge.get_opposite(vertex)
@@ -50,7 +47,6 @@ def is_cyclic(graph: Graph, current: Edge):
                     else:
                         vertexEdge.label = 'CROSS'
                         graph.remove_edge(current)
-                        #print(f"!!!!!({current.u.name}-{current.v.name})")
                         return True
         l0.clear()
         l0.extend(l1)
@@ -66,8 +62,6 @@ graph = Graph()
 graph.load_from_file('mst_dataset/input_random_59_40000.txt')
 #graph.load_from_file('mst_dataset/input_random_68_100000.txt')
 
-
-#print(is_cyclic(graph.V['1'], None))
 
 from time import perf_counter
 s = perf_counter()

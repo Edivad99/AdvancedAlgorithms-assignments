@@ -37,17 +37,6 @@ graph.load_from_file('mst_dataset/input_random_11_40.txt')
 #graph.load_from_file('mst_dataset/input_random_68_100000.txt')
 
 
-
-'''example_graph = {}
-for x in graph.V.values():
-    vertici = {}
-    for y in x.vertices_adjacent:
-        vertici[y.name] = graph.get_weight(x,y)
-    example_graph[x.name] = vertici
-#print(example_graph)
-from prim2 import create_spanning_tree
-print(dict(create_spanning_tree(example_graph, '1')))'''
-
 starting_node = graph.V['1']
 from time import perf_counter
 s = perf_counter()
@@ -57,8 +46,3 @@ print(f"Time: {f-s}")
 
 sum_result = sum(x.key for x in graph.V.values())
 print(f"MSP: {sum_result}")
-
-'''with open('parent_python.csv', 'w')as file:
-    file.write("nodo;parent\n")
-    for x in graph.V.values():
-        file.write(f"{x.name};{x.parent.name if x.parent else x.name}\n")'''

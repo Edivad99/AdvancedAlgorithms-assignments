@@ -19,7 +19,7 @@ def Prim(G: Graph, s: Vertex):
             bar.next()
             continue
         u.visited = True
-        for v in u.vertices_adjacent:
+        for v in u.vertices_adjacent.values():
             weight = G.get_weight(u,v)
             if not v.visited and weight < v.key:
                 v.key = weight
@@ -30,7 +30,7 @@ def Prim(G: Graph, s: Vertex):
 
 
 graph = Graph()
-#graph.load_from_file('mst_dataset/input_random_05_20.txt')
+#graph.load_from_file('mst_dataset/input_random_03_10.txt')
 graph.load_from_file('mst_dataset/input_random_11_40.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')
 #graph.load_from_file('mst_dataset/input_random_53_20000.txt')

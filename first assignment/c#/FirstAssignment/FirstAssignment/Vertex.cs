@@ -5,7 +5,7 @@ public class Vertex : IEquatable<Vertex>
     public string Name { get; set; }
     public int Key { get; set; }
     public Vertex? Parent { get; set; }
-    public List<Vertex> VerticesAdjacent { get; set; }
+    public Dictionary<string, Vertex> VerticesAdjacent { get; set; }
     public Dictionary<(string,string),Edge> EdgesIncident { get; set; }
     private bool Visited { get; set; }
 
@@ -26,8 +26,23 @@ public class Vertex : IEquatable<Vertex>
         if(!EdgesIncident.ContainsKey((edge.U.Name, edge.V.Name)))//For avoid error in self loop
             EdgesIncident.Add((edge.U.Name, edge.V.Name), edge);
     }
-    public void RemoveIncidentEdge(Edge edge) => EdgesIncident.Remove((edge.U.Name, edge.V.Name));
-    public void ClearIncidentEdge() => EdgesIncident.Clear();
+    public void RemoveIncidentEdge(Edge edge)
+    {
+        if (EdgesIncident.ContainsKey((edge.U.Name, edge.V.Name)))
+            EdgesIncident.Remove((edge.U.Name, edge.V.Name));
+    }
+
+    public void AddAdjacentVertices(Vertex v)
+    {
+        if (!VerticesAdjacent.ContainsKey(v.Name))
+            VerticesAdjacent.Add(v.Name, v);
+    }
+
+    public void RemoveAdjacentVertices(Vertex v)
+    {
+        if (VerticesAdjacent.ContainsKey(v.Name))
+            VerticesAdjacent.Remove(v.Name);
+    }
 
     public bool Equals(Vertex? other) => other != null && Name.Equals(other.Name);
 }

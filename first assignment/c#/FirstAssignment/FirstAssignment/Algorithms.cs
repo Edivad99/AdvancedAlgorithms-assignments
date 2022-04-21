@@ -19,7 +19,7 @@ public static class Algorithms
             if (u.IsVisited())
                 continue;
             u.SetVisited(true);
-            foreach (Vertex v in u.VerticesAdjacent)
+            foreach (Vertex v in u.VerticesAdjacent.Values)
             {
                 int weigth = G.GetWeight(u, v);
                 if (!v.IsVisited() && weigth < v.Key)
@@ -38,60 +38,43 @@ public static class Algorithms
         edges.Sort();
 
         Graph graph = new();
-        graph.V = G.V;
-        graph.E.Clear();
-        foreach (var x in graph.V.Values)
-            x.ClearIncidentEdge();
 
         foreach (var edge in edges)
-            if (!IsCyclicBFS(graph, edge))
-                graph.AddEdge(edge);
+            if (IsAcyclic(graph, edge))
+                graph.AddEdge(edge.U.Name, edge.V.Name, edge.Weigth);
                 
         return graph.E.Values.ToList();
     }
 
-    private static bool IsCyclicBFS(Graph graph, Edge current)
-    { 
-        foreach (var x in graph.V)
-            x.Value.SetVisited(false);
-        foreach (var x in graph.E)
-            x.Value.Label = string.Empty;
+    private static bool IsAcyclic(Graph graph, Edge newEdge)
+    {
+        // Check if the edge is self-loop
+        if (newEdge.U == newEdge.V)
+            return false;
 
-        graph.AddEdge(current);
-
-        var s = current.U;
-        s.SetVisited(true);
-        var l0 = new List<Vertex>() { s };
-
-        while(l0.Any())
+        // If both vertices are present in the graph I need to chek if the graph is acyclic
+        if(graph.V.ContainsKey(newEdge.U.Name) && graph.V.ContainsKey(newEdge.V.Name))
         {
-            var l1 = new List<Vertex>();
-            foreach(var vertex in l0)
-            {
-                foreach (var vertexEdge in vertex.EdgesIncident.Values)
-                {
-                    if(string.IsNullOrEmpty(vertexEdge.Label))
-                    {
-                        var w = vertexEdge.GetOpposite(vertex);
-                        if(!w.IsVisited())
-                        {
-                            vertexEdge.Label = "DISCOVERY";
-                            w.SetVisited(true);
-                            l1.Add(w);
-                        }
-                        else
-                        {
-                            vertexEdge.Label = "CROSS";
-                            graph.RemoveEdge(current);
-                            return true;
-                        }
-                    }
-                }
-            }
-            l0.Clear();
-            l0.AddRange(l1);
+            var visited = new Dictionary<string, bool>();
+            foreach (var x in graph.V.Values)
+                visited.Add(x.Name, false);
+
+            var result = Dfs(graph.V[newEdge.U.Name], graph.V[newEdge.V.Name], visited);
+            return !result;
         }
-        graph.RemoveEdge(current);
+        return true; 
+    }
+
+    private static bool Dfs(Vertex current, Vertex destination, Dictionary<string, bool> visited)
+    {
+        if (current == destination)
+            return true;
+
+        visited[current.Name] = true;
+
+        foreach (var u in current.VerticesAdjacent.Values)
+            if (!visited[u.Name] && Dfs(u, destination, visited))
+                return true;
         return false;
     }
 

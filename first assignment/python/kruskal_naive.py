@@ -29,34 +29,26 @@ def _is_acyclic(g: Graph, new_edge: Edge):
         # in quanto questo arco mi porterà a scroprire almeno un nuovo nodo.
         # Se entrambi i nodi sono presenti nel grafo, allora verifico se il grafo è aciclico
         if new_edge.u.name in g.V and new_edge.v.name in g.V:
-            value = is_there_a_path(g, g.V[new_edge.u.name], g.V[new_edge.v.name])
+            visited = dict([(x.name, False) for x in g.V.values()])
+            value = dfs(g.V[new_edge.u.name], g.V[new_edge.v.name], visited)
             return not value
         else:
             return True
     else:
         return False
 
-# Chiama DFS modificata
-#
-# Complessità temporale: O(m)
-def is_there_a_path(g: Graph, source_node: Vertex, destination_node: Vertex):
-    # Imposto tutti i vertici come non visitati
-    visited = dict([(x.name, False) for x in g.V.values()])
-
-    return dfs(g, source_node, destination_node, visited)
-
 # Si esegue una DFS modificata in modo da determinare se esiste o meno un percorso da source_node a destination_node
 #
 # Complessità temporale: O(m)
-def dfs(G: Graph, current_node: Vertex, destination_node: Vertex, visited):
+def dfs(current_node: Vertex, destination_node: Vertex, visited):
     if destination_node == current_node:
         return True
 
     visited[current_node.name] = True
 
     for u in current_node.vertices_adjacent.values():
-        if u.name in visited and not visited[u.name]:
-            if dfs(G, u, destination_node, visited):
+        if not visited[u.name]:
+            if dfs(u, destination_node, visited):
                 return True
 
     return False

@@ -8,7 +8,6 @@ class Vertex:
         self.vertices_adjacent: Dict[str, Vertex] = {}
         self.edges_incident = {}
         self.visited = False
-        self.color = 'white'
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.name == other.name

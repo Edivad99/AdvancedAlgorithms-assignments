@@ -30,7 +30,7 @@ def Prim(G: Graph, s: Vertex):
 
 
 graph = Graph()
-#graph.load_from_file('mst_dataset/input_random_03_10.txt')
+#graph.load_from_file('mst_dataset/input_random_05_20.txt')
 graph.load_from_file('mst_dataset/input_random_11_40.txt')
 #graph.load_from_file('mst_dataset/input_random_50_10000.txt')
 #graph.load_from_file('mst_dataset/input_random_53_20000.txt')

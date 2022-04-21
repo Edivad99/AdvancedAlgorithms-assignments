@@ -63,20 +63,18 @@ def dfs(G: Graph, current_node: Vertex, destination_node: Vertex, visited):
 
 graph = Graph()
 #graph.load_from_file('mst_dataset/input_random_45_8000.txt')
-graph.load_from_file('mst_dataset/input_random_01_10.txt')
+#graph.load_from_file('mst_dataset/input_random_03_10.txt')
 #graph.load_from_file('mst_dataset/input_random_05_20.txt')
 #graph.load_from_file('mst_dataset/input_random_11_40.txt')
-#graph.load_from_file('mst_dataset/input_random_53_20000.txt')
-#graph.load_from_file('mst_dataset/input_random_59_40000.txt')
+#graph.load_from_file('mst_dataset/input_random_50_10000.txt')
+graph.load_from_file('mst_dataset/input_random_59_40000.txt')
 #graph.load_from_file('mst_dataset/input_random_68_100000.txt')
 
-def test():
-    from time import perf_counter
-    s = perf_counter()
-    res = Kruskal(graph)
-    f = perf_counter()
-    print(f"Time: {f-s}")
-    sum_result = sum(x.weight for x in res)
-    print(f"MSP: {sum_result}")
 
-test()
+from time import perf_counter
+s = perf_counter()
+res = Kruskal(graph)
+f = perf_counter()
+print(f"Time: {f-s}")
+sum_result = sum(x.weight for x in res)
+print(f"MSP: {sum_result}")

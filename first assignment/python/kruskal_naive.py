@@ -1,4 +1,3 @@
-from typing import List
 from vertex import Vertex
 from edge import Edge
 from graph import Graph
@@ -9,48 +8,49 @@ def Kruskal(G: Graph):
     edges.sort(key= lambda x: x.weight)
 
     graph = Graph()
-    graph.V = G.V
-    graph.E.clear()
-    for x in graph.V.values():
-        x.edges_incident.clear()
+
 
     bar = Bar('Processing', max=len(edges), suffix='%(index)d/%(max)d - ETA: %(eta_td)s, AVG: %(avg)s')
     for edge in edges:
-        if not is_cyclic(graph, edge):
-            graph.add_edge(edge)
+        if _is_acyclic(graph, edge):
+            graph.add_from_existing_edge(edge)
         bar.next()
     bar.finish()
     return graph.E.values()
 
+# Controlla se il grafo in input è aciclico o meno
+#
+# Complessità temporale: O(m)
+def _is_acyclic(g: Graph, new_edge: Edge):
+    # Controllo che l'arco che si vuole aggiungere non sia un self-loop
+    if new_edge.u != new_edge.v:
 
-def is_cyclic(graph: Graph, current: Edge):
-    for x in graph.V.values():
-        x.visited = False
-    for x in graph.E.values():
-        x.label = ''
+        # Se almeno uno dei due nodi dell'arco non è presente nel grafo, sono sicuro che non introdurrà un ciclo,
+        # in quanto questo arco mi porterà a scroprire almeno un nuovo nodo.
+        # Se entrambi i nodi sono presenti nel grafo, allora verifico se il grafo è aciclico
+        if new_edge.u.name in g.V and new_edge.v.name in g.V:
+            visited = dict([(x.name, False) for x in g.V.values()])
+            value = dfs(g.V[new_edge.u.name], g.V[new_edge.v.name], visited)
+            return not value
+        else:
+            return True
+    else:
+        return False
 
-    graph.add_edge(current)
+# Si esegue una DFS modificata in modo da determinare se esiste o meno un percorso da source_node a destination_node
+#
+# Complessità temporale: O(m)
+def dfs(current_node: Vertex, destination_node: Vertex, visited):
+    if destination_node == current_node:
+        return True
 
-    s = current.u
-    s.visited = True
-    l0: List[Vertex] = [s]
-    while l0:
-        l1: List[Vertex] = []
-        for vertex in l0:
-            for vertexEdge in vertex.edges_incident.values():
-                if vertexEdge.label == '':
-                    w = vertexEdge.get_opposite(vertex)
-                    if not w.visited:
-                        vertexEdge.label = 'DISCOVERY'
-                        w.visited = True
-                        l1.append(w)
-                    else:
-                        vertexEdge.label = 'CROSS'
-                        graph.remove_edge(current)
-                        return True
-        l0.clear()
-        l0.extend(l1)
-    graph.remove_edge(current)
+    visited[current_node.name] = True
+
+    for u in current_node.vertices_adjacent.values():
+        if not visited[u.name]:
+            if dfs(u, destination_node, visited):
+                return True
+
     return False
 
 graph = Graph()

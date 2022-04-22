@@ -44,25 +44,22 @@ public static class Testing
             int edgesCount = graph.E.Count;
             int verticesCount = graph.V.Count;
 
-            if (verticesCount == 4000)
-            {
-                Console.WriteLine($"Start {verticesCount}-{edgesCount}");
+            Console.WriteLine($"Start {verticesCount}-{edgesCount}");
 
-                var stopWatch = new Stopwatch();
-                stopWatch.Start();
-                var edges = Algorithms.Kruskal(graph);
-                stopWatch.Stop();
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var edges = Algorithms.Kruskal(graph);
+            stopWatch.Stop();
 
-                int sum = edges.Sum(x => x.Weigth);
-                var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
-                csv.Add(res);
-                var readableTime = new DateTime(stopWatch.Elapsed.Ticks).ToString("HH:mm:ss.fff");
-                Console.WriteLine($"Finish {verticesCount}-{edgesCount} {readableTime}");
-            }
+            int sum = edges.Sum(x => x.Weigth);
+            var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
+            csv.Add(res);
+            var readableTime = new DateTime(stopWatch.Elapsed.Ticks).ToString("HH:mm:ss.fff");
+            Console.WriteLine($"Finish {verticesCount}-{edgesCount} {readableTime}");
         };
 
         var raw_csv = string.Join("\n", csv);
-        await File.WriteAllTextAsync("result_kruskal_4000.csv", raw_csv);
+        await File.WriteAllTextAsync("result_kruskal_naive.csv", raw_csv);
     }
 
     public async static void ExportKruskalUFCSV(string folderPath)

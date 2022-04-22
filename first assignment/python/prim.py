@@ -19,7 +19,7 @@ def Prim(G: Graph, s: Vertex):
             bar.next()
             continue
         u.visited = True
-        for v in u.vertices_adjacent:
+        for v in u.vertices_adjacent.values():
             weight = G.get_weight(u,v)
             if not v.visited and weight < v.key:
                 v.key = weight

@@ -19,11 +19,19 @@ public class Graph
 		return newVertex;
 	}
 
-	public void AddEdge(Edge newEdge)
+	public void AddEdge(string uName, string vName, int weigth)
 	{
+		var u = AddVertex(new Vertex(uName));
+		var v = AddVertex(new Vertex(vName));
+
+		u.AddAdjacentVertices(v);
+		v.AddAdjacentVertices(u);
+
+		var newEdge = new Edge(u, v, weigth);
 		E.Add((newEdge.U.Name, newEdge.V.Name), newEdge);
-		newEdge.U.AddIncidentEdge(newEdge);
-		newEdge.V.AddIncidentEdge(newEdge);
+
+		u.AddIncidentEdge(newEdge);
+		v.AddIncidentEdge(newEdge);
 	}
 
 	public void RemoveEdge(Edge removeEdge)
@@ -31,6 +39,9 @@ public class Graph
 		E.Remove((removeEdge.U.Name, removeEdge.V.Name));
 		removeEdge.U.RemoveIncidentEdge(removeEdge);
 		removeEdge.V.RemoveIncidentEdge(removeEdge);
+
+		removeEdge.U.RemoveAdjacentVertices(removeEdge.V);
+		removeEdge.V.RemoveAdjacentVertices(removeEdge.U);
 	}
 
 	public int GetWeight(Vertex u, Vertex v)
@@ -58,13 +69,7 @@ public class Graph
 			string v1 = line[0];
 			string v2 = line[1];
 			int w = Convert.ToInt32(line[2]);
-
-			Vertex u = AddVertex(new Vertex(v1));
-			Vertex v = AddVertex(new Vertex(v2));
-
-			u.VerticesAdjacent.Add(v);
-			v.VerticesAdjacent.Add(u);
-			AddEdge(new Edge(u, v, w));
+			AddEdge(v1, v2, w);
 		}
 
 		if (V.Count != vertices)

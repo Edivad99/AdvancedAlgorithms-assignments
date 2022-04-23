@@ -13,6 +13,7 @@ public class Graph
 
 	private Vertex AddVertex(Vertex newVertex)
 	{
+		// Return the vertex already inserted if present
 		if (V.ContainsKey(newVertex.Name))
 			return V[newVertex.Name];
 		V.Add(newVertex.Name, newVertex);

@@ -44,7 +44,10 @@ The data structure for a graph was implemented as follows:
 \noindent
 The implemented methods were:
 \begin{enumerate}
-    \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of their relative value;
-    \item \verb|Equals|: checks if two edges have the same ends and weight.
+    \item \verb|AddVertex|: adds a vertex to the graph;
+    \item \verb|AddEdge|: adds an edge to the graph;
+    \item \verb|RemoveEdge|: removes an edge from the collection \verb|E|;
+    \item \verb|GetWeight|: returns the weight of an edge given two vertices;
+    \item \verb|LoadFromFileAsync|: creates the graph starting from the selected file.
 \end{enumerate}
 These operations have been implemented in order to have a constant computational complexity O(1).

@@ -78,8 +78,8 @@ In fact, by using the Heap we can compute the minimum weight in logarithmic time
 \subsubsection{Our implementation}
 For the heap structure we used a PriorityQueue that was recently added in .NET 6.0.
 The PriorityQueue creates an association between the Vertex object that we pass to it and the weight that vertex has.\\
-Our implementation is slightly different from the original one. In fact, instead of filling all the PriorityQueue with 
-the vertices, we started by inserting only the starting node with the weight of zero.\\
+Our implementation is slightly different from the original one. In fact, instead of filling the PriorityQueue with 
+all the vertices, we started by inserting only the starting node with the weight of zero.\\
 Then, in the while, we extracting the minimum vertex and we check if the vertex was already visited.
 If it was visited we skip it and we extract another one.
 Otherwise we mark it as visited, and we starting to check all its adjacent vertices.

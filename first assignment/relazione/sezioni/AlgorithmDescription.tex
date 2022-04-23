@@ -52,6 +52,37 @@ The implemented methods were:
 \end{enumerate}
 These operations have been implemented in order to have a constant computational complexity O(1).
 
+\subsection{Prim}
+\subsubsection{Introduction}
+The base version of Prim's Algorithm has a computational complexity of $\mathcal{O}(mn)$.
+The base idea is to start with a random vertex and choose, for each interaction, the edge 
+that connects with the lowest possible weight the \textit{MST} node tree at the new vertex.\\
+The algorithm can be optimized by using the correct data structure.
+In fact, by using the Heap we can compute the minimum weight in logarithmic time and the complexity become $\mathcal{O}(mlog(n))$.
+
+\begin{verbatim}
+  Prim(G,s)
+    for each u in V do
+      [u] <- +inf
+      parent[u] <- nil
+    key[s] <- 0
+    Q <- V
+    while Q not empty do
+      u <- extractMin(Q)
+      for each v adjacent to u do
+        if v in Q and w(u,v) < key[v] then
+          parent[v] <- u
+          key[v] <- w(u,v)
+\end{verbatim}
+
+\subsubsection{Our implementation}
+For the heap structure we used a PriorityQueue that was recently added in .NET 6.0.
+The PriorityQueue creates an association between the Vertex object that we pass to it and the weight that vertex has.\\
+Our implementation is slightly different from the original one. In fact, instead of filling all the PriorityQueue with 
+the vertices, we started by inserting only the starting node with the weight of zero.\\
+Then, in the while, we extracting the minimum vertex and we check if the vertex was already visited.
+If it was visited we skip it and we extract another one.
+Otherwise we mark it as visited, and we starting to check all its adjacent vertices.
+
 \subsection{Kruskal naive}
 \subsection{Kruskal with Union-Find}
-\subsection{Prim}

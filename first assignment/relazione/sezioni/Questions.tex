@@ -38,22 +38,22 @@ The graph just illustrated above (fig. \ref{fig:kruskaluf}) shows the excepted (
 Analyzing the three algorithms we have found that in the case of Kruskal Naive the algorithm requires a significantly higher average execution time than in Kruskal Union-Find and Prim. In fact, the average time calculated in the case of the four files containing the greatest number of vertices (100000) the results were as follows:
 \begin{table}[H]\centering
     \begin{tabular}{l|l|l|l|l}
-        \textbf{Nodes} & \textbf{Datasets} & \textbf{Kruskal naive [ms]} & \textbf{Kruskal U-F [ms]} & \textbf{Prim [ms]} \\
+        \textbf{Nodes} & \textbf{Datasets} & \textbf{Prim [ms]} & \textbf{Kruskal naive [ms]} & \textbf{Kruskal U-F [ms]}\\
     \hline
-        100000 & 65, 66, 67, 68 & 2504591,06  & 110,66 & 86.14 
+        100000 & 65, 66, 67, 68 & 86.14 & 2504591,06 & 110,66 
     \end{tabular}
 \end{table}
 \noindent
 Comparing the results of the graphs with a smaller number of vertices we could see the following:
 \begin{table}[H]\centering
     \begin{tabular}{l|l|l|l|l}
-        \textbf{Nodes} & \textbf{Datasets} & \textbf{Kruskal naive [ms]} & \textbf{Kruskal Union-Find [ms]} & \textbf{Prim [ms]} \\
+        \textbf{Nodes} & \textbf{Datasets} & \textbf{Prim [ms]} & \textbf{Kruskal naive [ms]} & \textbf{Kruskal Union-Find [ms]} \\
     \hline
-    %   10 & 1, 2, 3, 4    & 0,07     & 0,018   & 0,009
-        10 & 1, 2, 3, 4    & 1,73     & 0,018   & 0,009 \\
-    %   20 & 5, 6, 7, 8    & 0,13     & 0,016   & 0,013     
-        20 & 5, 6, 7, 8    & 0,13     & 1,45    & 0,996 \\
-        40 & 9, 10, 11, 12 & 0,34     & 0,028   & 0,026 \\
+    %   10 & 1, 2, 3, 4     & 0,009  & 0,07  & 0,018  \\
+        10 & 1, 2, 3, 4     & 0,009  & 1,73  & 0,018  \\
+    %   20 & 5, 6, 7, 8     & 0,013  & 0,13  & 0,016  \\
+        20 & 5, 6, 7, 8     & 0,996  & 0,13  & 1,45   \\
+        40 & 9, 10, 11, 12  & 0,026  & 0,34  & 0,028  \\
     \end{tabular}
 \end{table}
 \noindent

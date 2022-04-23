@@ -1,7 +1,8 @@
 \section{Answers to questions}
 
 \subsection{Question 1}
-\textit{Run the three algorithms you have implemented (Prim, Kruskal naive and Kruskal efficient) on the graphs of the dataset. Measure the execution times of the three algorithms and create a graph showing the increase of execution times as the number of vertices in the graph increases. Compare the measured times with the asymptotic complexity of the algorithms. For each problem instance, report the weight of the minimum spanning tree obtained by your code.}\\
+\textit{Run the three algorithms you have implemented (Prim, Kruskal naive and Kruskal efficient) on the graphs of the dataset. Measure the execution times of the three algorithms and create a graph showing the increase of execution times as the number of vertices in the graph increases. Compare the measured times with the asymptotic complexity of the algorithms. For each problem instance, report the weight of the minimum spanning tree obtained by your code.} \\
+
 \noindent
 We have implemented the code in C\# for the execution of the three algorithms on the whole provided dataset. The results, which have been reported in detail and with the relative weights also in the appendix section, are shown below.
 
@@ -34,6 +35,7 @@ The graph just illustrated above (fig. \ref{fig:kruskaluf}) shows the excepted (
 
 \subsection{Question 2}
 \textit{Comment on the results you have obtained: how do the algorithms behave with respect to the various instances? There is an algorithm that is always better than the others? Which of the three algorithms you have implemented is more efficient?} \\
+
 \noindent
 Analyzing the three algorithms we have found that in the case of Kruskal Naive the algorithm requires a significantly higher average execution time than in Kruskal Union-Find and Prim. In fact, the average time calculated in the case of the four files containing the greatest number of vertices (100000) the results were as follows:
 \begin{table}[H]\centering

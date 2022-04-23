@@ -137,7 +137,7 @@ Thanks to this new approach we are able to reduce the time complexity to $\mathc
         U.Union(v, w)
     return A
 \end{verbatim}
-
+\noindent
 The check for the cyclicality of the graph is replaced with the check whether the two vertices of edge $(v, w)$ 
 belong to two trees or not distinct. If the two vertices have the root node in common it means that there already 
 exists a path from $v$ to $w$ and thus adding the edge $(v, w)$ it would create a cycle.
@@ -146,7 +146,7 @@ not create a cycle in the graph.
 Then, the edge $(v, w)$ will be added to $A$ and the two trees will be joined based on their \textit{size}.
 
 \subsubsection{Our implementation}
-Since in C\# the UF data structure is not present, we implemented it us.\\
+Since in C\# the UF data structure is not present, we implemented it.\\
 The principal methods available in the Union Find data structure are:
 \begin{enumerate}
     \item \verb|MakeSet(x)|: where we pass the data that we want to insert in the data structure and we return 

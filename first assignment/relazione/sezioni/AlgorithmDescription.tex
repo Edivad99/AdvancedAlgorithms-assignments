@@ -18,7 +18,7 @@ The implemented methods were:
     \item \verb|RemoveAdjecentVertices|: removes an adjacent vertex to the \verb|VerticesAdjacent|;
     \item \verb|Equals|: checks if two vetrices have the same name.
 \end{enumerate}
-These operations have been implemented in order to have a constant computational complexity O(1).
+These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
 
 \subsection*{Data structure for an edge}
 The data structure for am edge was implemented as follows:
@@ -33,7 +33,7 @@ The implemented methods were:
     \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of their relative value;
     \item \verb|Equals|: checks if two edges have the same ends and weight.
 \end{enumerate}
-These operations have been implemented in order to have a constant computational complexity O(1).
+These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
 
 \subsection*{Data structure for a graph}
 The data structure for a graph was implemented as follows:
@@ -50,7 +50,7 @@ The implemented methods were:
     \item \verb|GetWeight|: returns the weight of an edge given two vertices;
     \item \verb|LoadFromFileAsync|: creates the graph starting from the selected file.
 \end{enumerate}
-These operations have been implemented in order to have a constant computational complexity O(1).
+These operations (except \verb|LoadFromFileAsync|) have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
 
 \subsection{Prim}
 \subsubsection{Introduction}
@@ -87,23 +87,56 @@ In the if condition, we check that the adjacent vertices was not visited yet and
 we adding the vertex to the PriorityQueue.
 
 \subsection{Kruskal naive}
+\subsubsection{Introduction}
+The naive version of Kruskal has a time complexity of $\mathcal{O}(mn)$. The main idea is to sort the edges by 
+their weight in increasing order.
+Once sorted, for each edge we checking if by adding it we create a cycle. If it creates a cycle it wont be 
+added, otherwise it will be part of the MST. By sorting the edges by their weight, we are sure that the sum of the
+edges will be minimum
+\begin{verbatim}
+  Kruskal-Naive(G)
+    A = empty_set
+    sort the edges of G.E into increasing order by weight w
+    for each edge e in G.E, taken in increasing order by weight
+      if A U {e} is acyclic
+        A = A U {e}
+    return A
+\end{verbatim}
+\subsubsection{Our implementation}
+In our implementation, instead of using A as set we decided to use our implementation of the Graph.
+The check for cyclicality is implemented with a modified version of \textit{Depth First Search}(\textit{DFS}).\\
+The first optimization implemented is in the \verb|IsAcyclic| method, where we check if first of all the edge that we want 
+to insert is a self loop. Next we check if both vertices are already present in the dictionary of the vertices.
+If one of them is not present we are sure that the edge that we want insert wont create a cycle.
+This approach will let us reduce the calls to DFS in the first phase of the exploration.
+If both vertices are present in the dictionary, we need to call DFS to check if we'll craeate a cycle by adding the edge.\\
+The second optimization concerns DFS: the method that is implemented it does not reflect the original version 
+of the algorithm. Our intent is to find, if it exists, a path that joins $u$ with $v$. If these vertices are found 
+in two distinct connected components (for example when you are adding edges to the graph $A$), means that adding the 
+edge $(u, v)$ to the graph $A$ does not will introduce a cycle. Starting DFS from vertex $u$ on the graph $A$,
+we want to check if there is a path that leads me up to $v$.
+If both vertices are in the same connected component, then such a path will be found, otherwise such a path will 
+not come found because it does not exist. Hence, DFS will only run on the connected component of $u$ and not on all 
+vertices of the graph. This version allows us to save the visit of the whole graph and its computational complexity 
+becomes $\mathcal{O}(m)$.
+
 \subsection{Kruskal with Union-Find}
 \subsubsection{Introduction}
 In order to speed up naive Kruskal's Algorithm, especially the checking of the cyclicity we can use a new 
 data structure called: \textbf{Disjoint Set} or \textbf{Union Find}.\\
-Thanks to this new approach we are able to reduce the time complexity to $O(mlog(n))$;
+Thanks to this new approach we are able to reduce the time complexity to $\mathcal{O}(mlog(n))$;
 \begin{verbatim}
-    Kruskal-Union-Find(G)
-      A = empty_set
-      U = union_find_ds
-      for each vertex v in G.V
-        U.MakeSet(v)
-      sort the edges of G.E into increasing order by weight w
-      for each edge (v, w) in G.E, taken in increasing order by weight
-        if U.FindSet(v) != U.FindSet(w)
-          A = A U {(v, w)}
-          U.Union(v, w)
-      return A
+  Kruskal-Union-Find(G)
+    A = empty_set
+    U = union_find_ds
+    for each vertex v in G.V
+      U.MakeSet(v)
+    sort the edges of G.E into increasing order by weight w
+    for each edge (v, w) in G.E, taken in increasing order by weight
+      if U.FindSet(v) != U.FindSet(w)
+        A = A U {(v, w)}
+        U.Union(v, w)
+    return A
 \end{verbatim}
 
 The check for the cyclicality of the graph is replaced with the check whether the two vertices of edge $(v, w)$ 
@@ -118,11 +151,11 @@ Since in C\# the UF data structure is not present, we implemented it us.\\
 The principal methods available in the Union Find data structure are:
 \begin{enumerate}
     \item \verb|MakeSet(x)|: where we pass the data that we want to insert in the data structure and we return 
-        if the data was inserted or not. The time complexity of this method is $O(1)$;
+        if the data was inserted or not. The time complexity of this method is $\mathcal{O}(1)$;
     \item \verb|FindSet(x)|: returns the root node of the tree to which the node that has value $x$ belongs.
-        The time complexity of this method is $O(log n)$;
+        The time complexity of this method is $\mathcal{O}(log n)$;
     \item \verb|Union(x, y)|: given the values of the two nodes, we determine the parent node for each node and 
         if they belong to different tree we merge them in base at their size. The time complexity of this 
-        method is $O(log(n))$.
+        method is $\mathcal{O}(log(n))$.
 \end{enumerate}
 

@@ -6,14 +6,15 @@
 The program was written entirely in C\# and is structured in 3 main folders which represent the algorithms module, the measurements module and the dataset containing the graphs.
 
 \subsubsection{Setting up and requirements}
+Before run the program, you need to install \textbf{NET 6.0}.\\
+Next, to start the program you have to type the following command:\\
+\centerline{\textbf{dotnet run --project FirstAssignment.csproj --configuration Release}}\newline{}
 
 \subsubsection{Relevant considerations about the program}
 At first, given the large amount of data that must be analyzed, we thought to implement the program in multiprocessing mode so to use all the threads available in modern computer processors. \\
 \noindent
-However, during the measurements we noted that the execution slowed down considerably, since monitoring the CPU usage, only one core was constantly used at 100\%. \\ 
-\noindent
-Therefore, the measurement code has been adapted so that it can be executed sequentially. Some of the positive aspects of this modality concern the parallel execution for the calulation of the results of the algorithms.
-\noindent
+However, we found some problem during the measurement of each task.
+Therefore, the measurement code has been adapted so that it can be executed sequentially.
 All the measurements were performed sequentially monitoring the use of a dedicated CPU core at 100\% for the entire duration of the run.
 
 \subsubsection{Technical characteristics of the computer for measurements}
@@ -21,7 +22,7 @@ The execution of the program and the relative measurements were carried out on t
 \begin{itemize}
     \item \textbf{CPU}: Intel Xeon Dual Core 8th Generation;
     \item \textbf{RAM}: 16 GB;
-    \item \textbf{SSD}: 128 GB;
+    \item \textbf{SSD}: 128 GB.
 \end{itemize}
 
 \subsection{Introduction to measurements}

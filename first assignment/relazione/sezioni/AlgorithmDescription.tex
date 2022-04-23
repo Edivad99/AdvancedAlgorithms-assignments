@@ -152,7 +152,7 @@ The principal methods available in the Union Find data structure are:
     \item \verb|MakeSet(x)|: where we pass the data that we want to insert in the data structure and we return 
         if the data was inserted or not. The time complexity of this method is $\mathcal{O}(1)$;
     \item \verb|FindSet(x)|: returns the root node of the tree to which the node that has value $x$ belongs.
-        The time complexity of this method is $\mathcal{O}(log n)$;
+        The time complexity of this method is $\mathcal{O}(log(n))$;
     \item \verb|Union(x, y)|: given the values of the two nodes, we determine the parent node for each node and 
         if they belong to different tree we merge them in base at their size. The time complexity of this 
         method is $\mathcal{O}(log(n))$.

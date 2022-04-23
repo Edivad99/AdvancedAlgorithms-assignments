@@ -76,7 +76,7 @@ In fact, by using the Heap we can compute the minimum weight in logarithmic time
 \end{verbatim}
 
 \subsubsection{Our implementation}
-For the heap structure we used a PriorityQueue that was recently added in .NET 6.0.
+For the heap structure we used a \textbf{PriorityQueue} that was recently added in .NET 6.0.
 The PriorityQueue creates an association between the Vertex object that we pass to it and the weight that vertex has.\\
 Our implementation is slightly different from the original one. In fact, instead of filling the PriorityQueue with 
 all the vertices, we started by inserting only the starting node with the weight of zero.\\
@@ -88,3 +88,41 @@ we adding the vertex to the PriorityQueue.
 
 \subsection{Kruskal naive}
 \subsection{Kruskal with Union-Find}
+\subsubsection{Introduction}
+In order to speed up naive Kruskal's Algorithm, especially the checking of the cyclicity we can use a new 
+data structure called: \textbf{Disjoint Set} or \textbf{Union Find}.\\
+Thanks to this new approach we are able to reduce the time complexity to $O(mlog(n))$;
+\begin{verbatim}
+    Kruskal-Union-Find(G)
+      A = empty_set
+      U = union_find_ds
+      for each vertex v in G.V
+        U.MakeSet(v)
+      sort the edges of G.E into increasing order by weight w
+      for each edge (v, w) in G.E, taken in increasing order by weight
+        if U.FindSet(v) != U.FindSet(w)
+          A = A U {(v, w)}
+          U.Union(v, w)
+      return A
+\end{verbatim}
+
+The check for the cyclicality of the graph is replaced with the check whether the two vertices of edge $(v, w)$ 
+belong to two trees or not distinct. If the two vertices have the root node in common it means that there already 
+exists a path from $v$ to $w$ and thus adding the edge $(v, w)$ it would create a cycle.
+If, on the other hand, the two vertices belong to two different trees, then the introduction of such an arch will 
+not create a cycle in the graph.
+Then, the edge $(v, w)$ will be added to $A$ and the two trees will be joined based on their \textit{size}.
+
+\subsubsection{Our implementation}
+Since in C\# the UF data structure is not present, we implemented it us.\\
+The principal methods available in the Union Find data structure are:
+\begin{enumerate}
+    \item \verb|MakeSet(x)|: where we pass the data that we want to insert in the data structure and we return 
+        if the data was inserted or not. The time complexity of this method is $O(1)$;
+    \item \verb|FindSet(x)|: returns the root node of the tree to which the node that has value $x$ belongs.
+        The time complexity of this method is $O(log n)$;
+    \item \verb|Union(x, y)|: given the values of the two nodes, we determine the parent node for each node and 
+        if they belong to different tree we merge them in base at their size. The time complexity of this 
+        method is $O(log(n))$.
+\end{enumerate}
+

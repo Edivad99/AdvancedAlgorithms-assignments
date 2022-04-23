@@ -1,6 +1,7 @@
 ﻿using FirstAssignment;
 
 const string FOLDER_PATH = @"/Users/davide/Sviluppo/Advanced Algorithm/first assignment/mst_dataset";
+//const string FOLDER_PATH = @"C:\Users\crist\Desktop\Advanced Algorithm\AdvancedAlgorithms-assignments\first assignment\mst_dataset";
 
 //Testing.ExportPrimCSV(FOLDER_PATH);
 
@@ -16,13 +17,13 @@ var res = $"{graph.V.Count},{graph.E.Count},{sum}";
 Console.WriteLine(res);*/
 
 var result = Algorithms.Kruskal(graph);
-var sum = result.Sum(x => x.Weigth);
+var sum = result.Sum(x => x.Weight);
 var res = $"{graph.V.Count},{graph.E.Count},{sum}";
 Console.WriteLine(res);
 
 
 /*var res = Algorithms.KruskalUnionFind(graph);
-var sum = res.Sum(x => x.Weigth);
+var sum = res.Sum(x => x.Weight);
 Console.WriteLine(sum);*/
 
 //Testing.ExportKruskalCSV(FOLDER_PATH);

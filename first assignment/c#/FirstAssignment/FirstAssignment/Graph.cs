@@ -19,7 +19,7 @@ public class Graph
 		return newVertex;
 	}
 
-	public void AddEdge(string uName, string vName, int weigth)
+	public void AddEdge(string uName, string vName, int weight)
 	{
 		var u = AddVertex(new Vertex(uName));
 		var v = AddVertex(new Vertex(vName));
@@ -27,18 +27,14 @@ public class Graph
 		u.AddAdjacentVertices(v);
 		v.AddAdjacentVertices(u);
 
-		var newEdge = new Edge(u, v, weigth);
+		var newEdge = new Edge(u, v, weight);
 		E.Add((newEdge.U.Name, newEdge.V.Name), newEdge);
 
-		u.AddIncidentEdge(newEdge);
-		v.AddIncidentEdge(newEdge);
 	}
 
 	public void RemoveEdge(Edge removeEdge)
 	{
 		E.Remove((removeEdge.U.Name, removeEdge.V.Name));
-		removeEdge.U.RemoveIncidentEdge(removeEdge);
-		removeEdge.V.RemoveIncidentEdge(removeEdge);
 
 		removeEdge.U.RemoveAdjacentVertices(removeEdge.V);
 		removeEdge.V.RemoveAdjacentVertices(removeEdge.U);
@@ -47,9 +43,9 @@ public class Graph
 	public int GetWeight(Vertex u, Vertex v)
 	{
 		if (E.ContainsKey((u.Name, v.Name)))
-			return E[(u.Name, v.Name)].Weigth;
+			return E[(u.Name, v.Name)].Weight;
 		if (E.ContainsKey((v.Name, u.Name)))
-			return E[(v.Name, u.Name)].Weigth;
+			return E[(v.Name, u.Name)].Weight;
 		throw new ArgumentException("Edge not found");
 	}
 

@@ -51,7 +51,7 @@ public static class Testing
             var edges = Algorithms.Kruskal(graph);
             stopWatch.Stop();
 
-            int sum = edges.Sum(x => x.Weigth);
+            int sum = edges.Sum(x => x.Weight);
             var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
             csv.Add(res);
             var readableTime = new DateTime(stopWatch.Elapsed.Ticks).ToString("HH:mm:ss.fff");
@@ -83,7 +83,7 @@ public static class Testing
             var edges = Algorithms.KruskalUnionFind(graph);
             stopWatch.Stop();
 
-            int sum = edges.Sum(x => x.Weigth);
+            int sum = edges.Sum(x => x.Weight);
             var res = $"{Path.GetFileNameWithoutExtension(file)};{graph.V.Count};{graph.E.Count};{sum};{stopWatch.Elapsed.TotalMilliseconds.ToString("N", new System.Globalization.CultureInfo("it-it"))}";
             csv.Add(res);
             Console.WriteLine($"Finish {verticesCount}-{edgesCount}");

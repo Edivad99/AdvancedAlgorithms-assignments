@@ -2,5 +2,49 @@
 
 \subsection*{Data structure for a vertex}
 The data structure for a vertex was implemented as follows:
+\begin{enumerate}
+    \item \verb|Name| of the vertex;
+    \item \verb|Key| is a kind of weight of a vertex;
+    \item \verb|Parent| indicates the parent of a vertex;
+    \item \verb|VerticesAdjacent| is a set which contains all adjacent nodes; 
+    \item \verb|Visited| that indicates if a node has already been visited or not.
+\end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|IsVisited|: returns the value of \verb|Visited|;
+    \item \verb|SetVisited|: sets the value of \verb|Visited| to true or false as indicated by the parameter;
+    \item \verb|AddAdjacentVertices|: adds an adjacent vertex to the \verb|VerticesAdjacent| of a node;
+    \item \verb|RemoveAdjecentVertices|: removes an adjacent vertex to the \verb|VerticesAdjacent|;
+    \item \verb|Equals|: checks if two vetrices have the same name.
+\end{enumerate}
+These operations have been implemented in order to have a constant computational complexity O(1).
+
 \subsection*{Data structure for an edge}
+The data structure for am edge was implemented as follows:
+\begin{enumerate}
+    \item \verb|U| represents one end of the edge;
+    \item \verb|V| represents one end of the edge;
+    \item \verb|Weight| indicates the weight of the edge.
+    \end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of their relative value;
+    \item \verb|Equals|: checks if two edges have the same ends and weight.
+\end{enumerate}
+These operations have been implemented in order to have a constant computational complexity O(1).
+
 \subsection*{Data structure for a graph}
+The data structure for a graph was implemented as follows:
+\begin{enumerate}
+    \item \verb|V| is a set of vertices;
+    \item \verb|E| is a collection of edges.
+    \end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of their relative value;
+    \item \verb|Equals|: checks if two edges have the same ends and weight.
+\end{enumerate}
+These operations have been implemented in order to have a constant computational complexity O(1).

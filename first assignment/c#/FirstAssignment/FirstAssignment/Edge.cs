@@ -4,20 +4,18 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
 {
     public Vertex U { get; set; }
     public Vertex V { get; set; }
-    public int Weigth { get; set; }
-    public string Label { get; set; }
+    public int Weight { get; set; }
 
-    public Edge(Vertex u, Vertex v, int weigth)
+    public Edge(Vertex u, Vertex v, int weight)
     {
         U = u;
         V = v;
-        Weigth = weigth;
-        Label = string.Empty;
+        Weight = weight;
     }
 
     public bool Equals(Edge? other)
     {
-        return other != null && U == other.U && V == other.V && Weigth == other.Weigth;
+        return other != null && U == other.U && V == other.V && Weight == other.Weight;
     }
 
     public int CompareTo(Edge? other)
@@ -25,9 +23,7 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
         // If other is not a valid object reference, this instance is greater.
         if (other == null)
             return 1;
-        return Weigth.CompareTo(other.Weigth);
+        return Weight.CompareTo(other.Weight);
     }
-
-    public Vertex GetOpposite(Vertex v) => v.Equals(U) ? V : U;
 }
 

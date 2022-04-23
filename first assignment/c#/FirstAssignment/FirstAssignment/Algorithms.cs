@@ -21,10 +21,10 @@ public static class Algorithms
             u.SetVisited(true);
             foreach (Vertex v in u.VerticesAdjacent.Values)
             {
-                int weigth = G.GetWeight(u, v);
-                if (!v.IsVisited() && weigth < v.Key)
+                int weight = G.GetWeight(u, v);
+                if (!v.IsVisited() && weight < v.Key)
                 {
-                    v.Key = weigth;
+                    v.Key = weight;
                     v.Parent = u;
                     vertexHeap.Enqueue(v, v.Key);
                 }
@@ -41,7 +41,7 @@ public static class Algorithms
 
         foreach (var edge in edges)
             if (IsAcyclic(graph, edge))
-                graph.AddEdge(edge.U.Name, edge.V.Name, edge.Weigth);
+                graph.AddEdge(edge.U.Name, edge.V.Name, edge.Weight);
                 
         return graph.E.Values.ToList();
     }

@@ -83,6 +83,8 @@ all the vertices, we started by inserting only the starting node with the weight
 Then, in the while, we extracting the minimum vertex and we check if the vertex was already visited.
 If it was visited we skip it and we extract another one.
 Otherwise we mark it as visited, and we starting to check all its adjacent vertices.
+In the if condition, we check that the adjacent vertices was not visited yet and if the conditions succeeds 
+we adding the vertex to the PriorityQueue.
 
 \subsection{Kruskal naive}
 \subsection{Kruskal with Union-Find}

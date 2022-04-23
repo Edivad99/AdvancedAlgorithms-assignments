@@ -2,3 +2,10 @@
 .vs
 bin
 obj
+
+*.aux
+*.log
+*.out
+*.pdf
+*.gz
+*.toc

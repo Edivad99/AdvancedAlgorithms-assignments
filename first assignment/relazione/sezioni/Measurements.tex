@@ -9,11 +9,13 @@ Next, to start the program you have to type the following command:\\
 \centerline{\textbf{dotnet run --project FirstAssignment.csproj --configuration Release}}
 
 \subsubsection{Relevant considerations about the program}
-At first, given the large amount of data that must be analyzed, we thought to implement the program in multiprocessing mode so to use all the threads available in modern computer processors. \\
+At first, given the large amount of data that must be analyzed, we thought to implement the program in multiprocessing
+mode so to use all the threads available in modern computer processors. \\
 \noindent
 However, we found some problem during the measurement of each task.
 Therefore, the measurement code has been adapted so that it can be executed sequentially.
-All the measurements were performed sequentially monitoring the use of a dedicated CPU core at 100\% for the entire duration of the run.
+All the measurements were performed sequentially monitoring the use of a dedicated CPU core at 100\% for the entire 
+duration of the run.
 
 \subsubsection{Technical characteristics of the computer for measurements}
 The execution of the program and the relative measurements were carried out on the following Azure machine:
@@ -24,15 +26,18 @@ The execution of the program and the relative measurements were carried out on t
 \end{itemize}
 
 \subsection{Introduction to measurements}
-The measurements were made through the implementation of a three distinct methods, one for each algorithm. \\ \noindent
-The measurements are made after retrieving and loading the entire dataset into the graph data structure, as mentioned previuosly. Each method saves the results of the program in a different file, one for each algorithm.\\
+The measurements were made through the implementation of three distinct methods, one for each algorithm. \\ \noindent
+The measurements were made after retrieving and loading the entire dataset into the graph data structure, as mentioned 
+previuosly. Each method saves the results of the program in a different file, one for each algorithm.\\
 \noindent
-The single measurement is organized sequentially by running the entire dataset based on the type of algorithm. The method \verb|ExportPrimCSV| applies the Prim's algorithm to the input graph and proceeds as follows:
+The single measurement is organized sequentially by running the entire dataset based on the type of algorithm. 
+The method \verb|ExportPrimCSV| applies the Prim's algorithm to the input graph and proceeds as follows:
 \begin{enumerate}
     \item Executes once the Prim's algorithm to the graph and saving the execution time;
     \item Save in append to the output file in \textbf{csv} format. 
 \end{enumerate}
-We also implemented \verb|ExportKruskalCSV| and \verb|ExportKruskalUFCSV| methods which use Kruskal in naive version and Kruskal with Union-Find respectively to calculate sequentially the single measurement.
+We also implemented \verb|ExportKruskalCSV| and \verb|ExportKruskalUFCSV| methods which use Kruskal in naive version and 
+Kruskal with Union-Find respectively to calculate sequentially the single measurement.
 \noindent
 The output file is saved directly at the end of each algorithm execution keeping the following formatting:
 \begin{itemize}

@@ -2,6 +2,9 @@
 
 public static class Algorithms
 {
+    /*
+     * Time complexity: O(m * log(n))
+     */
     public static void Prim(Graph G, Vertex s)
     {
         foreach (var v in G.V.Values)
@@ -32,13 +35,17 @@ public static class Algorithms
         }
     }
 
+    /*
+     * Time complexity: O(m * n)
+     */
     public static List<Edge> Kruskal(Graph G)
     {
         var edges = G.E.Values.ToList();
-        edges.Sort();
+        edges.Sort(); // By documentation, time complexity: O(n * log(n))
 
         Graph graph = new();
 
+        // Time complexity: O(m * n)
         foreach (var edge in edges)
             if (IsAcyclic(graph, edge))
                 graph.AddEdge(edge.U.Name, edge.V.Name, edge.Weight);
@@ -46,6 +53,9 @@ public static class Algorithms
         return graph.E.Values.ToList();
     }
 
+    /*
+     * Time complexity: O(n)
+     */
     private static bool IsAcyclic(Graph graph, Edge newEdge)
     {
         // Check if the edge is self-loop
@@ -65,6 +75,9 @@ public static class Algorithms
         return true; 
     }
 
+    /*
+     * Time complexity: O(n)
+     */
     private static bool Dfs(Vertex current, Vertex destination, Dictionary<string, bool> visited)
     {
         if (current == destination)
@@ -78,16 +91,19 @@ public static class Algorithms
         return false;
     }
 
+    /*
+     * Time complexity: O(m * log(n))
+     */
     public static List<Edge> KruskalUnionFind(Graph G)
     {
         var edges = G.E.Values.ToList();
-        edges.Sort();
+        edges.Sort(); // By documentation, time complexity: O(n * log(n))
 
         var U = new UnionFind<Vertex>();
-        G.V.Values.ToList().ForEach(v => U.MakeSet(v));
+        G.V.Values.ToList().ForEach(v => U.MakeSet(v)); // Time complexity: O(n)
 
         var A = new List<Edge>();
-        foreach (var edge in edges)
+        foreach (var edge in edges) // By documentation, time complexity: O(m * log(n))
         {
             if(U.FindSet(edge.U) != U.FindSet(edge.V))
             {

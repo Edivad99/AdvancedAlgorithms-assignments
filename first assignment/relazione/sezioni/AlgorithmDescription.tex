@@ -96,7 +96,7 @@ edges will be minimum
 \begin{verbatim}
   Kruskal-Naive(G)
     A = empty_set
-    sort the edges of G.E into increasing order by weight w
+    sort the edges of G.E into increasing order by weight
     for each edge e in G.E, taken in increasing order by weight
       if A U {e} is acyclic
         A = A U {e}
@@ -130,7 +130,7 @@ Thanks to this new approach we are able to reduce the time complexity to $\mathc
     U = union_find_ds
     for each vertex v in G.V
       U.MakeSet(v)
-    sort the edges of G.E into increasing order by weight w
+    sort the edges of G.E into increasing order by weight
     for each edge (v, w) in G.E, taken in increasing order by weight
       if U.FindSet(v) != U.FindSet(w)
         A = A U {(v, w)}

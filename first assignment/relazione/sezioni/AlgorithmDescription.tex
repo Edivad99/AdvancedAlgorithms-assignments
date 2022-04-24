@@ -30,7 +30,7 @@ The data structure for am edge was implemented as follows:
 \noindent
 The implemented methods were:
 \begin{enumerate}
-    \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of their relative value;
+    \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of which one is the greater;
     \item \verb|Equals|: checks if two edges have the same ends and weight.
 \end{enumerate}
 These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
@@ -38,15 +38,15 @@ These operations have been implemented in order to have a constant computational
 \subsection*{Data structure for a graph}
 The data structure for a graph was implemented as follows:
 \begin{enumerate}
-    \item \verb|V| is a set of vertices;
-    \item \verb|E| is a collection of edges.
+    \item \verb|V| is a dictionary of vertices, with key the name of the vertex;
+    \item \verb|E| is a dictionary of edges, with key the tuple of the names of the two vertices.
     \end{enumerate}
 \noindent
 The implemented methods were:
 \begin{enumerate}
     \item \verb|AddVertex|: adds a vertex to the graph;
     \item \verb|AddEdge|: adds an edge to the graph;
-    \item \verb|RemoveEdge|: removes an edge from the collection \verb|E|;
+    \item \verb|RemoveEdge|: removes an edge from the dictionary \verb|E|;
     \item \verb|GetWeight|: returns the weight of an edge given two vertices;
     \item \verb|LoadFromFileAsync|: creates the graph starting from the selected file.
 \end{enumerate}
@@ -55,7 +55,7 @@ These operations (except \verb|LoadFromFileAsync|) have been implemented in orde
 \subsection{Prim}
 \subsubsection{Introduction}
 The base version of Prim's Algorithm has a computational complexity of $\mathcal{O}(mn)$.
-The base idea is to start with a random vertex and choose, for each interaction, the edge 
+The base idea is to start with a random vertex and choose, for each iteraction, the edge 
 that connects with the lowest possible weight the \textit{MST} node tree at the new vertex.\\
 The algorithm can be optimized by using the correct data structure.
 In fact, by using the Heap we can compute the minimum weight in logarithmic time and the complexity become $\mathcal{O}(mlog(n))$.
@@ -63,7 +63,7 @@ In fact, by using the Heap we can compute the minimum weight in logarithmic time
 \begin{verbatim}
   Prim(G,s)
     for each u in V do
-      [u] <- +inf
+      key[u] <- +inf
       parent[u] <- nil
     key[s] <- 0
     Q <- V

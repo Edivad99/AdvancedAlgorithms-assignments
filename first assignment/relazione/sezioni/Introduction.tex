@@ -5,10 +5,10 @@
 In this brief report we will show comparisons between three algorithms for calculating the \textbf{Minimum Spanning Tree}: Prim's algorithm, Kruskal's algorithm in the naive version and Kruskal's algorithm with Union-Find.
 
 \subsection{Definition of MST}
-Let $V$ be the set of vertices that make up the weighted graph $G$ and let $E$ be the collection of the edges of that graph. With the aim of analyzing the complexity of algorithms, consider $|V| = n$ and $|E| = m$. \\
+Let $V$ be the set of vertices that makes the weighted graph $G$ and let $E$ be the collection of the edges of that graph. With the aim of analyzing the complexity of algorithms, consider $|V| = n$ and $|E| = m$. \\
 A minimum spanning tree $T = (V,E')$ is a tree, where the collection of edges $E'$ is a subset of $E$ of a connected, undirected and weighted graph $G = (V,E)$ which interconnects all the vertices $V$ and with the minimum sum of weights. \\
 \noindent
-One generic MST algorithm is the following: 
+One generic \textit{MST} algorithm is the following: 
 \begin{verbatim}
     GENERIC-MST(G)
         A = empty set
@@ -18,13 +18,14 @@ One generic MST algorithm is the following:
         return A
 \end{verbatim}
 \noindent
-Some definition for MST:
+Some definition for \textit{MST}:
 \begin{enumerate}
-    \item a cut $(S, V \setminus S)$ of a graph $G = (V, E)$ is a partition of $V$;
-    \item an edge $(u,v) \in E$ crosses a cut $(S, V \setminus S)$ if $u\in S$ and $v \in V \setminus S$ or viceversa;
-    \item a cut respects a set $A$ of edges if no edge of $A$ crosses the cut;
-    \item given a cut, the minumim weight edge that crosses the cut is called \textit{light edge}.
+    \item A cut $(S, V \setminus S)$ of a graph $G = (V, E)$ is a partition of $V$;
+    \item An edge $(u,v) \in E$ crosses a cut $(S, V \setminus S)$ if $u\in S$ and $v \in V \setminus S$ or viceversa;
+    \item A cut respects a set $A$ of edges if no edge of $A$ crosses the cut;
+    \item Given a cut, the minumim weight edge that crosses the cut is called \textit{light edge}.
 \end{enumerate}
 \noindent
-To determine if an edge is safe, we will use the following theorem: \\ \noindent
-\textbf{Theorem}: Let $G = (V,E)$ be a weighted, connected and undirected graph. Let $A$ be a subset of $E$ of some MST of $G$, let $(S, V \setminus S)$ a cut that respects $A$ and let (u,v) be a light edge for $(S, V \setminus S)$. Then (u,v) is safe for $A$.
+To determine if an edge is safe, we will use the following theorem: \\
+\noindent
+\textbf{Theorem}: Let $G = (V,E)$ be a weighted, connected and undirected graph. Let $A$ be a subset of $E$ of some \textit{MST} of $G$, let $(S, V \setminus S)$ a cut that respects $A$ and let (u,v) be a light edge for $(S, V \setminus S)$. Then (u,v) is safe for $A$.

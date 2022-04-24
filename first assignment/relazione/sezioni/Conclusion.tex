@@ -4,7 +4,7 @@ At the end of the work we can say that the optimizations that have been implemen
 In fact:
 \begin{enumerate}
     \item Check directly the self-loops and the presence or absence of the edge $(u, v)$ made it possible to save several calls to DFS for the control of the cyclical nature of graph $G$;
-    \item The modified version of DFS allows to avoid the scanning of the whole graph when it is not necessary. It suffices to check whether there is a path from $u$ to $v$ in the connected component of $u$. If such a path does not exist, then the edge $(u, v)$ will be part of the final MST.
+    \item The modified version of DFS allows to avoid the scanning of the whole graph when it is not necessary. It suffices to check whether there is a path from $u$ to $v$ in the connected component of $u$. If such a path does not exist, then the edge $(u, v)$ will be part of the final \textit{MST}.
 \end{enumerate}
 \noindent
 These optimizations have made it possible to obtain better perfomances when the algorithm begins to analyze the graph loaded as input. It can be seen that the times for Kruskal Naive are comparable to the times of the other two algorithms for graphs with a small number of vertices. \\

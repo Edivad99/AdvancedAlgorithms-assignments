@@ -21,7 +21,7 @@ The implemented methods were:
 These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
 
 \subsection*{Data structure for an edge}
-The data structure for am edge was implemented as follows:
+The data structure for an edge is the following one:
 \begin{enumerate}
     \item \verb|U| represents one end of the edge;
     \item \verb|V| represents one end of the edge;
@@ -54,12 +54,14 @@ These operations (except \verb|LoadFromFileAsync|) have been implemented in orde
 
 \subsection{Prim}
 \subsubsection{Introduction}
-The base version of Prim's Algorithm has a computational complexity of $\mathcal{O}(mn)$.
-The base idea is to start with a random vertex and choose, for each iteraction, the edge 
-that connects with the lowest possible weight the \textit{MST} node tree at the new vertex.\\
+The basic version of Prim's algorithm has a computational complexity of $\mathcal{O}(mn)$.
+The initial intuition is to start with a random vertex \verb|s| and choose, for each iteration, the edge 
+that connects one node in the \textit{MST} tree with the lowest possible weight to a new vertex.\\
 The algorithm can be optimized by using the correct data structure.
-In fact, by using the Heap we can compute the minimum weight in logarithmic time and the complexity become $\mathcal{O}(mlog(n))$.
-
+In fact, by using the \textit{Heap}, a data structure that implements a priority queue, we can compute the 
+minimum weight in logarithmic time and the complexity becomes $\mathcal{O}(mlog(n))$. \\
+\noindent
+The pseudo-code of Prim's algorithm using \textit{Heap} is illustrated below:
 \begin{verbatim}
   Prim(G,s)
     for each u in V do
@@ -71,8 +73,8 @@ In fact, by using the Heap we can compute the minimum weight in logarithmic time
       u <- extractMin(Q)
       for each v adjacent to u do
         if v in Q and w(u,v) < key[v] then
-          parent[v] <- u
           key[v] <- w(u,v)
+          parent[v] <- u
 \end{verbatim}
 
 \subsubsection{Our implementation}
@@ -91,8 +93,10 @@ we adding the vertex to the PriorityQueue.
 The naive version of Kruskal has a time complexity of $\mathcal{O}(mn)$. The main idea is to sort the edges by 
 their weight in increasing order.
 Once sorted, for each edge we checking if by adding it we create a cycle. If it creates a cycle it wont be 
-added, otherwise it will be part of the MST. By sorting the edges by their weight, we are sure that the sum of the
-edges will be minimum
+added, otherwise it will be part of the \textit{MST}. By sorting the edges by their weight, we are sure that the sum of the
+edges will be minimum. \\
+\noindent
+The pseudo-code of naive Kruskal's algorithm is as follows:
 \begin{verbatim}
   Kruskal-Naive(G)
     A = empty_set
@@ -103,27 +107,33 @@ edges will be minimum
     return A
 \end{verbatim}
 \subsubsection{Our implementation}
-In our implementation, instead of using A as set we decided to use our implementation of the Graph.
-The check for cyclicality is implemented with a modified version of \textit{Depth First Search}(\textit{DFS}).\\
+In our implementation, we used \verb|sort|, a method provided directly by C\#, which has a computational complexity equal to $mathcal{O}(n log(n))$ to order the edges in a non-decreasing order of weight.
+Moreover, instead of using A as set we decided to use our implementation of the Graph.
+The cyclicality check is implemented with a modified version of \textit{Depth First Search}(\textit{DFS}).\\
 The first optimization implemented is in the \verb|IsAcyclic| method, where we check if, first of all, the edge that we want 
 to insert is a self loop. Next we check if both vertices are already present in the dictionary of the vertices.
-If one of them is not present we are sure that the edge that we want insert wont create a cycle.
+If one of them is not present we are sure that the edge that we want insert won't create a cycle.
 This approach will let us reduce the calls to DFS in the first phase of the exploration.
-If both vertices are present in the dictionary, we need to call DFS to check if we'll craeate a cycle by adding the edge.\\
+If both vertices are present in the dictionary, we need to call DFS to check if we'll create a cycle by adding the edge.\\
 The second optimization concerns DFS: the method that is implemented it does not reflect the original version 
 of the algorithm. Our intent is to find, if it exists, a path that joins $u$ with $v$. If these vertices are found 
-in two distinct connected components, means that adding the edge $(u, v)$ to the graph $A$ does not will introduce a cycle. 
-Starting DFS from vertex $u$ on the graph $A$, we want to check if there is a path that leads me up to $v$.
+in two distinct connected components, means that adding the edge $(u, v)$ to the graph $A$ will not introduce a cycle. 
+Starting DFS from vertex $u$ on the graph $A$, we want to check if there is a path that leads to $v$.
 If both vertices are in the same connected component, then such a path will be found, otherwise such a path will 
-not come found because it does not exist. Hence, DFS will only run on the connected component of $u$ and not on all 
+not be found because it doesn't exist. Hence, DFS will only run on the connected component of $u$ and not on all 
 vertices of the graph. This version allows us to save the visit of the whole graph and its computational complexity 
-becomes $\mathcal{O}(m)$.
+becomes $\mathcal{O}(m)$. To conclude, these optimizations allow us to avoid exessive calls to DFS and avoid visiting the entire
+graph even when a path from $u$ and $v$ does not exist. So, the computational complexity of the Kruskal Naive algorithm remains equal to $\mathcal{O}(mn)$.
 
 \subsection{Kruskal with Union-Find}
+
 \subsubsection{Introduction}
-In order to speed up naive Kruskal's Algorithm, especially the checking of the cyclicity we can use a new 
-data structure called: \textbf{Disjoint Set} or \textbf{Union Find}.\\
-Thanks to this new approach we are able to reduce the time complexity to $\mathcal{O}(mlog(n))$;
+The naive version of Kruskal's algorithm performs repeatedly the cycle check operation on the graph. 
+This constant control is responsible fot the computational complexity of the algorithm, so, in order to speed up the 
+naive Kruskal's algorithm, we can use a new data structure called: \textbf{Disjoint Set} or \textbf{Union Find}.\\
+Thanks to this new approach we are able to reduce the time complexity to $\mathcal{O}(mlog(n))$. \\
+\noindent
+The pseudo-code of Kruskal's algorithm using Union-Find is illustrated below:
 \begin{verbatim}
   Kruskal-Union-Find(G)
     A = empty_set
@@ -138,9 +148,9 @@ Thanks to this new approach we are able to reduce the time complexity to $\mathc
     return A
 \end{verbatim}
 \noindent
-The check for the cyclicality of the graph is replaced with the check whether the two vertices of edge $(v, w)$ 
-belong to two trees or not distinct. If the two vertices have the root node in common it means that there already 
-exists a path from $v$ to $w$ and thus adding the edge $(v, w)$ it would create a cycle.
+The check for the cyclicality of the graph is replaced with the verification whether the two vertices of edge $(v, w)$ 
+belong to two distinct trees or not. If the two vertices have the root node in common it means that a path from $v$ to $w$ already exists 
+and thus adding the edge $(v, w)$ it would create a cycle.
 If, on the other hand, the two vertices belong to two different trees, then the introduction of such an arch will 
 not create a cycle in the graph.
 Then, the edge $(v, w)$ will be added to $A$ and the two trees will be joined based on their \textit{size}.

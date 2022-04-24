@@ -1,6 +1,10 @@
 \section{Description of the algorithms}
 
-\subsection*{Data structure for a vertex}
+\subsection{Data structures}
+In the following subsections, we will illustrate the main data structures used as a common foundation for all the 
+three algorithms for calculating a \textbf{Minimum Spannin Tree}.
+
+\subsubsection{Data structure for a vertex}
 The data structure for a vertex was implemented as follows:
 \begin{enumerate}
     \item \verb|Name| of the vertex;
@@ -20,7 +24,7 @@ The implemented methods were:
 \end{enumerate}
 These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
 
-\subsection*{Data structure for an edge}
+\subsubsection{Data structure for an edge}
 The data structure for an edge is the following one:
 \begin{enumerate}
     \item \verb|U| represents one end of the edge;
@@ -35,7 +39,7 @@ The implemented methods were:
 \end{enumerate}
 These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
 
-\subsection*{Data structure for a graph}
+\subsubsection{Data structure for a graph}
 The data structure for a graph was implemented as follows:
 \begin{enumerate}
     \item \verb|V| is a dictionary of vertices, with key the name of the vertex;
@@ -60,6 +64,7 @@ that connects one node in the \textit{MST} tree with the lowest possible weight 
 The algorithm can be optimized by using the correct data structure.
 In fact, by using the \textit{Heap}, a data structure that implements a priority queue, we can compute the 
 minimum weight in logarithmic time and the complexity becomes $\mathcal{O}(mlog(n))$. \\
+
 \noindent
 The pseudo-code of Prim's algorithm using \textit{Heap} is illustrated below:
 \begin{verbatim}
@@ -95,6 +100,7 @@ their weight in increasing order.
 Once sorted, for each edge we checking if by adding it we create a cycle. If it creates a cycle it wont be 
 added, otherwise it will be part of the \textit{MST}. By sorting the edges by their weight, we are sure that the sum of the
 edges will be minimum. \\
+
 \noindent
 The pseudo-code of naive Kruskal's algorithm is as follows:
 \begin{verbatim}
@@ -131,7 +137,18 @@ graph even when a path from $u$ and $v$ does not exist. So, the computational co
 The naive version of Kruskal's algorithm performs repeatedly the cycle check operation on the graph. 
 This constant control is responsible fot the computational complexity of the algorithm, so, in order to speed up the 
 naive Kruskal's algorithm, we can use a new data structure called: \textbf{Disjoint Set} or \textbf{Union Find}.\\
-Thanks to this new approach we are able to reduce the time complexity to $\mathcal{O}(mlog(n))$. \\
+
+\noindent
+The data structure for representing the disjoint sets was implemented as a tree. Initially, each vertex is represented as a single node tree, whose parent is itself.
+As we go to visit the edges that makes the graph $G$, we check if the two vertices of the selected edge belong to the same tree or not.
+If they belong to the tree, it means that they have the same root node, otherwise the root node will be different.
+Neither the order of the nodes saved in the tree nor which node is selected to be a root of the tree is important for the implementation of this algorithm.
+If the vertices of the edge $(u, v)$ belong to two different trees, then we perform an \textit{union} of these two trees. In order to implement this operation in the data structure, we taking into account also the size of each tree;
+each node stores its size which represents the number of nodes that makes its tree.
+When two different trees needs to be joined together, the tree with the smallest size becomes a child of the other; if the two tree have the same size then the choice is not so relevant, 
+it's possible to make the first tree a child of the second or viceversa.
+Thanks to this new approach we are able to reduce the time complexity to $\mathcal{O}(m log(n))$. \\
+
 \noindent
 The pseudo-code of Kruskal's algorithm using Union-Find is illustrated below:
 \begin{verbatim}
@@ -167,4 +184,6 @@ The principal methods available in the Union Find data structure are:
         if they belong to different tree we merge them in base at their size. The time complexity of this 
         method is $\mathcal{O}(log(n))$.
 \end{enumerate}
-
+\noindent
+Using our implementation of the Union-find data structure and analyzing the times in which the above mentioned methods are called, 
+we can say that the final computational complexity of our Kruskal Union-Find algorithm is $\mathcal{O}(m log(n))$

@@ -26,7 +26,7 @@ public static class Testing
             csv.Add(res);
         }
         var raw_csv = string.Join("\n", csv);
-        await File.WriteAllTextAsync("result.csv", raw_csv);
+        await File.WriteAllTextAsync("result_prim.csv", raw_csv);
     }
 
     public async static void ExportKruskalCSV(string folderPath)

@@ -3,10 +3,15 @@
 \subsection{Program's features}
 
 \subsubsection{Introduction and setting up}
-The program was written entirely in C\# mainly for convenience, in fact from the standard library, it's possible to use several useful data structures such as \textbf{PriorityQueue}. 
-Before run the program, you need to install \textbf{.NET 6.0}.\\
-Next, to start the program you have to type the following command:\\
-\centerline{\textbf{dotnet run --project FirstAssignment.csproj --configuration Release}}
+The program was written entirely in C\# mainly for convenience, in fact from the standard library, it's possible to 
+use several useful data structures such as \textbf{PriorityQueue}.
+Before running the program, follow these steps:
+\begin{enumerate}
+    \item Install \textbf{.NET 6.0};
+    \item Be sure to have change the path inside \textit{Program.cs};
+    \item Open a terminal and type the following command:\\
+        \centerline{\textbf{dotnet run --project FirstAssignment.csproj --configuration Release}}
+\end{enumerate}
 
 \subsubsection{Relevant considerations about the program}
 At first, given the large amount of data that must be analyzed, we thought to implement the program in multiprocessing
@@ -20,7 +25,7 @@ duration of the run.
 \subsubsection{Technical characteristics of the computer for measurements}
 The execution of the program and the relative measurements were carried out on the following Azure machine:
 \begin{itemize}
-    \item \textbf{CPU}: Intel Xeon Dual Core 8th Generation;
+    \item \textbf{CPU}: Intel Xeon Platinum Dual Core 8th Generation @ 2.60GHz;
     \item \textbf{RAM}: 16 GB;
     \item \textbf{SSD}: 128 GB.
 \end{itemize}

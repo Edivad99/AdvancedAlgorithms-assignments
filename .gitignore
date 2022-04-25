@@ -9,3 +9,5 @@ obj
 *.pdf
 *.gz
 *.toc
+*.fdb_latexmk
+*.fls

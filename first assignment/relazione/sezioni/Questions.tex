@@ -23,9 +23,10 @@ are shown below.
     \caption{Prim complexity.}
     \label{fig:prim}
 \end{figure}
-The graph just illustrated above (fig. \ref{fig:prim}) shows the excepted (in orange) and actual (in blue) 
-computational complexity for the Prim algorithm. As can be seen from the image, also in this case the actual 
-complexity curve remains slightly below the theoretical curve.
+The figure just illustrated above (fig. \ref{fig:prim}) shows the excepted (in orange) and actual (in blue) 
+computational complexity for the Prim algorithm. In this case the actual complexity 
+curve has a somewhat strange behavior, in fact for the graphs with 80000 vertices, the average time is greater than 
+what it should be, but on the whole the actual complexity curve remains below the theoretical curve.
 
 \subsubsection{Results of naive Kruskal}
 \begin{figure}[H]
@@ -34,7 +35,7 @@ complexity curve remains slightly below the theoretical curve.
     \caption{Naive Kruskal complexity.}
     \label{fig:kruskal}
 \end{figure}
-The graph just illustrated above (fig. \ref{fig:kruskal}) shows the excepted (in orange) and actual 
+The figure just illustrated above (fig. \ref{fig:kruskal}) shows the excepted (in orange) and actual 
 (in blue) computational complexity for the Kruskal Naive algorithm. As can be seen from the image, 
 the actual complexity curve remains slightly below the theoretical curve and therefore the two complexities are comparable.
 
@@ -45,10 +46,9 @@ the actual complexity curve remains slightly below the theoretical curve and the
     \caption{Kruskal Union Find complexity.}
     \label{fig:kruskaluf}
 \end{figure}
-The graph just illustrated above (fig. \ref{fig:kruskaluf}) shows the excepted (in orange) and actual 
-(in blue) computational complexity for the Kruskal Union Find algorithm. In this case the actual complexity 
-curve has a somewhat strange behavior, in fact for the graphs with 80000 vertices, the average time is greater than 
-what it should be, but on the whole the actual complexity curve remains below the theoretical curve.
+The figure just illustrated above (fig. \ref{fig:kruskaluf}) shows the excepted (in orange) and actual 
+(in blue) computational complexity for the Kruskal Union Find algorithm. As can be seen from the image, in this case the actual 
+complexity curve remains slightly below the theoretical curve.
 
 \subsection{Question 2}
 \textit{Comment on the results you have obtained: how do the algorithms behave with respect to the various 
@@ -64,7 +64,7 @@ were as follows:
     \begin{tabular}{l|l|l|l|l}
         \textbf{Nodes} & \textbf{Datasets} & \textbf{Prim [ms]} & \textbf{Kruskal naive [ms]} & \textbf{Kruskal U-F [ms]}\\
     \hline
-        100000 & 65, 66, 67, 68 & 86.14 & 2504591,06 & 110,66 
+        100000 & 65, 66, 67, 68 & 275,065 & 2504591,06 & 273,955 
     \end{tabular}
 \end{table}
 \noindent
@@ -73,16 +73,13 @@ Comparing the results of the graphs with a smaller number of vertices we could s
     \begin{tabular}{l|l|l|l|l}
         \textbf{Nodes} & \textbf{Datasets} & \textbf{Prim [ms]} & \textbf{Kruskal naive [ms]} & \textbf{Kruskal Union-Find [ms]} \\
     \hline
-    %   10 & 1, 2, 3, 4     & 0,009  & 0,07  & 0,018  \\
-        10 & 1, 2, 3, 4     & 0,009  & 1,73  & 0,018  \\
-    %   20 & 5, 6, 7, 8     & 0,013  & 0,13  & 0,016  \\
-        20 & 5, 6, 7, 8     & 0,996  & 0,13  & 1,45   \\
-        40 & 9, 10, 11, 12  & 0,026  & 0,34  & 0,028  \\
+        10 & 1, 2, 3, 4     & 0,04  & 0,065  & 0,055  \\
+        20 & 5, 6, 7, 8     & 0,045  & 0,13  & 0,1125   \\
+        40 & 9, 10, 11, 12  & 0,085  & 0,3425  & 0,165  \\
     \end{tabular}
 \end{table}
 \noindent
-Omitting some particular cases for Kruskal with Union-Find and Prim which considerably reaise the average 
-time; the measured times detected with Krusal Naive are closer to the other algorithms since, working with 
+The measured times detected with Krusal Naive are closer to the other algorithms since, working with 
 a smaller amount of vertices, it is not possible to see a difference in the average execution times.
 
 \subsubsection{Comparison Prim-Kruskal Union Find}
@@ -92,8 +89,8 @@ a smaller amount of vertices, it is not possible to see a difference in the aver
     \caption{Comparison between Prim and Kruskal Union-Find.}
     \label{fig:comparison}
 \end{figure}
-In the graph just illustrated (fig. \ref{fig:comparison}) there is a comparison between the Prim algorithm 
-and Kruskal Union-Find algorithm. It can be clearly seen that \textbf{Prim algorithm turns out to be more 
-efficient than Kruskal Union-Find algorithm}, since the average running time is moderately lower for Prim 
-in our implementation. Therefore, from this we can conclude that the Prim algorithm always tends to do 
+In the figure just illustrated (fig. \ref{fig:comparison}) there is a comparison between the Prim algorithm 
+and Kruskal Union-Find algorithm. It can be clearly seen that \textbf{Kruskal Union-Find algorithm turns out to be more 
+efficient than Prim algorithm}, since the average running time is moderately lower for Kruskal Union-Find 
+in our implementation. Therefore, from this we can conclude that the Kruskal Union-Find algorithm always tends to do 
 better than the others.

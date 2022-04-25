@@ -7,6 +7,7 @@ In this brief report we will show comparisons between three algorithms for calcu
 \subsection{Definition of MST}
 Let $V$ be the set of vertices that makes the weighted graph $G$ and let $E$ be the collection of the edges of that graph. With the aim of analyzing the complexity of algorithms, consider $|V| = n$ and $|E| = m$. \\
 A minimum spanning tree $T = (V,E')$ is a tree, where the collection of edges $E'$ is a subset of $E$ of a connected, undirected and weighted graph $G = (V,E)$ which interconnects all the vertices $V$ and with the minimum sum of weights. \\
+
 \noindent
 One generic \textit{MST} algorithm is the following: 
 \begin{verbatim}
@@ -29,4 +30,4 @@ Some definition for \textit{MST}:
 To determine if an edge is safe, we will use the following theorem: \\
 
 \noindent
-\textit{ Let $G = (V,E)$ be a weighted, connected and undirected graph. Let $A$ be a subset of $E$ of some \textit{MST} of $G$, let $(S, V \setminus S)$ a cut that respects $A$ and let (u,v) be a light edge for $(S, V \setminus S)$. Then (u,v) is safe for $A$}.
+\textit{Let $G = (V,E)$ be a weighted, connected and undirected graph. Let $A$ be a subset of $E$ of some \textit{MST} of $G$, let $(S, V \setminus S)$ a cut that respects $A$ and let (u,v) be a light edge for $(S, V \setminus S)$. Then (u,v) is safe for $A$}.

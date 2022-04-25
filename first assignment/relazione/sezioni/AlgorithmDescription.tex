@@ -92,6 +92,24 @@ If it was visited we skip it and we extract another one.
 Otherwise we mark it as visited, and we starting to check all its adjacent vertices.
 In the if condition, we check that the adjacent vertices was not visited yet and if the conditions succeeds 
 we adding the vertex to the PriorityQueue.
+So the code become:
+\begin{verbatim}
+  Prim(G,s)
+    for each u in V do
+      key[u] <- +inf
+      parent[u] <- nil
+    key[s] <- 0
+    Q <- {s}
+    while Q not empty do
+      u <- extractMin(Q)
+      if not visited[u] do
+        visited[u] <- true
+        for each v adjacent to u do
+          if not visited[v] and w(u,v) < key[v] then
+            key[v] <- w(u,v)
+            parent[v] <- u
+            Q <- Q U {v}
+\end{verbatim}
 
 \subsection{Kruskal naive}
 \subsubsection{Introduction}

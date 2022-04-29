@@ -2,8 +2,7 @@
 
 const string FOLDER_PATH = @"/Users/davide/Sviluppo/Advanced Algorithm/second assignment/tsp_dataset";
 
-var graph = new Graph();
-await graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "berlin52.tsp"));
+var graph = await Graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "dsj1000.tsp"));
 
 Console.WriteLine(graph.V.Count);
 

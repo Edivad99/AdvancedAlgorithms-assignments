@@ -6,11 +6,48 @@ public class Vertex : IEquatable<Vertex>
     public double X { get; init; }
     public double Y { get; init; }
 
-    public Vertex(string name, double x, double y)
+    public bool Visited { get; set; }
+    public int Key { get; set; }
+    public Dictionary<string, Vertex> VerticesAdjacent { get; set; }
+
+    public Vertex(string name, double x, double y, Type type)
     {
         Name = name;
         X = x;
         Y = y;
+        VerticesAdjacent = new();
+        Key = 0;
+
+        if (type == Type.GEO)
+        {
+            X = ConvertGeoCoordinate(X);
+            Y = ConvertGeoCoordinate(Y);
+        }
     }
+
+    private static double ConvertGeoCoordinate(double x)
+    {
+        const double PI = 3.141592;
+        int deg = Convert.ToInt32(Math.Truncate(x));
+        double min = x - deg;
+        double rad = PI * (deg + 5.0 * min / 3.0) / 180.0;
+        return rad;
+    }
+
+    public bool IsVisited() => Visited;
+    public void SetVisited(bool value) => Visited = value;
+
+    public void AddAdjacentVertices(Vertex v)
+    {
+        if (!VerticesAdjacent.ContainsKey(v.Name))
+            VerticesAdjacent.Add(v.Name, v);
+    }
+
+    public void RemoveAdjacentVertices(Vertex v)
+    {
+        if (VerticesAdjacent.ContainsKey(v.Name))
+            VerticesAdjacent.Remove(v.Name);
+    }
+
     public bool Equals(Vertex? other) => other != null && Name.Equals(other.Name);
 }

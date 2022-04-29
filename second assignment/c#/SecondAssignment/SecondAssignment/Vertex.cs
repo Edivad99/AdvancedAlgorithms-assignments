@@ -7,7 +7,8 @@ public class Vertex : IEquatable<Vertex>
     public double Y { get; init; }
 
     public bool Visited { get; set; }
-    public int Key { get; set; }
+    public double Key { get; set; }
+    public Vertex? Parent { get; set; }
     public Dictionary<string, Vertex> VerticesAdjacent { get; set; }
 
     public Vertex(string name, double x, double y, Type type)

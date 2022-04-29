@@ -38,7 +38,6 @@ public class Graph
 
 		var newEdge = new Edge(u, v, Type);
 		E.Add((newEdge.U.Name, newEdge.V.Name), newEdge);
-
 	}
 
 	public double GetWeight(Vertex u, Vertex v)

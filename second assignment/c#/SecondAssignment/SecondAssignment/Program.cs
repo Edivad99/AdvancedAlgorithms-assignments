@@ -4,34 +4,18 @@ const string FOLDER_PATH = @"/Users/davide/Sviluppo/Advanced Algorithm/second as
 
 var graph = await Graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "burma14.tsp"));
 
-Console.WriteLine(graph.V.Count);
+var vertices = Algorithms.ApproxMetricTSP(graph);
 
-Algorithms.Prim(graph, graph.V["1"]);
+var verticesPair = vertices.Where((e, i) => i < vertices.Count - 1).Select((e, i) => new { A = e, B = vertices[i + 1] });
 
-var tree = new Dictionary<string, List<string>>();
-
-foreach(var vertex in graph.V.Values)
+foreach(var x in verticesPair)
 {
-    if (vertex.Parent is not null)
-    {
-        if(tree.ContainsKey(vertex.Parent.Name))
-        {
-            tree[vertex.Parent.Name].Add(vertex.Name);
-        }
-        else
-        {
-            tree.Add(vertex.Parent.Name, new() { vertex.Name });
-        }
-    }
+    Console.WriteLine(x.A.Name + " " + x.B.Name);
 }
 
-foreach(var vertex in graph.V.Values)
-{
-    var is_internal = tree.ContainsKey(vertex.Name);
-    Console.WriteLine($"{vertex.Name} is internal: {is_internal}");
-}
+var sum = verticesPair.Sum(x => graph.GetWeight(x.A, x.B));
 
-Console.WriteLine(graph.V.Sum(x => x.Value.Key));
+Console.WriteLine("Somma: " + sum);
 
 Console.WriteLine("END");
 Console.ReadKey();

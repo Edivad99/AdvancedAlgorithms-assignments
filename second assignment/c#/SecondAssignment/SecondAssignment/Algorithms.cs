@@ -34,5 +34,44 @@ public static class Algorithms
             }
         }
     }
+
+    public static List<Vertex> ApproxMetricTSP(Graph graph)
+    {
+        var s = graph.V.First().Value;
+        Prim(graph, s);
+
+        var tree = new Dictionary<string, List<Vertex>>();
+        foreach (var vertex in graph.V.Values)
+        {
+            if (vertex.Parent is not null)
+            {
+                if (tree.ContainsKey(vertex.Parent.Name))
+                {
+                    tree[vertex.Parent.Name].Add(vertex);
+                }
+                else
+                {
+                    tree.Add(vertex.Parent.Name, new() { vertex });
+                }
+            }
+        }
+        var H = PreOrder(s, tree);
+        H.Add(s);
+        return H;
+    }
+
+    private static List<Vertex> PreOrder(Vertex s, Dictionary<string, List<Vertex>> tree)
+    {
+        var result = new List<Vertex>() { s };
+        if(tree.ContainsKey(s.Name))
+        {
+            foreach(var adj in tree[s.Name])
+            {
+                result.AddRange(PreOrder(adj, tree));
+            }
+        }
+
+        return result;
+    }
 }
 

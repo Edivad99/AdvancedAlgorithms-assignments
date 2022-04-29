@@ -12,9 +12,7 @@ var tree = new Dictionary<string, List<string>>();
 
 foreach(var vertex in graph.V.Values)
 {
-    if (vertex.Parent is null)
-        tree.Add("ROOT", new() { vertex.Name });
-    else
+    if (vertex.Parent is not null)
     {
         if(tree.ContainsKey(vertex.Parent.Name))
         {

@@ -70,7 +70,6 @@ public static class Algorithms
                 result.AddRange(PreOrder(adj, tree));
             }
         }
-
         return result;
     }
 }

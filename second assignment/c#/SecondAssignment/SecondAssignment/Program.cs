@@ -8,12 +8,11 @@ var vertices = Algorithms.ApproxMetricTSP(graph);
 
 var verticesPair = vertices.Where((e, i) => i < vertices.Count - 1).Select((e, i) => new { A = e, B = vertices[i + 1] });
 
-foreach(var x in verticesPair)
+var sum = verticesPair.Sum(x =>
 {
-    Console.WriteLine(x.A.Name + " " + x.B.Name);
-}
-
-var sum = verticesPair.Sum(x => graph.GetWeight(x.A, x.B));
+    Console.WriteLine(x.A.Name + "\t" + x.B.Name + "\t-> " + graph.GetWeight(x.A, x.B));
+    return graph.GetWeight(x.A, x.B);
+});
 
 Console.WriteLine("Somma: " + sum);
 

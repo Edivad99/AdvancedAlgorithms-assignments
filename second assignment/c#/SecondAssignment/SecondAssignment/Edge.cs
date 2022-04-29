@@ -10,7 +10,7 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
     {
         U = u;
         V = v;
-        if(type == Type.GEO)
+        if (type == Type.GEO)
         {
             const double RRR = 6378.388;
             var q1 = Math.Cos(U.X - V.X);
@@ -20,7 +20,9 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
         }
         else
         {
-            Distance = Math.Sqrt(Math.Pow(U.X - V.X, 2) + Math.Pow(U.Y - V.Y, 2));
+            //No coordinate conversions are needed in this case.
+            //Calculate the Euclidean distance and round the value to the nearest integer.
+            Distance = Math.Round(Math.Sqrt(Math.Pow(U.X - V.X, 2) + Math.Pow(U.Y - V.Y, 2)));
         }
     }
 

@@ -29,7 +29,7 @@ public class Vertex : IEquatable<Vertex>
     private static double ConvertGeoCoordinate(double x)
     {
         const double PI = 3.141592;
-        int deg = Convert.ToInt32(Math.Truncate(x));
+        double deg = Math.Truncate(x);
         double min = x - deg;
         double rad = PI * (deg + 5.0 * min / 3.0) / 180.0;
         return rad;

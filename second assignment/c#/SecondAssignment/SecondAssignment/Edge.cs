@@ -13,9 +13,9 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
         if (type == Type.GEO)
         {
             const double RRR = 6378.388;
-            var q1 = Math.Cos(U.X - V.X);
-            var q2 = Math.Cos(U.Y - V.Y);
-            var q3 = Math.Cos(U.Y + V.Y);
+            var q1 = Math.Cos(U.Y - V.Y);
+            var q2 = Math.Cos(U.X - V.X);
+            var q3 = Math.Cos(U.X + V.X);
             Distance = Math.Truncate(RRR * Math.Acos(0.5 * ((1 + q1) * q2 - (1 - q1) * q3)) + 1);
         }
         else

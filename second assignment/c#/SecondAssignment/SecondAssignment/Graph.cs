@@ -62,6 +62,7 @@ public class Graph
 
         for (int i = 1; i < lines.Length; i++)
         {
+            lines[i] = lines[i].Trim();
             if (lines[i].Contains("EDGE_WEIGHT_TYPE"))
             {
                 type = lines[i].Split(" ").Last().Equals("GEO") ? Type.GEO : Type.EUC_2D;
@@ -80,7 +81,7 @@ public class Graph
             }
             else if (readHeader)
             {
-                var line = lines[i].Trim().Split(' ').ToList();
+                var line = lines[i].Split(' ').ToList();
                 line.RemoveAll(x => x.Equals(string.Empty));
                 string name = line[0];
                 double x = Convert.ToDouble(line[1]);

@@ -41,8 +41,9 @@ public static class Algorithms
         Prim(graph, s);
 
         var tree = new Dictionary<string, List<Vertex>>();
-        foreach (var vertex in graph.V.Values)
+        foreach (var kvp in graph.V.OrderBy(x => x.Value.Key))
         {
+            var vertex = kvp.Value;
             if (vertex.Parent is not null)
             {
                 if (tree.ContainsKey(vertex.Parent.Name))

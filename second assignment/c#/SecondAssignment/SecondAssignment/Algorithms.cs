@@ -112,7 +112,7 @@ public static class Algorithms
         return res;
     }
 
-    public static LinkedList<Vertex> ClosestInsertion(Graph graph)
+    public static List<Vertex> ClosestInsertion(Graph graph)
     {
         var result = new LinkedList<Vertex>();
         var vertices = graph.V.Keys.ToHashSet();
@@ -138,60 +138,45 @@ public static class Algorithms
         vertices.Remove(s.Name);
         vertices.Remove(j.Name);
 
-
-        min = double.MaxValue;
-        key = string.Empty;
-        foreach(var vertex in vertices)
+        while(vertices.Any())
         {
-            var distance = result.Select(x => graph.GetWeight(x, graph.V[vertex])).Sum();
-            if (distance < min)
+            min = double.MaxValue;
+            key = string.Empty;
+            foreach (var vertex in vertices)
             {
-                key = vertex;
-                min = distance;
-            }
-        }
-
-        min = double.MaxValue;
-        string v = string.Empty, u = string.Empty;
-        /*for (int i = 0; i < result.Count; i++)
-        {
-            for (int l = i + 1; l < result.Count; l++)
-            {
-                var w = graph.GetWeight(result.ElementAt(i), graph.V[key]) +
-                        graph.GetWeight(result.ElementAt(l), graph.V[key]) -
-                        graph.GetWeight(result.ElementAt(i), result.ElementAt(l));
-
-                if(w < min)
+                var distance = result.Select(x => graph.GetWeight(x, graph.V[vertex])).Sum();
+                if (distance < min)
                 {
-                    min = w;
-                    v = result.ElementAt(l).Name;
-                    u = result.ElementAt(i).Name;
+                    key = vertex;
+                    min = distance;
                 }
             }
-        }*/
 
-
-        for (var i = result.First; i != null; i = i.Next)
-        {
-            for (var l = i.Next; l != null; l = l.Next)
+            min = double.MaxValue;
+            LinkedListNode<Vertex>? iVertex = null;
+            for (var i = result.First; i != null; i = i.Next)
             {
-                var w = graph.GetWeight(i.Value, graph.V[key]) +
-                        graph.GetWeight(l.Value, graph.V[key]) -
-                        graph.GetWeight(i.Value, l.Value);
-
-                if (w < min)
+                for (var l = i.Next; l != null; l = l.Next)
                 {
-                    min = w;
-                    v = l.Value.Name;
-                    u = i.Value.Name;
+                    var w = graph.GetWeight(i.Value, graph.V[key]) +
+                            graph.GetWeight(l.Value, graph.V[key]) -
+                            graph.GetWeight(i.Value, l.Value);
+
+                    if (w < min)
+                    {
+                        min = w;
+                        iVertex = i;
+                    }
                 }
             }
+            if (iVertex is not null)
+            {
+                result.AddAfter(iVertex, graph.V[key]);
+                vertices.Remove(key);
+            }
         }
-
-        //result.AddAfter(result, graph.V[key]);
-
-
-        return result;
+        result.AddLast(s);
+        return result.ToList();
     }
 }
 

@@ -5,7 +5,8 @@ const string FOLDER_PATH = @"/Users/davide/Sviluppo/Advanced Algorithm/second as
 
 var graph = await Graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "burma14.tsp"));
 
-var vertices = Algorithms.ApproxMetricTSP(graph);
+graph.PrintAdjacentMatrix();
+var vertices = Algorithms.NearestNeighbor(graph);
 var verticesPair = vertices.PairWise();
 
 var sum = verticesPair.Sum(x =>
@@ -16,7 +17,8 @@ var sum = verticesPair.Sum(x =>
 
 Console.WriteLine("Somma: " + sum);
 
-Testing.Export2APCSV(FOLDER_PATH);
+//Testing.ExportNNCSV(FOLDER_PATH);
+Algorithms.ClosestInsertion(graph);
 
 Console.WriteLine("END");
 Console.ReadKey();

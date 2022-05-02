@@ -6,16 +6,17 @@ const string FOLDER_PATH = @"/Users/davide/Sviluppo/Advanced Algorithm/second as
 var graph = await Graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "burma14.tsp"));
 
 var vertices = Algorithms.ApproxMetricTSP(graph);
-
-var verticesPair = vertices.Where((e, i) => i < vertices.Count - 1).Select((e, i) => new { A = e, B = vertices[i + 1] });
+var verticesPair = vertices.PairWise();
 
 var sum = verticesPair.Sum(x =>
 {
-    Console.WriteLine(x.A.Name + "\t" + x.B.Name + "\t-> " + graph.GetWeight(x.A, x.B));
-    return graph.GetWeight(x.A, x.B);
+    //Console.WriteLine(x.Item1.Name + "\t" + x.Item2.Name + "\t-> " + graph.GetWeight(x.Item1, x.Item2));
+    return graph.GetWeight(x.Item1, x.Item2);
 });
 
 Console.WriteLine("Somma: " + sum);
+
+Testing.Export2APCSV(FOLDER_PATH);
 
 Console.WriteLine("END");
 Console.ReadKey();

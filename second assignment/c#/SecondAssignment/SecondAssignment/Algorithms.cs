@@ -73,5 +73,43 @@ public static class Algorithms
         }
         return result;
     }
+
+
+    public static List<Vertex> NearestNeighbor(Graph graph)
+    {
+        var result = new List<Vertex>();
+        var kvp = graph.V.First();
+
+        result.AddRange(VisitNearestNeighbor(graph, kvp.Key));
+        result.Add(kvp.Value);
+
+        return result;
+    }
+
+    private static List<Vertex> VisitNearestNeighbor(Graph graph, string vertexKey)
+    {
+        var s = graph.V[vertexKey];
+        s.SetVisited(true);
+        var res = new List<Vertex>() { s };
+
+        string key = string.Empty;
+        double min = double.MaxValue;
+        foreach (var kvpAdj in s.VerticesAdjacent)
+        {
+            var adj = kvpAdj.Value;
+            var w = graph.GetWeight(s, adj);
+            if (!adj.IsVisited() && w < min)
+            {
+                min = w;
+                key = kvpAdj.Key;
+            }
+        }
+        if (!string.IsNullOrEmpty(key))
+        {
+            res.AddRange(VisitNearestNeighbor(graph, key));
+        }
+        
+        return res;
+    }
 }
 

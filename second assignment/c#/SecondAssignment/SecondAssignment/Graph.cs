@@ -49,6 +49,26 @@ public class Graph
         throw new ArgumentException("Edge not found");
     }
 
+    public void PrintAdjacentMatrix()
+    {
+        Console.Write("\t\t");
+        foreach (var i in V)
+            Console.Write($"\t{i.Key}\t");
+        Console.WriteLine("\n");
+        foreach(var i in V)
+        {
+            Console.Write($"\t{i.Key}\t");
+            foreach (var j in V)
+            {
+                if (i.Key == j.Key)
+                    Console.Write("\t0\t");
+                else
+                    Console.Write($"\t{GetWeight(i.Value, j.Value)}\t");
+            }
+            Console.WriteLine();
+        }
+    }
+
     public static async Task<Graph> LoadFromFileAsync(string filePath)
     {
         var points = new List<Vertex>();

@@ -167,7 +167,7 @@ public static class Algorithms
             }
 
             min = double.MaxValue;
-            LinkedListNode<Vertex>? iVertex = null;
+            LinkedListNode<Vertex> iVertex = result.First!;
             for (var i = result.First; i.Next != null; i = i.Next) // O(n)
             {
                 double w = graph.GetWeight(i.Value, graph.V[key]) +
@@ -180,7 +180,7 @@ public static class Algorithms
                     iVertex = i;
                 }
             }
-            result.AddAfter(iVertex!, graph.V[key]); // O(1)
+            result.AddAfter(iVertex, graph.V[key]); // O(1)
             vertices.Remove(key);
         }
         return result.ToList();

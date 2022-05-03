@@ -5,7 +5,7 @@ public static class Algorithms
     /*
      * Time complexity: O(m * log(n))
      */
-    public static void Prim(Graph G, Vertex s)
+    private static void Prim(Graph G, Vertex s)
     {
         foreach (var v in G.V.Values)
         {

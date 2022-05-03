@@ -137,7 +137,6 @@ public static class Algorithms
         vertices.Remove(s.Name);
         vertices.Remove(j.Name);
 
-        var c = 2;
         while(vertices.Any())
         {
             min = double.MaxValue;
@@ -154,37 +153,35 @@ public static class Algorithms
 
             min = double.MaxValue;
             LinkedListNode<Vertex>? iVertex = null;
-            if (c == 2)
-                iVertex = result.First;
-            else
+            for (var i = result.First; i != null; i = i.Next)
             {
-               for (var i = result.First; i != null; i = i.Next)
-               {
-                   double w;
-                   if (i != result.Last) // i.Next!=null
-                   {
-                       w = graph.GetWeight(i.Value, graph.V[key]) +
-                           graph.GetWeight(graph.V[key], i.Next.Value) -
-                           graph.GetWeight(i.Value, i.Next.Value);
-                   }
-                   else
-                   {
-                       w = graph.GetWeight(i.Value, graph.V[key]) + 
-                           graph.GetWeight(graph.V[key], result.First.Value) -
-                           graph.GetWeight(i.Value, result.First.Value);
-                   }
-               
-                   if (!(w < min)) continue; 
-                   min = w;
-                   iVertex = i;
-               } 
+                double w;
+                if (i == result.Last)
+                {
+                    w = graph.GetWeight(i.Value, graph.V[key]) +
+                        graph.GetWeight(graph.V[key], result.First!.Value) -
+                        graph.GetWeight(i.Value, result.First.Value);
+                }
+                else
+                {
+                    w = graph.GetWeight(i.Value, graph.V[key]) +
+                        graph.GetWeight(graph.V[key], i.Next!.Value) -
+                        graph.GetWeight(i.Value, i.Next.Value);
+
+                }
+
+                if (w < min)
+                {
+                    min = w;
+                    iVertex = i;
+                }
             }
 
-            c += 1;
-            
-            if (iVertex is null) continue;
-            result.AddAfter(iVertex, graph.V[key]);
-            vertices.Remove(key);
+            if (iVertex is not null)
+            {
+                result.AddAfter(iVertex, graph.V[key]);
+                vertices.Remove(key);   
+            }
         }
         result.AddLast(s);
         return result.ToList();

@@ -1,4 +1,6 @@
-﻿namespace SecondAssignment;
+﻿using System.Globalization;
+
+namespace SecondAssignment;
 
 public enum Type
 {
@@ -104,8 +106,8 @@ public class Graph
                 var line = lines[i].Split(' ').ToList();
                 line.RemoveAll(x => x.Equals(string.Empty));
                 string name = line[0];
-                double x = Convert.ToDouble(line[1]);
-                double y = Convert.ToDouble(line[2]);
+                double x = Convert.ToDouble(line[1], CultureInfo.InvariantCulture);
+                double y = Convert.ToDouble(line[2], CultureInfo.InvariantCulture);
 
                 points.Add(new Vertex(name, x, y, type));
             }

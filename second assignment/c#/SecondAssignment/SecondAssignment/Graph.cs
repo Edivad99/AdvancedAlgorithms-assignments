@@ -53,13 +53,12 @@ public class Graph
 
     public void PrintAdjacentMatrix()
     {
-        Console.Write("\t");
         foreach (var i in V)
             Console.Write($"\t{i.Key}");
         Console.WriteLine("\n");
         foreach(var i in V)
         {
-            Console.Write($"\t{i.Key}");
+            Console.Write($"{i.Key}");
             foreach (var j in V)
             {
                 if (i.Key == j.Key)

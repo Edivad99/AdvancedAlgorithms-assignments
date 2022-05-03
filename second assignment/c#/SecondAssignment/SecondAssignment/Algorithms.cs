@@ -70,13 +70,14 @@ public static class Algorithms
     private static List<Vertex> PreOrder(Vertex s, Dictionary<string, List<Vertex>> tree)
     {
         var result = new List<Vertex>() { s };
-        if(tree.ContainsKey(s.Name))
+        if (tree.ContainsKey(s.Name))
         {
-            foreach(var adj in tree[s.Name])
+            foreach (var adj in tree[s.Name])
             {
                 result.AddRange(PreOrder(adj, tree));
             }
         }
+
         return result;
     }
 
@@ -97,6 +98,37 @@ public static class Algorithms
     /*
      * Time Complexity: O(n^2)
      */
+    /*public static List<Vertex> NearestNeighborIT(Graph graph)
+    {
+        var result = new List<Vertex>();
+        var kvp = graph.V.First().Value;
+        result.Add(kvp);
+        var vertices = graph.V.Values.ToHashSet();
+        vertices.Remove(kvp);
+        
+        while(vertices.Any())
+        {
+            var min = double.MaxValue;
+            foreach (var vertex in vertices)
+            {
+                var w = graph.GetWeight(result.Last(), vertex);
+                if (w < min)
+                {
+                    min = w;
+                    kvp = vertex;
+                }
+            }
+            vertices.Remove(kvp);
+            result.Add(kvp);
+        }
+        result.Add(graph.V.First().Value);
+        return result;
+    }
+    */
+
+    /*
+    * Time Complexity: O(n^2)
+    */
     private static List<Vertex> VisitNearestNeighbor(Graph graph, string vertexKey)
     {
         var s = graph.V[vertexKey];

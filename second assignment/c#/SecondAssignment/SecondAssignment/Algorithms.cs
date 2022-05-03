@@ -3,7 +3,7 @@
 public static class Algorithms
 {
     /*
-     * Time complexity: O(m * log(n))
+     * Time complexity: O(n^2 * log(n))
      */
     private static void Prim(Graph G, Vertex s)
     {
@@ -36,12 +36,12 @@ public static class Algorithms
     }
 
     /*
-     * Time Complexity: O(n^2)
+     * Time Complexity: O(n^2 * log(n))
      */
     public static List<Vertex> ApproxMetricTSP(Graph graph)
     {
         var s = graph.V.First().Value;
-        Prim(graph, s); // O(m * log(n))
+        Prim(graph, s); // O(n^2 * log(n))
 
         var tree = new Dictionary<string, List<Vertex>>();
         foreach (var kvp in graph.V.OrderBy(x => x.Value.Key)) // O(n)
@@ -123,6 +123,9 @@ public static class Algorithms
         return res;
     }
 
+    /*
+     * O(n^2)
+     */
     public static List<Vertex> ClosestInsertion(Graph graph)
     {
         var result = new LinkedList<Vertex>();

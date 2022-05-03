@@ -18,7 +18,7 @@ var sum = verticesPair.Sum(x =>
 
 Console.WriteLine("Sum: " + sum);
 
-Export.ExportClosestInsertionCSV(FOLDER_PATH);
+//Export.ExportClosestInsertionCSV(FOLDER_PATH);
 
 Console.WriteLine("END");
 Console.ReadKey();

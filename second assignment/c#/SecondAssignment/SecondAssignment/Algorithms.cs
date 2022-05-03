@@ -168,7 +168,7 @@ public static class Algorithms
 
             min = double.MaxValue;
             LinkedListNode<Vertex> iVertex = result.First!;
-            for (var i = result.First; i.Next != null; i = i.Next) // O(n)
+            for (var i = result.First; i!.Next != null; i = i.Next) // O(n)
             {
                 double w = graph.GetWeight(i.Value, graph.V[key]) +
                            graph.GetWeight(graph.V[key], i.Next!.Value) -

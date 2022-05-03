@@ -2,7 +2,7 @@
 
 namespace SecondAssignment;
 
-public static class Testing
+public static class Export
 {
     private async static Task<List<string>> TestMethod(string folderPath, Func<Graph, List<Vertex>> func)
     {

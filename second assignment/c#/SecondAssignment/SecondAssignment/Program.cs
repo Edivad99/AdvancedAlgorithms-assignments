@@ -12,13 +12,13 @@ var verticesPair = vertices.PairWise();
 
 var sum = verticesPair.Sum(x =>
 {
-    Console.WriteLine(x.Item1.Name + "\t" + x.Item2.Name + "\t-> " + graph.GetWeight(x.Item1, x.Item2));
+    //Console.WriteLine(x.Item1.Name + "\t" + x.Item2.Name + "\t-> " + graph.GetWeight(x.Item1, x.Item2));
     return graph.GetWeight(x.Item1, x.Item2);
 });
 
 Console.WriteLine("Sum: " + sum);
 
-//Testing.ExportNNCSV(FOLDER_PATH);
+Export.ExportClosestInsertionCSV(FOLDER_PATH);
 
 Console.WriteLine("END");
 Console.ReadKey();

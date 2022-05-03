@@ -65,7 +65,7 @@ public static class Algorithms
     }
 
     /*
-     * Time Complexity: O(n^2)
+     * Time Complexity: Theta(n)
      */
     private static List<Vertex> PreOrder(Vertex s, Dictionary<string, List<Vertex>> tree)
     {

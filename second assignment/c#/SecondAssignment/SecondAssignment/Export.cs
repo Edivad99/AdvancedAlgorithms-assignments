@@ -37,7 +37,7 @@ public static class Export
         await File.WriteAllTextAsync("2ap.csv", raw_csv);
     }
 
-    public async static void ExportNNCSV(string folderPath)
+    public async static void ExportNearestNeighborCSV(string folderPath)
     {
         var csv = await TestMethod(folderPath, graph => Algorithms.NearestNeighbor(graph));
         var raw_csv = string.Join("\n", csv);

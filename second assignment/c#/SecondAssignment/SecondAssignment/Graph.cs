@@ -53,19 +53,18 @@ public class Graph
 
     public void PrintAdjacentMatrix()
     {
-        Console.Write("\t\t");
         foreach (var i in V)
-            Console.Write($"\t{i.Key}\t");
+            Console.Write($"\t{i.Key}");
         Console.WriteLine("\n");
         foreach(var i in V)
         {
-            Console.Write($"\t{i.Key}\t");
+            Console.Write($"{i.Key}");
             foreach (var j in V)
             {
                 if (i.Key == j.Key)
-                    Console.Write("\t0\t");
+                    Console.Write("\t0");
                 else
-                    Console.Write($"\t{GetWeight(i.Value, j.Value)}\t");
+                    Console.Write($"\t{GetWeight(i.Value, j.Value)}");
             }
             Console.WriteLine();
         }

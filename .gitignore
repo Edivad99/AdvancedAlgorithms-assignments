@@ -11,3 +11,4 @@ obj
 *.toc
 *.fdb_latexmk
 *.fls
+*.xml

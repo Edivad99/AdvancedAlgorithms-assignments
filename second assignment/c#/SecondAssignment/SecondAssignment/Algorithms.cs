@@ -5,7 +5,7 @@ public static class Algorithms
     /*
      * Time complexity: O(m * log(n))
      */
-    public static void Prim(Graph G, Vertex s)
+    private static void Prim(Graph G, Vertex s)
     {
         foreach (var v in G.V.Values)
         {
@@ -35,13 +35,16 @@ public static class Algorithms
         }
     }
 
+    /*
+     * Time Complexity: O(n^2)
+     */
     public static List<Vertex> ApproxMetricTSP(Graph graph)
     {
         var s = graph.V.First().Value;
-        Prim(graph, s);
+        Prim(graph, s); // O(m * log(n))
 
         var tree = new Dictionary<string, List<Vertex>>();
-        foreach (var kvp in graph.V.OrderBy(x => x.Value.Key))
+        foreach (var kvp in graph.V.OrderBy(x => x.Value.Key)) // O(n)
         {
             var vertex = kvp.Value;
             if (vertex.Parent is not null)
@@ -56,11 +59,14 @@ public static class Algorithms
                 }
             }
         }
-        var H = PreOrder(s, tree);
+        var H = PreOrder(s, tree); // O(n^2)
         H.Add(s);
         return H;
     }
 
+    /*
+     * Time Complexity: O(n^2)
+     */
     private static List<Vertex> PreOrder(Vertex s, Dictionary<string, List<Vertex>> tree)
     {
         var result = new List<Vertex>() { s };
@@ -74,18 +80,23 @@ public static class Algorithms
         return result;
     }
 
-
+    /*
+     * Time Complexity: O(n^2)
+     */
     public static List<Vertex> NearestNeighbor(Graph graph)
     {
         var result = new List<Vertex>();
         var kvp = graph.V.First();
 
-        result.AddRange(VisitNearestNeighbor(graph, kvp.Key));
+        result.AddRange(VisitNearestNeighbor(graph, kvp.Key)); // O(n)
         result.Add(kvp.Value);
 
         return result;
     }
 
+    /*
+     * Time Complexity: O(n^2)
+     */
     private static List<Vertex> VisitNearestNeighbor(Graph graph, string vertexKey)
     {
         var s = graph.V[vertexKey];
@@ -94,7 +105,7 @@ public static class Algorithms
 
         string key = string.Empty;
         double min = double.MaxValue;
-        foreach (var kvpAdj in s.VerticesAdjacent)
+        foreach (var kvpAdj in s.VerticesAdjacent) // O(n)
         {
             var adj = kvpAdj.Value;
             var w = graph.GetWeight(s, adj);
@@ -106,7 +117,7 @@ public static class Algorithms
         }
         if (!string.IsNullOrEmpty(key))
         {
-            res.AddRange(VisitNearestNeighbor(graph, key));
+            res.AddRange(VisitNearestNeighbor(graph, key)); // O(n^2)
         }
         
         return res;
@@ -117,11 +128,10 @@ public static class Algorithms
         var result = new LinkedList<Vertex>();
         var vertices = graph.V.Keys.ToHashSet();
 
-
         var s = graph.V.First().Value;
         string key = string.Empty;
         double min = double.MaxValue;
-        foreach (var kvpAdj in s.VerticesAdjacent)
+        foreach (var kvpAdj in s.VerticesAdjacent) // O(n)
         {
             var adj = kvpAdj.Value;
             var w = graph.GetWeight(s, adj);
@@ -135,16 +145,20 @@ public static class Algorithms
 
         result.AddFirst(s);
         result.AddLast(j);
+        result.AddLast(s);
         vertices.Remove(s.Name);
         vertices.Remove(j.Name);
 
-        while(vertices.Any())
+        /*
+         * Time Complexity: O(n^2)
+         */
+        while(vertices.Any()) // O(n)
         {
             min = double.MaxValue;
             key = string.Empty;
-            foreach (var vertex in vertices)
+            foreach (var vertex in vertices) // O(n)
             {
-                var distance = result.Select(x => graph.GetWeight(x, graph.V[vertex])).Sum();
+                var distance = result.Select(x => graph.GetWeight(graph.V[vertex], x)).Min();
                 if (distance < min)
                 {
                     key = vertex;
@@ -154,28 +168,21 @@ public static class Algorithms
 
             min = double.MaxValue;
             LinkedListNode<Vertex>? iVertex = null;
-            for (var i = result.First; i != null; i = i.Next)
+            for (var i = result.First; i.Next != null; i = i.Next) // O(n)
             {
-                for (var l = i.Next; l != null; l = l.Next)
+                double w = graph.GetWeight(i.Value, graph.V[key]) +
+                           graph.GetWeight(graph.V[key], i.Next!.Value) -
+                           graph.GetWeight(i.Value, i.Next.Value);
+                
+                if (w < min)
                 {
-                    var w = graph.GetWeight(i.Value, graph.V[key]) +
-                            graph.GetWeight(l.Value, graph.V[key]) -
-                            graph.GetWeight(i.Value, l.Value);
-
-                    if (w < min)
-                    {
-                        min = w;
-                        iVertex = i;
-                    }
+                    min = w;
+                    iVertex = i;
                 }
             }
-            if (iVertex is not null)
-            {
-                result.AddAfter(iVertex, graph.V[key]);
-                vertices.Remove(key);
-            }
+            result.AddAfter(iVertex!, graph.V[key]); // O(1)
+            vertices.Remove(key);
         }
-        result.AddLast(s);
         return result.ToList();
     }
 }

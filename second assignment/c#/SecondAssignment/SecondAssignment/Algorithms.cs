@@ -206,7 +206,7 @@ public static class Algorithms
             for (var i = result.First; i!.Next != null; i = i.Next) // O(n)
             {
                 double w = graph.GetWeight(i.Value, graph.V[key]) +
-                           graph.GetWeight(graph.V[key], i.Next!.Value) -
+                           graph.GetWeight(graph.V[key], i.Next.Value) -
                            graph.GetWeight(i.Value, i.Next.Value);
                 
                 if (w < min)

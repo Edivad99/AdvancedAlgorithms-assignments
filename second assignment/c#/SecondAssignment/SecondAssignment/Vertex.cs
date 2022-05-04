@@ -50,5 +50,11 @@ public class Vertex : IEquatable<Vertex>
             VerticesAdjacent.Remove(v.Name);
     }
 
+    public void ClearStatus()
+    {
+        Visited = false;
+        Key = 0;
+    }
+
     public bool Equals(Vertex? other) => other != null && Name.Equals(other.Name);
 }

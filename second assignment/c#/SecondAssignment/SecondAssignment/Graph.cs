@@ -51,6 +51,12 @@ public class Graph
         throw new ArgumentException("Edge not found");
     }
 
+    public void ClearVerticesStatus()
+    {
+        foreach(var vertex in V.Values)
+            vertex.ClearStatus();
+    }
+
     public void PrintAdjacentMatrix()
     {
         foreach (var i in V)
@@ -75,7 +81,7 @@ public class Graph
         var points = new List<Vertex>();
         string[] lines = await File.ReadAllLinesAsync(filePath);
 
-        Console.WriteLine($"Loading: {lines[0].Split(" ").Last()}");
+        Console.Write($"Loading: {lines[0].Split(" ").Last()}");
 
         Type type = Type.EUC_2D;
         bool readHeader = false;
@@ -123,6 +129,7 @@ public class Graph
                 graph.AddEdge(points[i], points[j]);
             }
         }
+        Console.WriteLine(" Done");
         return graph;
     }
 }

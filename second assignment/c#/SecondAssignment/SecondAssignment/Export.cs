@@ -33,17 +33,14 @@ public static class Export
             var graph = await Graph.LoadFromFileAsync(file);
             (var sum, var time) = RunAlgorithm(graph, algorithm);
 
-            if (time.Seconds < 1)
-            {   
-                while(time.Seconds < 1)
-                {
-                    execution++;
-                    graph.ClearVerticesStatus();
-                    (var _, var timeExec) = RunAlgorithm(graph, algorithm);
-                    time = time.Add(timeExec);
-                }
-                time = time.Divide(execution);
+            while(time.Seconds < 1)
+            {
+                execution++;
+                graph.ClearVerticesStatus();
+                (var _, var timeExec) = RunAlgorithm(graph, algorithm);
+                time = time.Add(timeExec);
             }
+            time = time.Divide(execution);
             csv.Add($"{fileName};{sum};{time.TotalMilliseconds.ToString("N", IT)};{execution}");
         }
         return csv;

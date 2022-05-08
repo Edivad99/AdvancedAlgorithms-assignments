@@ -1,0 +1,177 @@
+\section{Description of the algorithms}
+
+\subsection{Data structures}
+In the following subsections, we will illustrate the main data structures used as a common foundation for all the 
+three algorithms for solving the \textbf{Travelling Salesman Problem}.
+
+\subsubsection{Data structure for a vertex}
+The data structure for a vertex was implemented as follows:
+\begin{enumerate}
+    \item \verb|Name| of the vertex;
+    \item \verb|Key| is a kind of weight of a vertex;
+    \item \verb|Parent| indicates the parent of a vertex;
+    \item \verb|VerticesAdjacent| is a set which contains all adjacent nodes; 
+    \item \verb|Visited| that indicates if a node has already been visited or not;
+    \item \verb|X| is a coordinate of the vertex;
+    \item \verb|Y| is a coordinate of the vertex
+\end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|IsVisited|: returns the value of \verb|Visited|;
+    \item \verb|SetVisited|: sets the value of \verb|Visited| to true or false as indicated by the parameter;
+    \item \verb|AddAdjacentVertices|: adds an adjacent vertex to the \verb|VerticesAdjacent| of a node;
+    \item \verb|RemoveAdjecentVertices|: removes an adjacent vertex to the \verb|VerticesAdjacent|;
+    \item \verb|Equals|: checks if two vetrices have the same name;
+    \item \verb|ClearStatus|: sets the value of \verb|Visited| to false and \verb|Key| equal to 0;
+    \item \verb|ConvertGeoCoordinate|: converts a given coordinate to radians.
+\end{enumerate}
+These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
+
+\subsubsection{Data structure for an edge}
+The data structure for an edge is the following one:
+\begin{enumerate}
+    \item \verb|U| represents one end of the edge;
+    \item \verb|V| represents one end of the edge;
+    \item \verb|Distance| indicates the distance between the two vertices \verb|U| and \verb|V|.
+    \end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of which one is the greater;
+    \item \verb|Equals|: checks if two edges have the same ends and weight.
+\end{enumerate}
+These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
+
+\subsubsection{Data structure for a graph}
+The data structure for a graph was implemented as follows:
+\begin{enumerate}
+    \item \verb|V| is a dictionary of vertices, with key the name of the vertex;
+    \item \verb|E| is a dictionary of edges, with key the tuple of the names of the two vertices;
+    \item \verb|Type| is an enumeration type which indicates the format of the coordinate. In our algorithms, it can assume one of the following two values:
+    \begin{itemize}
+        \item \verb|EUC\_2D| when the coordinates are represented in an euclidean way;
+        \item \verb|GEO| when the coordinates are represented as latitude and longitude.
+    \end{itemize}
+\end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|AddVertex|: adds a vertex to the graph;
+    \item \verb|AddEdge|: adds an edge to the graph;
+    \item \verb|GetWeight|: returns the weight of an edge given two vertices;
+    \item \verb|ClearVerticesStatus|: clear all vertices calling \verb|ClearStatus| for each vertex;
+    \item \verb|PrintAdjacentMatrix|: utility function for printing the \textit{adjacency matrix};
+    \item \verb|LoadFromFileAsync|: creates the graph starting from the selected file.
+\end{enumerate}
+These operations (except \verb|LoadFromFileAsync|, \verb|ClearVerticesStatus| and \verb|PrintAdjacentMatrix|) have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
+
+\subsection{Nearest Neighbor}
+
+\subsubsection{Introduction}
+The \textit{Nearest Neighbor} algorithm for solving TSP falls into the class of constructive heuristics. These are a family of algorithms which, starting from an initial vertex, build the solution one vertex at a time. We add this vertex to a subset corresponding to the partial solution and this addition is performed according to some rules, until an approximate solution is found.
+
+\subsubsection{Algorithm}
+As all the constructive heuristics for solving TSP, the Nearest Neighbor algorithm could be divided into three steps: initialization, selection and insertion. First of all, we write the algorithm as a pseudo-code and then we analyze the three steps in detail.
+
+\begin{verbatim}
+    NearestNeighbor(G = (V,E))
+    // the initial path correspond to the first vertex of the graph
+    result <- v_0 in V
+    
+    // iterate until all the nodes of the graph have been inserted in the path
+    while result != V
+        // select the vertex not in the path of minimum distance from the last node inserted in the path
+        nextVertex <- MinimumUnseenAdjacent(result, lastVertex)
+        // insert the next vertex in the path
+        result <- nextVertex
+    
+    // add the starting vertex to close the cycle
+    result <- result U v_0
+    
+    return result
+\end{verbatim}
+
+The three steps are:
+\begin{enumerate}
+    \item \textbf{Initialization}: start from the single-node path 0;
+    \item \textbf{Selection}: let $(v_0, \dots, v_k)$ be the current path. Find the vertex $v_k+1$ not in the path with minimum distance from $v_k$;
+    \item \textbf{Insertion}: insert $v_{k+1}$ immediately after $v_k$.
+\end{enumerate}
+The second and third steps are repeated until all the vertices are included in the final path. Once this condition is been verified, we need to add the initial vertex to the tail of the path. This is necessary to maintain the Hamiltonian path property.
+
+\subsubsection{Approximation analysis}
+The Nearest Neighbor algorithm allows to find a $log(n)$-approximate solution for TSP when the triangular inequality is guaranteed.
+
+\subsubsection{Implementation}
+Our implementation is similar to the standard implementation of the Nearest Neighbor algorithm for solving TSP. The code of the algorithm is divided in two different method implemented in the \verb|Algorithm| class.
+The first method, \verb|NearestNeighbor|, takes as input a graph $G$ and, after adding the initial vertex to the path, calls the recursive method \verb|VisitNearestNeighbor| which simply find the closest unvisited vertex to the last one present in the path and add it to the path. At the end, \verb|NearestNeighbor| add again the initial vertex to the path and return the found Hamiltonyan cycle.
+
+\subsubsection{Optimizations implemented}
+The main optimization that we made is the use of the \verb|Visited| field. In fact, each vertex has a \verb|Visited| field that is initialized to false and then, when the algorithm is seeking for the closest vertex, if a vertex has already been visited, we skip the weight control on the edge that interconnects that vertex to the current vertex. \\
+An other optimization is the use of adjacency lists in the \verb|GetWeight| method, in this way, instead of calculating the weight between one node and another at runtime, a linear scrolling of the adjacency list relating to the node in question is sufficient.
+
+\subsubsection{Complexity analysis}
+This algorithm, as the other constructive heuristics, has a computational complexity equal to $\mathcal{O}(V^2)$. In particular, we estimate this complexity starting from some considerations:
+\begin{itemize}
+    \item For each vertex, we need to find the closest node: this procedure can be executed in linear time, so $\mathcal{O}(|V|)$;
+    \item Calculating the distance between two points can be executed in $\mathcal{O}(1)$ because, using the adjacency lists, we can access to the weight between to vertices with constant complexity instruction;
+    \item The previous operation must be executed for all the vertices adjacent to the node under analysis. This, in the worst case, can be done in $\mathcal{O}(|V|)$ time.
+\end{itemize}
+
+Since the last procedure in the list above must be performed at each iteration of the selection phase, it is trivial to assume that the final complexity is $\mathcal{O}(|V|^2)$.
+
+\subsection{Closest Insertion}
+
+\subsubsection{Introduction}
+The \textit{Closest Insertion} algorithm for solving TSP falls into the class of constructive heuristics. These are a family of algorithms which, starting from an initial vertex, build the solution one vertex at a time. We add this vertex to a subset corresponding to the partial solution and this addition is performed according to some rules, until an approximate solution is found.
+
+\subsubsection{Algorithm}
+As all the constructive heuristics for solving TSP, the Nearest Neighbor algorithm could be divided into three steps: initialization, selection and insertion. First of all, we write the algorithm as a pseudo-code and then we analyze the three steps in detail.
+
+\begin{verbatim}
+    NearestNeighbor(G = (V,E))
+    // the initial path correspond to the first vertex of the graph
+    result <- v_0 in V
+    
+    // iterate until all the nodes of the graph have been inserted in the path
+    while result != V
+        // select the vertex not in the path of minimum distance from the last node inserted in the path
+        nextVertex <- MinimumUnseenAdjacent(result, lastVertex)
+        // insert the next vertex in the path
+        result <- nextVertex
+    
+    // add the starting vertex to close the cycle
+    result <- result U v_0
+    
+    return result
+\end{verbatim}
+
+The three steps are:
+\begin{enumerate}
+    \item \textbf{Initialization}: start from the single-node path 0;
+    \item \textbf{Selection}: let $(v_0, \dots, v_k)$ be the current path. Find the vertex $v_k+1$ not in the path with minimum distance from $v_k$;
+    \item \textbf{Insertion}: insert $v_{k+1}$ immediately after $v_k$.
+\end{enumerate}
+The second and third steps are repeated until all the vertices are included in the final path. Once this condition is been verified, we need to add the initial vertex to the tail of the path. This is necessary to maintain the Hamiltonian path property.
+
+\subsubsection{Approximation analysis}
+The Nearest Neighbor algorithm allows to find a $log(n)$-approximate solution for TSP when the triangular inequality is guaranteed.
+
+\subsubsection{Implementation}
+Our implementation is similar to the standard implementation of the Nearest Neighbor algorithm for solving TSP. The code of the algorithm is divided in two different method implemented in the \verb|Algorithm| class.
+The first method, \verb|NearestNeighbor|, takes as input a graph $G$ and, after adding the initial vertex to the path, calls the recursive method \verb|VisitNearestNeighbor| which simply find the closest unvisited vertex to the last one present in the path and add it to the path. At the end, \verb|NearestNeighbor| add again the initial vertex to the path and return the found Hamiltonyan cycle.
+
+\subsubsection{Optimizations implemented}
+The main optimization that we made is the use of the \verb|Visited| field. In fact, each vertex has a \verb|Visited| field that is initialized to false and then, when the algorithm is seeking for the closest vertex, if a vertex has already been visited, we skip the weight control on the edge that interconnects that vertex to the current vertex. \\
+An other optimization is the use of adjacency lists in the \verb|GetWeight| method, in this way, instead of calculating the weight between one node and another at runtime, a linear scrolling of the adjacency list relating to the node in question is sufficient.
+
+\subsubsection{Complexity analysis}
+This algorithm, as the other constructive heuristics, has a computational complexity equal to $\mathcal{O}(V^2)$. In particular, we estimate this complexity starting from some considerations:
+\begin{itemize}
+    \item For each vertex, we need to find the closest node: this procedure can be executed in linear time, so $\mathcal{O}(|V|)$;
+    \item Calculating the distance between two points can be executed in $\mathcal{O}(1)$ because, using the adjacency lists, we can access to the weight between to vertices with constant complexity instruction;
+    \item The previous operation must be executed for all the vertices adjacent to the node under analysis. This, in the worst case, can be done in $\mathcal{O}(|V|)$ time.
+\end{itemize}
+
+Since the last procedure in the list above must be performed at each iteration of the selection phase, it is trivial to assume that the final complexity is $\mathcal{O}(|V|^2)$.

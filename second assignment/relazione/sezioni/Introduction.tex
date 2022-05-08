@@ -1,0 +1,70 @@
+\section{Introduction}
+
+
+\subsection{Abstract}
+In this brief report we will show comparisons between three algorithms for resolving an intractable problem, looking at the execution times and the quality of each solution coming from \textbf{constructive heuristics algorithms} and an \textbf{approximation algorithm}.
+The intractable problem is the \textbf{Travelling Salesman Problem} which is $\mathcal{NP}$-complete, so easy to verify but difficult to find a solution. Generally, this problem is defined as follows: given a set of cities connected to each other, determine the shortest path that a salesman must take to visit all the cities only once.\\
+\\
+\noindent
+We can represent the \textbf{TSP} with an undirected, weighted and complete graph $G = (V,E)$ where the set of vertices $V$ represent the cities and the weight on the edge $(u,v)$ is equal to the distance between $u$ and $v$. Resolve the TSP problem means find an \textbf{Hamiltonian cycle}, that is a minimum-weight cycle which passes through all vertices of the graph exactly once.
+
+\subsection{$\mathcal{NP}$-completeness of the problem}
+
+\subsubsection{Proof of $\mathcal{NP}$-complete}
+First of all, we must prove that TSP is $\in \mathcal{NP}$. Given an instance of TSP, we should use as a \textit{certificate} the minimum-weight cycle of $n$ vertices. The algorithm have to control if the certificate contains each vertex of $G$ exactly once, summing the weights and check if the final sum is less than a value $k$. This sort of check can be done in polynomial time ($\mathcal{O}(n)$.\\
+\\
+\noindent
+To accurately establish the complexity of the problem, we should "transform" this problem in a \textit{decision problem}, adding a limit $k$ for the weight of the input cycle.\\
+\\
+\noindent
+\textbf{Decisional TSP}: Let $G = (V,E)$ be a undirected, complete and weighted graph and a given $k > 0$, there exists a cycle in $G$ with weight less than $k$ that passes through all the vertices exactly once.\\
+\\
+\noindent
+\textbf{Theorem}: \textbf{TSP} is an $\mathcal{NP}-complete$ problem.\\
+\\
+\noindent
+\textit{Proof}: We show that TSP is an $\mathcal{NP}-hard$ problem applying a reduction from \textit{Hamiltonyan Cycle Problem} to TSP.
+Let $G = (V,E)$ be and undirected graph and build an instance of TSP that allows us to resolve the Hamiltonyan Cycle Problem in $G$. We build an undirected and complete graph $G' = (V, E')$ with the same vertices of $G$ and the set of edges $E' = \{(u, v) | u,v \in V\}$. The weight of the edges of $G'$ is assigned as follows:
+
+\[
+    w(u, v) = 0, \textnormal{ if } \{u, v\} \in E
+\]
+\[
+    w(u, v) = 1, \textnormal{ if } \{u, v\} \notin E
+\]
+
+It's possible to build the graph $G'$ in polynomial time with respect to the number of vertices $|V|$ of the initial graph $G$. $G$ contains an Hamiltonyan cycle if and only if $G'$ contains a cycle with total weight less than or equal to 0. Suppose that there is an Hamiltonyan cycle $h = v_1, \dots, v_n$ in $G$.\\ \noindent
+Each edge in $h$ is also in $E$ and it's weight is equal to 0 in $G'$. So, $h$ is a cycle of $G'$ with weight equal to 0. Suppose that $G'$ contains a cycle $t$ that passes trough all the vertices of weight less than or equal to 0. Since the weight of the edges in $G'$ is only 0 or 1, all the edges in $t$ must have weight equal to 0. So, all the edges of the cycle are also in $E$ and $t$ is an Hamiltonyan cycle for $G$.
+
+\subsubsection{Inapproximability for constant $\rho$ factors of TSP}
+
+TSP is similar to the \textit{MST} problem: MST is the minimum path which interconnect all vertices of the graph $G$, while the TSP is minimum weighted cycle that passes through all the vertices of the graph $G$. Despite the similarity between this two problems, TSP is a very difficult problem even to approximate. If there was an approximation algorithm with a constant $\rho$, then we could solve in polynomial time an $\mathcal{NP}-hard$ problem.\\
+\\
+\noindent
+\textbf{Theorem}: If $\mathcal{P} \ne \mathcal{NP}$, there can be no polynomial $\rho$-approximation algorithm for TSP with $\rho = \mathcal{O}(1)$.\\
+\\
+\noindent
+\textit{Proof}: By absurding, suppose there exists a polynomial time $\rho$-approximation algorithm $A\rho$ for TSP. We prove how to build a polynomial time algorithm to solve the Hamiltonian cycle problem. Let $G = (V, E)$, then we do a reduction as follows:
+
+\[
+    G \rightarrow G' = (V, E') \textnormal{ if complete, where }
+\]
+\[
+    c(e \in E') = 1 \textnormal{ if } e \in E \textnormal{, otherwise } c(e \in E') = \rho|V| + 1
+\]
+Doing this modifications, we can therefore create representations of $G'$ and $c$ starting from the representations of $G$ in polynomial time in $|V|$ and $|E|$.
+We run $A\rho(G') \rightarrow C \textnormal{ (cycle), } c(C) \textnormal{(weight function of $C$, $c: V \times V \rightarrow \mathcal{N}$)}$ and determine:
+\begin{enumerate}
+    \item $G \in HAMILTON \Rightarrow c(C^*) = |V| \Rightarrow A\rho$, return a cycle $C$ with $c(C) \le \rho|V|$;
+    \item $G \not\in HAMILTON \Rightarrow C$ contains at least one edge that is not in $G \Rightarrow c(C) \ge \rho|V| + 1$. Since the edges that do not belong to $G$ are expensive, there is a gap of at least $\rho |V|$ between the cost of an Hamiltonyan path in $G$ (which costs $|V|$) and the cost of any other path (which costs at least $\rho |V| + |V|$). So, the cost of a path which is not Hamiltonyan in $G$ is at least a factor $\rho + 1$ greater than the cost of a path that is Hamiltonyan in $G$.
+\end{enumerate}
+
+We can build in polynomial time the graph $G'$ with respect to the number of vertices $|V|$ of the initial graph $G$. $G$ contains an Hamiltonyan cycle if and only if $G'$ has a cycle with cost less than or equal to 0. Suppose that $G$ has an Hamiltonyan cycle $h = v_1, \dots, v_n$. Each edge in $h$ is present in $E$, so it's weight is 0 in $G'$. As a consequence, $h$ is a cycle in $G'$ of cost equal to 0. On the other side, suppose that $G'$ contains a cycle $t$ that passes through all the vertices and with a weight less than or equal to 0. Since the weights in $G'$ are only 0 or 1, all the edges that made $t$ must have weight equal to 0. So all the edges are also in $E$ and $t$ is an Hamiltonyan cycle for $G$.
+
+\subsection{Metric TSP}
+Particular case of TSP where the input, in particular the weight function $c$ , satisfies the \textbf{triangular inequality}:
+\[
+\forall u, v, w \in V, \textnormal{ is true that } c(u, v) \le c(u, w) + c(w, v) \Rightarrow
+c(<u, v>) \le c(<u, w, v>)
+\]
+where $c$ is the weight function. According to this, for each set of three possible nodes in $G$, it's true than the weight of an edge $(u, v)$ is at most the sum between the weight of an edge $(u, w)$ and an edge $(w, v)$. That means that the cost of the path to go from $u$ to $v$ trough the edge that interconnect them is more convenient than the path between $u$ and $w$ plus the path between $w$ and $v$. This particular case of TSP is in $\mathcal{P}$.

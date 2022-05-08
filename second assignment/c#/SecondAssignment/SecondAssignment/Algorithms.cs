@@ -156,7 +156,7 @@ public static class Algorithms
     }
 
     /*
-     * O(n^2)
+     * Time Complexity: O(n^2)
      */
     public static List<Vertex> ClosestInsertion(Graph graph)
     {

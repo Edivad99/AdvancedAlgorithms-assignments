@@ -23,8 +23,8 @@ To accurately establish the complexity of the problem, we should "transform" thi
 \textbf{Theorem}: \textbf{TSP} is an $\mathcal{NP}-complete$ problem.\\
 \\
 \noindent
-\textit{Proof}: We show that TSP is an $\mathcal{NP}-hard$ problem applying a reduction from \textit{Hamiltonyan Cycle Problem} to TSP.
-Let $G = (V,E)$ be and undirected graph and build an instance of TSP that allows us to resolve the Hamiltonyan Cycle Problem in $G$. We build an undirected and complete graph $G' = (V, E')$ with the same vertices of $G$ and the set of edges $E' = \{(u, v) | u,v \in V\}$. The weight of the edges of $G'$ is assigned as follows:
+\textit{Proof}: We show that TSP is an $\mathcal{NP}-hard$ problem applying a reduction from \textit{Hamiltonian Cycle Problem} to TSP.
+Let $G = (V,E)$ be and undirected graph and build an instance of TSP that allows us to resolve the Hamiltonian Cycle Problem in $G$. We build an undirected and complete graph $G' = (V, E')$ with the same vertices of $G$ and the set of edges $E' = \{(u, v) | u,v \in V\}$. The weight of the edges of $G'$ is assigned as follows:
 
 \[
     w(u, v) = 0, \textnormal{ if } \{u, v\} \in E
@@ -33,8 +33,8 @@ Let $G = (V,E)$ be and undirected graph and build an instance of TSP that allows
     w(u, v) = 1, \textnormal{ if } \{u, v\} \notin E
 \]
 
-It's possible to build the graph $G'$ in polynomial time with respect to the number of vertices $|V|$ of the initial graph $G$. $G$ contains an Hamiltonyan cycle if and only if $G'$ contains a cycle with total weight less than or equal to 0. Suppose that there is an Hamiltonyan cycle $h = v_1, \dots, v_n$ in $G$.\\ \noindent
-Each edge in $h$ is also in $E$ and it's weight is equal to 0 in $G'$. So, $h$ is a cycle of $G'$ with weight equal to 0. Suppose that $G'$ contains a cycle $t$ that passes trough all the vertices of weight less than or equal to 0. Since the weight of the edges in $G'$ is only 0 or 1, all the edges in $t$ must have weight equal to 0. So, all the edges of the cycle are also in $E$ and $t$ is an Hamiltonyan cycle for $G$.
+It's possible to build the graph $G'$ in polynomial time with respect to the number of vertices $|V|$ of the initial graph $G$. $G$ contains an Hamiltonian cycle if and only if $G'$ contains a cycle with total weight less than or equal to 0. Suppose that there is an Hamiltonian cycle $h = v_1, \dots, v_n$ in $G$.\\ \noindent
+Each edge in $h$ is also in $E$ and it's weight is equal to 0 in $G'$. So, $h$ is a cycle of $G'$ with weight equal to 0. Suppose that $G'$ contains a cycle $t$ that passes trough all the vertices of weight less than or equal to 0. Since the weight of the edges in $G'$ is only 0 or 1, all the edges in $t$ must have weight equal to 0. So, all the edges of the cycle are also in $E$ and $t$ is an Hamiltonian cycle for $G$.
 
 \subsubsection{Inapproximability for constant $\rho$ factors of TSP}
 
@@ -56,10 +56,10 @@ Doing this modifications, we can therefore create representations of $G'$ and $c
 We run $A\rho(G') \rightarrow C \textnormal{ (cycle), } c(C) \textnormal{(weight function of $C$, $c: V \times V \rightarrow \mathcal{N}$)}$ and determine:
 \begin{enumerate}
     \item $G \in HAMILTON \Rightarrow c(C^*) = |V| \Rightarrow A\rho$, return a cycle $C$ with $c(C) \le \rho|V|$;
-    \item $G \not\in HAMILTON \Rightarrow C$ contains at least one edge that is not in $G \Rightarrow c(C) \ge \rho|V| + 1$. Since the edges that do not belong to $G$ are expensive, there is a gap of at least $\rho |V|$ between the cost of an Hamiltonyan path in $G$ (which costs $|V|$) and the cost of any other path (which costs at least $\rho |V| + |V|$). So, the cost of a path which is not Hamiltonyan in $G$ is at least a factor $\rho + 1$ greater than the cost of a path that is Hamiltonyan in $G$.
+    \item $G \not\in HAMILTON \Rightarrow C$ contains at least one edge that is not in $G \Rightarrow c(C) \ge \rho|V| + 1$. Since the edges that do not belong to $G$ are expensive, there is a gap of at least $\rho |V|$ between the cost of an Hamiltonian path in $G$ (which costs $|V|$) and the cost of any other path (which costs at least $\rho |V| + |V|$). So, the cost of a path which is not Hamiltonian in $G$ is at least a factor $\rho + 1$ greater than the cost of a path that is Hamiltonian in $G$.
 \end{enumerate}
 
-We can build in polynomial time the graph $G'$ with respect to the number of vertices $|V|$ of the initial graph $G$. $G$ contains an Hamiltonyan cycle if and only if $G'$ has a cycle with cost less than or equal to 0. Suppose that $G$ has an Hamiltonyan cycle $h = v_1, \dots, v_n$. Each edge in $h$ is present in $E$, so it's weight is 0 in $G'$. As a consequence, $h$ is a cycle in $G'$ of cost equal to 0. On the other side, suppose that $G'$ contains a cycle $t$ that passes through all the vertices and with a weight less than or equal to 0. Since the weights in $G'$ are only 0 or 1, all the edges that made $t$ must have weight equal to 0. So all the edges are also in $E$ and $t$ is an Hamiltonyan cycle for $G$.
+We can build in polynomial time the graph $G'$ with respect to the number of vertices $|V|$ of the initial graph $G$. $G$ contains an Hamiltonian cycle if and only if $G'$ has a cycle with cost less than or equal to 0. Suppose that $G$ has an Hamiltonian cycle $h = v_1, \dots, v_n$. Each edge in $h$ is present in $E$, so it's weight is 0 in $G'$. As a consequence, $h$ is a cycle in $G'$ of cost equal to 0. On the other side, suppose that $G'$ contains a cycle $t$ that passes through all the vertices and with a weight less than or equal to 0. Since the weights in $G'$ are only 0 or 1, all the edges that made $t$ must have weight equal to 0. So all the edges are also in $E$ and $t$ is an Hamiltonian cycle for $G$.
 
 \subsection{Metric TSP}
 Particular case of TSP where the input, in particular the weight function $c$ , satisfies the \textbf{triangular inequality}:

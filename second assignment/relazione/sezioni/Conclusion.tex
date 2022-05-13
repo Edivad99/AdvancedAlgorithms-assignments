@@ -1,44 +1,12 @@
 \section{Conclusion}
-At the end of the work we can say that the optimizations that have been implemented 
-in the algorithm of Kruskal in the naive version have proved useful for the execution 
-of the first graphs especially. \\
-\noindent
-In fact:
-\begin{enumerate}
-    \item Check directly the self-loops and the presence or absence of the edge $(u, v)$ 
-    made it possible to save several calls to DFS for the control of the cyclical nature of graph $G$;
-    \item The modified version of DFS allows to avoid the scanning of the whole graph when 
-    it is not necessary. It suffices to check whether there is a path from $u$ to $v$ in the 
-    connected component of $u$. If such a path does not exist, then the edge $(u, v)$ will be part 
-    of the final \textit{MST}.
-\end{enumerate}
-\noindent
-These optimizations have made it possible to obtain better perfomances when the algorithm begins to 
-analyze the graph loaded as input. It can be seen that the times for Kruskal Naive are comparable to 
-the times of the other two algorithms for graphs with a small number of vertices. \\
-\\
-\noindent
-Regarding the way of working adopted by the group, having worked with a versioning system we were able 
-to organize ourselves to create and develop each algorithm through an pseudo-incremental approach. 
-In fact, first of all we started by studying the functioning of each algorithm and then we implemented 
-them starting from the basic data structures such as \verb|Vertex|, \verb|Edge| and \verb|Graph|. 
-Once we checked that in all three cases the algorithms obtained identical results on the final sum of 
-weights, we tried to optimize each of them by removing the superfluous parts of code and applying 
-improvements based on what C\# language has to offer. Finally, for the realization of the graphs, 
-we preferred to collect the results in three different csv file and generate the graphs using Microsoft Excel. \\
-\\
-\noindent
-The initial choice to use Python to develop the algorithms was quite messy due to the lack of strong 
-typing which caused us several slowdowns in the development. Moreover, we also encountered some difficulties 
-with the module \textit{heapq} that belongs to the standard library which gave us some problems in 
-maintaining the priority queue ordered once the first element was removed. For these reasons, it made us 
-swtich to C\#. \\
-\\
-\noindent
-To conclude, what we got for the algorithms is likely with what we excepted, in fact:
-\begin{enumerate}
-    \item Kruskal Naive is the slowest of the three algorithms and the least efficient in terms of average 
-    execution time for the graphs with many vertices;
-    \item Kruskal Union-Find is the fastest and most efficient of the three algorithms, especially in case of large graphs;
-    \item Prim can be ranked second to Kruskal Union-Find, having a good execution time even for large graphs.
-\end{enumerate} 
+
+At the end of the work we can say that the results obtained are in line with what this assignment required of us.
+We found less difficulty in implementing the algorithms also because most of the code for the handling of the graph was recycled from the previous assignment.
+One part that we had a little trouble with, was the reading of the files because most of them present some irregularity in the formatting. But we found a way to managed it.\\
+For the development we adopted the same procedures as the assignment before, so we used the same repository GitHub to host the project.\\
+Regarding the measurements and the results we obtained, in this occasion we repeated each algorithm multiple times until we reach an  aggregate time of 1 sec per file.\\
+In conclusion:
+\begin{itemize}
+    \item Nearest neighbor and 2-approximation algorithms are both efficient, unless there are some constant that make the 2-approximation algorithm more slow, keeping in mind that the complexity of this one is bigger.
+    \item Closest Insertion is the most accurate, but it is also slower than the other algorithms. So if we compute small graphs is convenient on one hand, but on the other hand if the graph became very large we will wait a long time to get a solution.
+\end{itemize}

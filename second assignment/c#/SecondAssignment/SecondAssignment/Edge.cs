@@ -2,8 +2,8 @@
 
 public class Edge : IEquatable<Edge>, IComparable<Edge>
 {
-    public Vertex U { get; set; }
-    public Vertex V { get; set; }
+    public Vertex U { get; init; }
+    public Vertex V { get; init; }
     public double Distance { get; init; }
 
     public Edge(Vertex u, Vertex v, Type type)

@@ -2,7 +2,7 @@
 
 public class Vertex : IEquatable<Vertex>
 {
-    public string Name { get; set; }
+    public string Name { get; init; }
     public double X { get; init; }
     public double Y { get; init; }
 

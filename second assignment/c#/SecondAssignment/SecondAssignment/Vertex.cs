@@ -44,12 +44,6 @@ public class Vertex : IEquatable<Vertex>
             VerticesAdjacent.Add(v.Name, v);
     }
 
-    public void RemoveAdjacentVertices(Vertex v)
-    {
-        if (VerticesAdjacent.ContainsKey(v.Name))
-            VerticesAdjacent.Remove(v.Name);
-    }
-
     public void ClearStatus()
     {
         Visited = false;

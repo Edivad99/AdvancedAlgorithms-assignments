@@ -2,11 +2,14 @@
 
 At the end of the work we can say that the results obtained are in line with what this assignment required of us.
 We found less difficulty in implementing the algorithms also because most of the code for the handling of the graph was recycled from the previous assignment.
-One part that we had a little trouble with, was the reading of the files because most of them present some irregularity in the formatting. But we found a way to managed it.\\
-For the development we adopted the same procedures as the assignment before, so we used the same repository GitHub to host the project.\\
-Regarding the measurements and the results we obtained, in this occasion we repeated each algorithm multiple times until we reach an  aggregate time of 1 sec per file.\\
+One part that we had a little trouble with, was the reading of the files because most of them present some irregularity in the formatting. But we found a way to managed it.\\ \\ \noindent
+For the development we adopted the same procedures as the assignment before, so we used the same repository GitHub to host the project.\\ \\ \noindent
+Regarding the measurements and the results we obtained, in this occasion we repeated each algorithm multiple times until we reach an  aggregate time of 1 sec per file.\\ \\ \noindent
 In conclusion:
 \begin{itemize}
-    \item Nearest neighbor and 2-approximation algorithms are both efficient, unless there are some constant that make the 2-approximation algorithm more slow, keeping in mind that the complexity of this one is bigger.
-    \item Closest Insertion is the most accurate, but it is also slower than the other algorithms. So if we compute small graphs is convenient on one hand, but on the other hand if the graph became very large we will wait a long time to get a solution.
+    \item \textit{Nearest Neighbor} and \textit{2-Approximation} algorithms are both efficient, unless there are some constant that make the 2-Approximation algorithm more slow, keeping in mind that the complexity of this one is bigger.
+    \item \textit{Closest Insertion} is the most accurate, but it is also slower than the other algorithms. So if we compute small graphs is convenient on one hand, but on the other hand if the graph became very large we will wait a long time to get a solution.
 \end{itemize}
+\noindent
+Talking about the precision of the data obtained by running the algorithms, we got that, in terms of percentage of error, the Nearest Neighbor algorithm is on average slightly more precise than the 2-Approximation algorithm. Anyway, it's very difficult to find a general rule, since it is not possible to identify a regularity in the results, sometimes Nearest Neighbor is more precise than 2-Approximation and vice versa.
+In general, considering the cases with the least approximation error and the shortest execution time, the most efficient algorithm is Nearest Neighbor even if the difference is not so evident.

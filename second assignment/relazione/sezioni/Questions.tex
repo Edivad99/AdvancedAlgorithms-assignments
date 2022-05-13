@@ -1,7 +1,7 @@
 \section{Answers to questions}
 
 \subsection{Question 1}
-\textit{Run the three algorithms you have implemented (2-approximate, nearest neighbor and closest insertion) on the 13 graphs of the dataset. Show your results in a table. The rows in the table correspond to the problem instances. The columns show, for each algorithm, the weight of the approximate solution, the execution time and the relative error calculated as:
+\textit{Run the three algorithms you have implemented (2-Approximation, nearest neighbor and closest insertion) on the 13 graphs of the dataset. Show your results in a table. The rows in the table correspond to the problem instances. The columns show, for each algorithm, the weight of the approximate solution, the execution time and the relative error calculated as:
 \[\frac{(ApproximateSolution - OptimalSolution)}{OptimalSolution}\]}\\
 
 \noindent
@@ -36,7 +36,7 @@ The results of our implemented algorithms are show in the table at the following
 \begin{table}\centering
     \begin{tabular}{|l|r|r|c|r|r|c|r|r|c|}
     \hline
-    \multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Instance}}} & \multicolumn{3}{c|}{\textbf{Nearest Neighbour}} & \multicolumn{3}{c|}{\textbf{Closest Insertion}} & \multicolumn{3}{c|}{\textbf{2-approximation}} \\ \cline{2-10} 
+    \multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Instance}}} & \multicolumn{3}{c|}{\textbf{Nearest Neighbour}} & \multicolumn{3}{c|}{\textbf{Closest Insertion}} & \multicolumn{3}{c|}{\textbf{2-Approximation}} \\ \cline{2-10} 
     \multicolumn{1}{|c|}{} & \multicolumn{1}{c|}{\textbf{Solution}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Time\\ {[}ms{]}\end{tabular}}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Error\\ {[}\%{]}\end{tabular}}} & \multicolumn{1}{c|}{\textbf{Solution}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Time \\ {[}ms{]}\end{tabular}}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Error\\ {[}\%{]}\end{tabular}}} & \multicolumn{1}{c|}{\textbf{Solution}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Time\\ {[}ms{]}\end{tabular}}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Error\\ {[}\%{]}\end{tabular}}} \\ \hline
   
     \hline
@@ -60,7 +60,7 @@ The results of our implemented algorithms are show in the table at the following
     \caption{Results of execution of the three algorithm on datasets.}
 \end{table}
 \end{landscape}
-
+\noindent
 We believe it is useful to report in detail the execution times of the algorithms and the number of repetitions performed in one second by each algorithm on each dataset.
 \begin{table}[H]\centering
     \begin{tabular}{|l|l|r|r|r|r|r|r|}
@@ -93,8 +93,8 @@ instances? There is an algorithm that is always better than the others? Which of
 have implemented is more efficient?} \\
 
 \noindent
-Analyzing the three algorithm we saw that the more accurate is the Closest Insertion algorithm, but as side effect is also the one that is the slowest.
-As for the other two algorithms (Nearest neighbor and 2-approximation) it is not clear which is the more precise: from the results we saw that 2-approximation tends to be more precise in graph with small dimensions while nearest neighbor is able to find a better solution in graph with big dimension.\\
+Analyzing the three algorithm we saw that the more accurate is the \textit{Closest Insertion} algorithm, but as side effect is also the one that is the slowest.
+As for the other two algorithms (Nearest neighbor and 2-Approximation) it is not clear which is the more precise: from the results we saw that 2-Approximation tends to be more precise in graph with small dimensions while nearest neighbor is able to find a better solution in graph with big dimension.\\
 Below are some graphs showing the actual errors of the results and the errors in proportion to each other, in order to show what was discussed above.
 
 \begin{figure}[H]
@@ -107,32 +107,33 @@ Below are some graphs showing the actual errors of the results and the errors in
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{./img/error_nn_2ap.png}
-    \caption{Errors for Nearest Neighbor and 2-approximation.}
+    \caption{Errors for Nearest Neighbor and 2-Approximation.}
     \label{fig:error_nn_2ap}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{./img/error_nn_2ap_prop.png}
-    \caption{Errors in proportion for Nearest Neighbor and 2-approximation.}
+    \caption{Errors in proportion for Nearest Neighbor and 2-Approximation.}
     \label{fig:error_nn_2ap_prop}
 \end{figure}
-From the charts (fig. \ref{fig:proportion_error_ord}, \ref{fig:error_nn_2ap}, \ref{fig:error_nn_2ap_prop}) you can see that the nearest neighbors algorithm seems to be, in mean, the most efficient. This is not true, in the graph with small dimension, like (\textit{burma14}, \textit{ulysses16} and \textit{ulysses22}) where the 2-approximation algorithm is nearest to the optimal solution.\\
-One thing we have noticed is the fact that the closest neighbor is a greedy algorithm, may explain that the fact that it performs well when the graph has big dimension and the number of choices that it has to compute is bigger and so the error rate decreases in proportion.
+\noindent
+From the charts (fig. \ref{fig:proportion_error_ord}, \ref{fig:error_nn_2ap}, \ref{fig:error_nn_2ap_prop}) we can see that the nearest neighbors algorithm seems to be, in mean, the most efficient. This is not true, in fact in the graph with small dimension, like (\textit{burma14}, \textit{ulysses16} and \textit{ulysses22}), the \textit{2-Approximation} algorithm is closest to the optimal solution than the \textit{Nearest Neighbor}.\\
+One thing we noticed is the fact that the Nearest Neighbor is a greedy algorithm and this may explain the fact that it performs well when the graph has big dimension and the number of choices that it has to compute is bigger and so the error rate decreases in proportion.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{./img/time_nn_2ap_big.png}
-    \caption{Execution time for Nearest Neighbour and 2-approximation on big dataset.}
+    \caption{Execution time for Nearest Neighbour and 2-Approximation on big dataset.}
     \label{fig:time_nn_2ap_big}
 \end{figure}
-
+\noindent
 Regarding the execution time of the algorithms, we can see from the graph (fig. \ref{fig:time_nn_2ap_big}), that the execution time of the two algorithms (repeated more than ones), give us a execution time less in the nearest neighbor algorithm specially in the bigger graphs.\\
 Similarly, also in the smaller graphs (fig. \ref{fig:time_nn_2ap_small}) we noticed that this algorithm take less computational time, confirming itself as the faster of the three.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{./img/time_nn_2ap_small.png}
-    \caption{Execution time for Nearest Neighbor and 2-approximation on small dataset.}
+    \caption{Execution time for Nearest Neighbor and 2-Approximation on small dataset.}
     \label{fig:time_nn_2ap_small}
 \end{figure}

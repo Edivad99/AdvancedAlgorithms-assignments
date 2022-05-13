@@ -1,7 +1,7 @@
 \section{Description of the algorithms}
 
 \subsection{Data structures}
-In the following subsections, we will illustrate the main data structures used as a common foundation for all the 
+In the following subsections, we will illustrate the main data structures used as a common base for all the 
 three algorithms for solving the \textbf{Travelling Salesman Problem}.
 
 \subsubsection{Data structure for a vertex}
@@ -21,7 +21,6 @@ The implemented methods were:
     \item \verb|IsVisited|: returns the value of \verb|Visited|;
     \item \verb|SetVisited|: sets the value of \verb|Visited| to true or false as indicated by the parameter;
     \item \verb|AddAdjacentVertices|: adds an adjacent vertex to the \verb|VerticesAdjacent| of a node;
-    \item \verb|RemoveAdjecentVertices|: removes an adjacent vertex to the \verb|VerticesAdjacent|;
     \item \verb|Equals|: checks if two vetrices have the same name;
     \item \verb|ClearStatus|: sets the value of \verb|Visited| to false and \verb|Key| equal to 0;
     \item \verb|ConvertGeoCoordinate|: converts a given coordinate to radians.
@@ -50,7 +49,7 @@ The data structure for a graph was implemented as follows:
     \item \verb|E| is a dictionary of edges, with key the tuple of the names of the two vertices;
     \item \verb|Type| is an enumeration type which indicates the format of the coordinate. In our algorithms, it can assume one of the following two values:
     \begin{itemize}
-        \item \verb|EUC\_2D| when the coordinates are represented in an euclidean way;
+        \item \verb|EUC_2D| when the coordinates are represented in an euclidean way;
         \item \verb|GEO| when the coordinates are represented as latitude and longitude.
     \end{itemize}
 \end{enumerate}
@@ -77,21 +76,22 @@ As all the constructive heuristics for solving TSP, the Nearest Neighbor algorit
 \begin{verbatim}
 NearestNeighbor(G = (V,E))
     // the initial path correspond to the first vertex of the graph
-    result <- v_0 in V
+    path <- v_0 in V
     
     // iterate until all the nodes of the graph have been inserted in the path
-    while result != V
-        // select the vertex not in the path of minimum distance from the last node inserted in the path
-        nextVertex <- MinimumUnseenAdjacent(result, lastVertex)
+    while path != V
+        // select the vertex not in the path of minimum distance from 
+        // the last node inserted in the path
+        nextVertex <- MinimumUnseenAdjacent(path, lastVertex)
         // insert the next vertex in the path
-        result <- result U nextVertex
+        path <- path U nextVertex
     
     // add the starting vertex to close the cycle
-    result <- result U v_0
+    path <- path U v_0
     
-    return result
+    return path
 \end{verbatim}
-
+\noindent
 The three steps are:
 \begin{enumerate}
     \item \textbf{Initialization}: start from the single-node path 0;
@@ -104,7 +104,7 @@ The second and third steps are repeated until all the vertices are included in t
 The Nearest Neighbor algorithm allows to find a $log(n)$-approximate solution for TSP when the triangular inequality is guaranteed.
 
 \subsubsection{Implementation}
-Our implementation is similar to the standard implementation of the Nearest Neighbor algorithm for solving TSP. The code of the algorithm is divided in two different method implemented in the \verb|Algorithm| class.
+Our implementation is similar to the standard implementation of the Nearest Neighbor algorithm for solving TSP presented in the pseudo-code. The code of the algorithm is divided in two different method implemented in the \verb|Algorithm| class.
 The first method, \verb|NearestNeighbor|, takes as input a graph $G$ and, after adding the initial vertex to the path, calls the recursive method \verb|VisitNearestNeighbor| which simply find the closest not visited vertex to the last one present in the path and add it to the path. At the end, when there are no more vertices to visit, \verb|NearestNeighbor| adds again the initial vertex to the path and returns the found Hamiltonian cycle.
 
 \subsubsection{Optimizations implemented}
@@ -112,14 +112,14 @@ The main optimization that we made is the use of the \verb|Visited| field. In fa
 An other optimization is the use of adjacency lists in the \verb|GetWeight| method, in this way, instead of calculating the weight between one node and another at runtime, a linear scrolling of the adjacency list relating to the node in question is sufficient.
 
 \subsubsection{Complexity analysis}
-This algorithm, as the other constructive heuristics, has a computational complexity equal to $\mathcal{O}(V²)$. In particular, we estimate this complexity starting from some considerations:
+This algorithm, as the other constructive heuristics, has a computational complexity equal to $\mathcal{O}(V^2)$. In particular, we estimate this complexity starting from some considerations:
 \begin{itemize}
     \item For each vertex, we need to find the closest node: this procedure can be executed in linear time, so $\mathcal{O}(|V|)$;
     \item Calculating the distance between two points can be executed in $\mathcal{O}(1)$ because, using the adjacency lists, we can access to the weight between two vertices with constant complexity instruction;
     \item The previous operation must be executed for all the vertices adjacent to the node under analysis. This, in the worst case, can be done in $\mathcal{O}(|V|)$ time.
 \end{itemize}
-
-Since the last procedure in the list above must be performed at each iteration of the selection phase, it is trivial to assume that the final complexity is $\mathcal{O}(|V|²)$.
+\noindent
+So after the considerations above, it is trivial to assume that the final complexity is $\mathcal{O}(|V|^2)$.
 
 \subsection{Closest Insertion}
 
@@ -128,12 +128,13 @@ The \textit{Closest Insertion} algorithm for solving TSP, as for the Nearest Nei
 
 \subsubsection{Algorithm}
 As all the constructive heuristics for solving TSP, the Closest Insertion algorithm could be divided into three steps: initialization, selection and insertion. First of all, we write the algorithm as a pseudo-code and then we analyze the three steps in detail.
-
+\newpage
 \begin{verbatim}
 ClosestInsertion(G = (V,E))
     // the initial path correspond to the first vertex of the graph
-    result <- v_0 in V
-    // the remaining vertices that have to be analyzed are all the vertices V minus the initial vertex v_0
+    path <- v_0 in V
+    // the remaining vertices that have to be analyzed are all the vertices V 
+    // minus the initial vertex v_0
     vertices <- V \ v_0
     // find the vertex with minimum distance from v_0
     j <- MinimumAdjacent(vertices, v_0)
@@ -141,18 +142,20 @@ ClosestInsertion(G = (V,E))
     vertices <- vertices \ j
     
     // iterate until all the nodes of the graph have been inserted in the path
-    while result != V
-        // select the vertex not in the path of minimum distance from one node present in the path
-        nextVertex <- MinimumAdjacent(vertices, result)
-        // find an edge (i, j) that minimize the triangular inequality with respect to v_i, nextVertex and v_j
-        result <- AddAfter(v_i, nextVertex)
+    while path != V
+        // select the vertex not in the path of minimum distance from one node 
+        // present in the path
+        nextVertex <- MinimumAdjacent(vertices, path)
+        // find an edge (i, j) that minimize the triangular inequality with 
+        // respect to v_i, nextVertex and v_j
+        path <- AddAfter(v_i, nextVertex)
     
     // add the starting vertex to close the cycle
-    result <- result U v_0
+    path <- path U v_0
     
-    return result
+    return path
 \end{verbatim}
-
+\noindent
 The three steps are:
 \begin{enumerate}
     \item \textbf{Initialization}: start from the single-node path 0. Find the vertex $j$ that minimize $w(0, j)$ and build the partial circuit $C$;
@@ -166,7 +169,7 @@ The Closest Insertion algorithm allows to find a $2$-approximate solution for TS
 
 \subsubsection{Implementation}
 Our implementation is similar to the standard implementation of the Closest Insertion algorithm for solving TSP. The code of the algorithm is written in a single method implemented in the \verb|Algorithm| class.
-The method \verb|ClosestInsertion|, takes as input a graph $G$ and, after adding the initial vertex to the path, it simply finds the closest vertex to the initial one and add it to the path. We decided to add the starting vertex again after finding the closest one in the path so that the loops in the algorithm were clearer and easier to understand by removing some if conditions from the inside. As long as there are still vertices to add to the path, we seek among all the nodes not yet inserted in the path the closest to the path. We scan the vertices in the path to find through triangular inequality the correct position in which we must add the found closest vertex and then we remove this closest found vertex from the vertices that do not belong to the path. At the end of the procedure, when there are no more vertices to add, the \verb|ClosestInsertion| method returns the found Hamiltonian cycle.
+The method \verb|ClosestInsertion|, takes as input a graph $G$ and, after adding the initial vertex to the path, it simply finds the closest vertex to the initial one and add it to the path. We decided to add the starting vertex again after finding the closest one in the path so that the for each loops in the algorithm were clearer and easier to understand by removing some if conditions from the inside. As long as there are still vertices to add to the path, we seek among all the nodes not yet inserted in the path the closest to the path. We scan the vertices in the path to find through triangular inequality the correct position in which we must add the found closest vertex and then we remove this closest found vertex from the vertices that do not belong to the path. At the end of the procedure, when there are no more vertices to add, the \verb|ClosestInsertion| method returns the found Hamiltonian cycle.
 
 \subsubsection{Optimizations implemented}
 We brought some important optimizations in the implementation of the \verb|ClosestInsertion| method. The first one is using a \textit{LinkedList} to store the Hamiltonian cycle. This type of data structure is very useful because it provides the \verb|AddAfter| method, which is an operation that can be performed in constant $\mathcal{O}(1)$ time. This operation is much faster than the simple \verb|InsertAt| operation provided by the \textit{List} data structure which is performed in linear time $\mathcal{O}(n)$.\\ \noindent
@@ -174,19 +177,18 @@ The second optimization that we implemented is the fact of using an \textit{Hash
 As for the Nearest Neighbor algorithm, we decide to use an adjacency lists in the \verb|GetWeight| method, in this way, instead of calculating the weight between one node and another at runtime, a linear scrolling of the adjacency list relating to the node in question is sufficient.
 
 \subsubsection{Complexity analysis}
-This algorithm has a computational complexity equal to $\mathcal{O}(V²)$. In particular, we estimate this complexity starting from some considerations:
+This algorithm has a computational complexity equal to $\mathcal{O}(V^2)$. In particular, we estimate this complexity starting from some considerations:
 \begin{itemize}
     \item For the initial vertex, we need to find the closest node: this procedure can be executed in linear time, so $\mathcal{O}(|V|)$;
-    \item We add this vertices to the final path and remove them to the remaining vertices. This procedures are executed in linear time;
     \item We scan all the vertices not yet in the path to find the closest one by distance. Since calculating the distance between two points can be executed in $\mathcal{O}(1)$ using the adjacency lists. We can access to the weight between two vertices with constant complexity instruction and find the closest vertex, so the total complexity will be $\mathcal{O}(|V|)$;
     \item For each couple of nodes in the path we calculate the triangular inequality to find the position in which we have to add the closest vertex: this procedure can be executed in linear time, so $\mathcal{O}(|V|)$;
-    \item The previous two operations must be executed for all the vertices not yet inserted in the path that is in linear time $\mathcal{O}(|V|)$. Doing the previous two operations $|V|$ times, it is trivial to assume that the final complexity is $\mathcal{O}(|V|²)$. 
+    \item The previous two operations must be executed for all the vertices not yet inserted in the path that is in linear time $\mathcal{O}(|V|)$. Doing the previous two operations $|V|$ times, it is trivial to assume that the final complexity is $\mathcal{O}(|V|^2)$. 
 \end{itemize}
 
-\subsection{2-approximation}
+\subsection{2-Approximation}
 
 \subsubsection{Introduction}
-The 2-approximation algorithm can determine a TSP approximation under the conditions of triangular inequality.
+The \textit{2-Approximation} algorithm can determine a TSP approximation under the conditions of triangular inequality.
 
 \subsubsection{Definition of MST}
 Let $V$ be the set of vertices that makes the weighted graph $G$ and let $E$ be the collection of the edges of that graph. With the aim of analyzing the complexity of algorithms, consider $|V| = n$ and $|E| = m$. \\
@@ -217,8 +219,7 @@ To determine if an edge is safe, we will use the following theorem: \\
 \textit{Let $G = (V,E)$ be a weighted, connected and undirected graph. Let $A$ be a subset of $E$ of some \textit{MST} of $G$, let $(S, V \setminus S)$ a cut that respects $A$ and let (u,v) be a light edge for $(S, V \setminus S)$. Then (u,v) is safe for $A$}.
 
 \subsubsection{Algorithm}
-We dedicate a section to speak about the MST problem only because the idea behind the 2-approximation algorithm is to use at first an algorithm to calculate an MST. However, the MST represent a tree and what we want is an Hamiltonian cycle. To do this, we visit the MST in a preorder way and add the root of the MST to the preorder list of vertices. This is an Hamiltonian cycle of the initial graph because it is complete, so there is always an edge between two vertices.
-
+We dedicate a section to speak about the MST problem only because the idea behind the 2-Approximation algorithm is to use at first an algorithm to calculate an MST. However, the MST represent a tree and what we want is an Hamiltonian cycle. To do this, we visit the MST in a preorder way and add the root of the MST to the preorder list of vertices. This is an Hamiltonian cycle of the initial graph because it is complete, so there is always an edge between two vertices.\\
 We now show the pseudo-code:
 \begin{verbatim}
 PREORDER(v)
@@ -246,7 +247,7 @@ APPROX_METRIC_TSP(G)
 \end{verbatim}
 
 \subsubsection{Approximation analysis}
-We know proceed to analyze the quality of the solution returns by the algorithm:
+We proceed to analyze the quality of the solution returns by the algorithm:
 \begin{enumerate}
     \item The cost of T* is low, actually the lowest;
     \item Let's suppose that two different vertices $u$ and $v$ are not interconnect. The cost of the edge $(u, v)$ is lower than the cost of passing through a third node that connect $u$ and $v$, that is \textit{w(u, v)} $\leq$ \textit{w(u, a)} +{ \textit{w(a, v)}}. So in this case $(u, v)$ is a \textit{shortcut}.
@@ -264,14 +265,14 @@ We now show the analysis of the approximation ratio of the algorithm:
 \end{enumerate}
 
 \subsubsection{Implementation}
-The implementation of this algorithm require the use of an algorithm for calculating the MST. We decide to use the Prim's algorithm because it is the one explained by the professor and also because we can simply copy and paste it and use it in the implementation of \verb|2-approximation|. We proceed with the execution of the Prim's algorithm, starting from the first vertex read in the file, to determine the MST. Then, in the \verb|ApproxMetricTSP| algorithm, we first sort the vertices by their \verb|Key| value and then we utilize the \verb|Parent| field of each vertex to reconstruct a minimum spanning tree, in fact we decide to implement a \verb|Dictionary|, a new data structure that looks more as a tree data structure, in which the \verb|value| parameter is a list of vertices of the vertex indicated in the \verb|key| parameter. Once the MST has been reconstructed, we visit this tree in a preorder way. This operation is performed by the \verb|PreOrder| method which, through recursive calls, visits all the nodes of the tree and adds the visited nodes to a queue in a list. At the end of the preorder visit, the root vertex of the tree is added to the list produced by the \verb|PreOrder| in the queue, in order to build a cycle. This cycle represents the approximation of the TSP.
+The implementation of this algorithm require the use of an algorithm for calculating the MST. We decide to use the Prim's algorithm because it is the one explained by the professor and also because we can simply copy and paste it and use it in the implementation of 2-Approximation algorithm. We proceed with the execution of the Prim's algorithm, starting from the first vertex read in the file, to determine the MST. Then, in the \verb|ApproxMetricTSP| algorithm, we first sort the vertices by their \verb|Key| value and then we utilize the \verb|Parent| field of each vertex to reconstruct a minimum spanning tree, in fact we decide to implement a \verb|Dictionary|, a new data structure that looks more as a tree data structure, in which the \verb|value| parameter is a list of vertices of the vertex indicated in the \verb|key| parameter. Once the MST has been reconstructed, we visit this tree in a preorder way. This operation is performed by the \verb|PreOrder| method which, through recursive calls, visits all the nodes of the tree and adds the visited nodes to a queue in a list. At the end of the preorder visit, the root vertex of the tree is added to the list produced by the \verb|PreOrder| in the queue, in order to build a cycle. This cycle represents the approximation of the TSP.
 
 
 \subsubsection{Complexity analysis}
 We consider the methods implemented:
 \begin{enumerate}
-    \item \verb|Prim|: Prim's algorithm has a computational complexity equal to $\mathcal{O}(|E| log(|V|))$. In this case, however, the graphs are dense, that means that the graphs are complete, therefore the quantity of sides present in each graph $G$ is equal to $|E| = |V|²$. Hence, the final complexity of the algorithm is $\mathcal{O}(|V|² log(|V|))$;
-    \item \textbf{Construction of MST}: the MST has a cardinality of $|V|$ and we check each vertex of the graph $G$ after having sorted them with the \verb|OrderBy| method that has complexity $\mathcal{O}(log |V|)$. The method \verb|Add| of the \verb|Dictionary| used to save the tree has a complexity of $\mathcal{O}(|V|)$ if the number of key/value pairs contained in the dictionary is less than the capacity. We  Therefore, this portion of code has a complexity of $ O(|V|² log (|V|))$;
-    \item \verb|PreOrder|: we visit all the vertices of the MST in a preorder way. The MST is a tree that connects all the vertices of the original graph $ G $. So, the
-     complexity will be $\theta(|V|)$;
+    \item \verb|Prim|: Prim's algorithm has a computational complexity equal to $\mathcal{O}(|E| log(|V|))$. In this case, however, the graphs are dense, that means that the graphs are complete, therefore the quantity of edges present in each graph $G$ is equal to $|E| = |V|^2$. Hence, the final complexity of the algorithm is $\mathcal{O}(|V|^2 log(|V|))$;
+    \item \textbf{Construction of MST}: the MST has a cardinality of $|V|$ and we check each vertex of the graph $G$ after having sorted them with the \verb|OrderBy| method that has complexity $\mathcal{O}(log |V|)$. The method \verb|Add| of the \verb|Dictionary| used to save the tree has a complexity of $\mathcal{O}(|V|)$ if the number of key/value pairs contained in the dictionary is less than the capacity. We  Therefore, this portion of code has a complexity of $ O(|V|^2 log (|V|))$;
+    \item \verb|PreOrder|: we visit all the vertices of the MST in a preorder way. The MST is a tree that connects all the vertices of the original graph $G$. So, the
+     complexity will be $\theta(|V|)$.
 \end{enumerate}

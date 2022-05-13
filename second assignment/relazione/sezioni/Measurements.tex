@@ -4,7 +4,7 @@
 
 \subsubsection{Introduction and setting up}
 The program was written entirely in C\# mainly for convenience, in fact from the standard library, it's possible to 
-use several useful data structures such as \textbf{PriorityQueue} used in Prim's Algorithm.
+use several useful data structures such as \textbf{PriorityQueue} used in Prim's algorithm.
 Before running the program, follow these steps:
 \begin{enumerate}
     \item Install \textbf{.NET 6.0};
@@ -17,8 +17,7 @@ Before running the program, follow these steps:
 The execution of the program and the relative measurements were carried out on the following machine:
 \begin{itemize}
     \item \textbf{CPU}: Apple M1 Pro;
-    \item \textbf{RAM}: 16 GB;
-    \item \textbf{SSD}: 512 GB.
+    \item \textbf{RAM}: 16 GB.
 \end{itemize}
 
 \subsection{Introduction to measurements}
@@ -27,16 +26,19 @@ The measurements were made after retrieving and loading the entire dataset into 
 previously. Each method saves the results of the program in a different file, one for each algorithm.\\
 \noindent
 The single measurement is organized sequentially by running the entire dataset based on the type of algorithm. 
-The method \verb|Export2APCSV| applies the 2-Approximate's algorithm to the input graph and proceeds as follows:
+The method \verb|Export2APCSV| applies the \textit{2-Approximation} algorithm to the input graph and proceeds as follows:
 \begin{enumerate}
-    \item Executes once the 2-Approximate's algorithm to the graph and saving the execution time and the approximate solution;
-    \item Save in append to the output file in \textbf{csv} format. 
+    \item Executes once the 2-Approximation's algorithm to the graph and save the execution time and the approximate solution;
+    \item Continue to run the algorithm until the total execution time became greater or equal to 1 second;
+    \item Calculate the final execution time as an average between the total sum of the execution time and the number of repetitions of the same algorithm;
+    \item Save in append to the output file in \textbf{csv} format.
 \end{enumerate}
-We also implemented \verb|ExportNearestNeighborCSV| and \verb|ExportClosestInsertionCSV| methods which use Nearest Neighbor's algorithm and Closest Insertion.
+We also implemented \verb|ExportNearestNeighborCSV| and \verb|ExportClosestInsertionCSV| methods which use \textit{Nearest Neighbor} algorithm and \textit{Closest Insertion}.
 \noindent
 The output file is saved directly at the end of each algorithm execution keeping the following formatting:
 \begin{itemize}
     \item Name of the dataset;
     \item Approximate solution;
-    \item Execution time in milliseconds.
+    \item Execution time in milliseconds;
+    \item Number of executions in one second.
 \end{itemize}

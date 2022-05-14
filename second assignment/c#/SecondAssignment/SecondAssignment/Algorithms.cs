@@ -1,4 +1,4 @@
-﻿namespace SecondAssignment;
+namespace SecondAssignment;
 
 public static class Algorithms
 {
@@ -96,35 +96,6 @@ public static class Algorithms
     }
 
     /*
-    * Time Complexity: O(n^2)
-    */
-    private static List<Vertex> VisitNearestNeighbor(Graph graph, string vertexKey)
-    {
-        var s = graph.V[vertexKey];
-        s.SetVisited(true);
-        var res = new List<Vertex>() { s };
-
-        string key = string.Empty;
-        double min = double.MaxValue;
-        foreach (var kvpAdj in s.VerticesAdjacent) // O(n)
-        {
-            var adj = kvpAdj.Value;
-            var w = graph.GetWeight(s, adj);
-            if (!adj.IsVisited() && w < min)
-            {
-                min = w;
-                key = kvpAdj.Key;
-            }
-        }
-        if (!string.IsNullOrEmpty(key))
-        {
-            res.AddRange(VisitNearestNeighbor(graph, key)); // O(n^2)
-        }
-        
-        return res;
-    }
-
-    /*
      * Time Complexity: O(n^2)
      */
     /*public static List<Vertex> NearestNeighborIT(Graph graph)
@@ -156,7 +127,36 @@ public static class Algorithms
     */
 
     /*
-     * Time Complexity: O(n^2)
+    * Time Complexity: O(n^2)
+    */
+    private static List<Vertex> VisitNearestNeighbor(Graph graph, string vertexKey)
+    {
+        var s = graph.V[vertexKey];
+        s.SetVisited(true);
+        var res = new List<Vertex>() { s };
+
+        string key = string.Empty;
+        double min = double.MaxValue;
+        foreach (var kvpAdj in s.VerticesAdjacent) // O(n)
+        {
+            var adj = kvpAdj.Value;
+            var w = graph.GetWeight(s, adj);
+            if (!adj.IsVisited() && w < min)
+            {
+                min = w;
+                key = kvpAdj.Key;
+            }
+        }
+        if (!string.IsNullOrEmpty(key))
+        {
+            res.AddRange(VisitNearestNeighbor(graph, key)); // O(n^2)
+        }
+        
+        return res;
+    }
+
+    /*
+     * Time Complexity: O(n^3)
      */
     public static List<Vertex> ClosestInsertion(Graph graph)
     {
@@ -185,7 +185,7 @@ public static class Algorithms
         vertices.Remove(j.Name);
 
         /*
-         * Time Complexity: O(n^2)
+         * Time Complexity: O(n^3)
          */
         while(vertices.Any()) // O(n)
         {
@@ -193,7 +193,7 @@ public static class Algorithms
             key = string.Empty;
             foreach (var vertex in vertices) // O(n)
             {
-                var distance = result.Select(x => graph.GetWeight(graph.V[vertex], x)).Min();
+                var distance = result.Select(x => graph.GetWeight(graph.V[vertex], x)).Min(); // O(n)
                 if (distance < min)
                 {
                     key = vertex;

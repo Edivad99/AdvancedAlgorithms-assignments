@@ -8,7 +8,7 @@ Regarding the measurements and the results we obtained, in this occasion we repe
 In conclusion:
 \begin{itemize}
     \item \textit{Nearest Neighbor} and \textit{2-Approximation} algorithms are both efficient, unless there are some constant that make the 2-Approximation algorithm more slow, keeping in mind that the complexity of this one is bigger.
-    \item \textit{Closest Insertion} is the most accurate, but it is also slower than the other algorithms. So if we compute small graphs is convenient on one hand, but on the other hand if the graph became very large we will wait a long time to get a solution.
+    \item \textit{Closest Insertion} is the most accurate, but it is also slower than the other algorithms due to its complexity, in fact it is the only one to have a complexity order of $\mathcal{O}(V^3)$. So if we compute small graphs is convenient on one hand, but on the other hand if the graph became very large we will wait a long time to get a solution.
 \end{itemize}
 \noindent
 Talking about the precision of the data obtained by running the algorithms, we got that, in terms of percentage of error, the Nearest Neighbor algorithm is on average slightly more precise than the 2-Approximation algorithm. Anyway, it's very difficult to find a general rule, since it is not possible to identify a regularity in the results, sometimes Nearest Neighbor is more precise than 2-Approximation and vice versa.

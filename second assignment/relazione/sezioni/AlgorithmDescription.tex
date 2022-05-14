@@ -177,12 +177,12 @@ The second optimization that we implemented is the fact of using an \textit{Hash
 As for the Nearest Neighbor algorithm, we decide to use an adjacency lists in the \verb|GetWeight| method, in this way, instead of calculating the weight between one node and another at runtime, a linear scrolling of the adjacency list relating to the node in question is sufficient.
 
 \subsubsection{Complexity analysis}
-This algorithm has a computational complexity equal to $\mathcal{O}(V^2)$. In particular, we estimate this complexity starting from some considerations:
+This algorithm has a computational complexity equal to $\mathcal{O}(V^3)$. In particular, we estimate this complexity starting from some considerations:
 \begin{itemize}
     \item For the initial vertex, we need to find the closest node: this procedure can be executed in linear time, so $\mathcal{O}(|V|)$;
-    \item We scan all the vertices not yet in the path to find the closest one by distance. Since calculating the distance between two points can be executed in $\mathcal{O}(1)$ using the adjacency lists. We can access to the weight between two vertices with constant complexity instruction and find the closest vertex, so the total complexity will be $\mathcal{O}(|V|)$;
+    \item We scan all the vertices not yet in the path to find the closest one by distance among the vertices already in the path. Since calculating the distance between two points can be executed in $\mathcal{O}(1)$ using the adjacency lists. We can access to the weight between two vertices with constant complexity instruction and find the closest vertex, so the total complexity will be $\mathcal{O}(|V|^2)$;
     \item For each couple of nodes in the path we calculate the triangular inequality to find the position in which we have to add the closest vertex: this procedure can be executed in linear time, so $\mathcal{O}(|V|)$;
-    \item The previous two operations must be executed for all the vertices not yet inserted in the path that is in linear time $\mathcal{O}(|V|)$. Doing the previous two operations $|V|$ times, it is trivial to assume that the final complexity is $\mathcal{O}(|V|^2)$. 
+    \item The previous two operations must be executed for all the vertices not yet inserted in the path that is in linear time $\mathcal{O}(|V|)$. Doing the previous two operations $|V|$ times, it is trivial to assume that the final complexity is $\mathcal{O}(|V|^3)$. 
 \end{itemize}
 
 \subsection{2-Approximation}

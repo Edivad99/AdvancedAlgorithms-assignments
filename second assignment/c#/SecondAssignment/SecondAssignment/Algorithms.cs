@@ -44,6 +44,7 @@ public static class Algorithms
         Prim(graph, s); // O(n^2 * log(n))
 
         var tree = new Dictionary<string, List<Vertex>>();
+        // OrderBy -> O(n * log(n))
         foreach (var kvp in graph.V.OrderBy(x => x.Value.Key)) // O(n)
         {
             var vertex = kvp.Value;

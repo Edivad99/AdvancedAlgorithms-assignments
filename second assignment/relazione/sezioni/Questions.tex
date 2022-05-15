@@ -1,7 +1,7 @@
 \section{Answers to questions}
 
 \subsection{Question 1}
-\textit{Run the three algorithms you have implemented (2-Approximation, nearest neighbor and closest insertion) on the 13 graphs of the dataset. Show your results in a table. The rows in the table correspond to the problem instances. The columns show, for each algorithm, the weight of the approximate solution, the execution time and the relative error calculated as:
+\textit{Run the three algorithms you have implemented (2-Approximation, Nearest Neighbor and Closest Insertion) on the 13 graphs of the dataset. Show your results in a table. The rows in the table correspond to the problem instances. The columns show, for each algorithm, the weight of the approximate solution, the execution time and the relative error calculated as:
 \[\frac{(ApproximateSolution - OptimalSolution)}{OptimalSolution}\]}\\
 
 \noindent
@@ -84,7 +84,7 @@ We believe it is useful to report in detail the execution times of the algorithm
 
     \hline
     \end{tabular}
-    \caption{Optimal solution for each dataset.}
+    \caption{Approximated solution for each dataset.}
 \end{table}
 
 \subsection{Question 2}
@@ -118,7 +118,7 @@ Below are some graphs showing the actual errors of the results and the errors in
     \label{fig:error_nn_2ap_prop}
 \end{figure}
 \noindent
-From the charts (fig. \ref{fig:proportion_error_ord}, \ref{fig:error_nn_2ap}, \ref{fig:error_nn_2ap_prop}) we can see that the nearest neighbors algorithm seems to be, in mean, the most efficient. This is not true, in fact in the graph with small dimension, like (\textit{burma14}, \textit{ulysses16} and \textit{ulysses22}), the \textit{2-Approximation} algorithm is closest to the optimal solution than the \textit{Nearest Neighbor}.\\
+From the charts (fig. \ref{fig:proportion_error_ord}, \ref{fig:error_nn_2ap}, \ref{fig:error_nn_2ap_prop}) we can see that the \textit{Nearest Neighbor} algorithm seems to be, in mean, the most efficient. This is not true, in fact in the graph with small dimension, like (\textit{burma14}, \textit{ulysses16} and \textit{ulysses22}), the \textit{2-Approximation} algorithm is closest to the optimal solution than the Nearest Neighbor.\\
 One thing we noticed is the fact that the Nearest Neighbor is a greedy algorithm and this may explain the fact that it performs well when the graph has big dimension and the number of choices that it has to compute is bigger and so the error rate decreases in proportion.
 
 \begin{figure}[H]
@@ -128,7 +128,7 @@ One thing we noticed is the fact that the Nearest Neighbor is a greedy algorithm
     \label{fig:time_nn_2ap_big}
 \end{figure}
 \noindent
-Regarding the execution time of the algorithms, we can see from the graph (fig. \ref{fig:time_nn_2ap_big}), that the execution time of the two algorithms (repeated more than ones), give us a execution time less in the nearest neighbor algorithm specially in the bigger graphs.\\
+Regarding the execution time of the algorithms, we can see from the graph (fig. \ref{fig:time_nn_2ap_big}), that the execution time of the two algorithms (repeated more than ones), give us a execution time less in the Nearest Neighbor algorithm specially in the bigger graphs.\\
 Similarly, also in the smaller graphs (fig. \ref{fig:time_nn_2ap_small}) we noticed that this algorithm take less computational time, confirming itself as the faster of the three.
 
 \begin{figure}[H]

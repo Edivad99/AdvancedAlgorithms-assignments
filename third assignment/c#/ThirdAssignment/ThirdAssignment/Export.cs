@@ -48,26 +48,10 @@ public static class Export
 
     public static async Task Export2APCSVAsync(string folderPath)
     {
-        var csv = await TestAlgorithmAsync(folderPath, graph => Algorithms.ApproxMetricTSP(graph));
-        var raw_csv = string.Join("\n", csv);
-        Console.WriteLine(raw_csv);
-        await File.WriteAllTextAsync("2ap.csv", raw_csv);
-    }
-
-    public static async Task ExportNearestNeighborCSVAsync(string folderPath)
-    {
-        var csv = await TestAlgorithmAsync(folderPath, graph => Algorithms.NearestNeighbor(graph));
-        var raw_csv = string.Join("\n", csv);
-        Console.WriteLine(raw_csv);
-        await File.WriteAllTextAsync("nn.csv", raw_csv);
-    }
-
-    public static async Task ExportClosestInsertionCSVAsync(string folderPath)
-    {
-        var csv = await TestAlgorithmAsync(folderPath, graph => Algorithms.ClosestInsertion(graph));
-        var raw_csv = string.Join("\n", csv);
-        Console.WriteLine(raw_csv);
-        await File.WriteAllTextAsync("ci.csv", raw_csv);
+        //var csv = await TestAlgorithmAsync(folderPath, graph => Algorithms.ApproxMetricTSP(graph));
+        //var raw_csv = string.Join("\n", csv);
+        //Console.WriteLine(raw_csv);
+        //await File.WriteAllTextAsync("2ap.csv", raw_csv);
     }
 }
 

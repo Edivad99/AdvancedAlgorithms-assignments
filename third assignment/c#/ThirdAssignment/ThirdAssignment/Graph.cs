@@ -70,7 +70,10 @@ public class Graph
                 if (i.Key == j.Key)
                     Console.Write("\t0");
                 else
-                    Console.Write($"\t{GetWeight(i.Value, j.Value)}");
+                    if (E.ContainsKey((i.Key, j.Key)) || E.ContainsKey((j.Key, i.Key)))
+                        Console.Write($"\t{GetWeight(i.Value, j.Value)}");
+                    else
+                        Console.Write("\t-");
             }
             Console.WriteLine();
         }

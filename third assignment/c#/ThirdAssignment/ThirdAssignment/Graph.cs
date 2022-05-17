@@ -1,6 +1,3 @@
-﻿using System.ComponentModel.Design;
-using System.Globalization;
-
 namespace ThirdAssignment;
 
 public class Graph
@@ -32,7 +29,7 @@ public class Graph
         v.AddAdjacentVertices(u);
 
         Edge newEdge = new Edge(u, v, weight);
-        var key = (Convert.ToInt32(newEdge.U.Name) < Convert.ToInt32(newEdge.V.Name))
+        var key = newEdge.U.Name.CompareTo(newEdge.V.Name) < 0
             ? (newEdge.U.Name, newEdge.V.Name)
             : (newEdge.V.Name, newEdge.U.Name);
         if (E.ContainsKey(key))

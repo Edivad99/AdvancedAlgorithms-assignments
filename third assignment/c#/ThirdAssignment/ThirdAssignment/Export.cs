@@ -15,7 +15,7 @@ public static class Export
         stopWatch.Stop();
 
         var verticesPair = vertices.PairWise();
-        var sum = verticesPair.Sum(x => graph.GetWeight(x.Item1, x.Item2));
+        var sum = verticesPair.Select(x => graph.GetWeight(x.Item1, x.Item2).Sum()).Sum();
 
         var time = stopWatch.Elapsed;
         return (sum, time);

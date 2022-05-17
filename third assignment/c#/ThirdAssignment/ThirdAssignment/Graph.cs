@@ -1,11 +1,12 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.Design;
+using System.Globalization;
 
 namespace ThirdAssignment;
 
 public class Graph
 {
     public Dictionary<string, Vertex> V { get; set; }
-    public Dictionary<(string, string), Edge> E { get; set; }
+    public Dictionary<(string, string), List<Edge>> E { get; set; }
 
     public Graph()
     {
@@ -30,8 +31,14 @@ public class Graph
         u.AddAdjacentVertices(v);
         v.AddAdjacentVertices(u);
 
-        var newEdge = new Edge(u, v, weight);
-        E.Add((newEdge.U.Name, newEdge.V.Name), newEdge);
+        Edge newEdge = new Edge(u, v, weight);
+        var key = (Convert.ToInt32(newEdge.U.Name) < Convert.ToInt32(newEdge.V.Name))
+            ? (newEdge.U.Name, newEdge.V.Name)
+            : (newEdge.V.Name, newEdge.U.Name);
+        if (E.ContainsKey(key))
+            E[key].Add(newEdge);
+        else
+            E.Add(key, new() { newEdge });
     }
 
     public void RemoveEdge(Edge removeEdge)
@@ -42,12 +49,12 @@ public class Graph
         removeEdge.V.RemoveAdjacentVertices(removeEdge.U);
     }
 
-    public double GetWeight(Vertex u, Vertex v)
+    public IEnumerable<int> GetWeight(Vertex u, Vertex v)
     {
         if (E.ContainsKey((u.Name, v.Name)))
-            return E[(u.Name, v.Name)].Weight;
+            return E[(u.Name, v.Name)].Select(x => x.Weight);
         if (E.ContainsKey((v.Name, u.Name)))
-            return E[(v.Name, u.Name)].Weight;
+            return E[(u.Name, v.Name)].Select(x => x.Weight);
         throw new ArgumentException("Edge not found");
     }
 
@@ -101,8 +108,8 @@ public class Graph
 
         if (graph.V.Count != vertices)
             throw new Exception("The list of vertices has a different size compared to the number read from file");
-        if (graph.E.Count != edges)
-            throw new Exception("The list of edges has a different size compared to the number read from file");
+        //if (graph.E.Count != edges)
+          //  throw new Exception("The list of edges has a different size compared to the number read from file");
         Console.WriteLine(" Done");
         return graph;
     }

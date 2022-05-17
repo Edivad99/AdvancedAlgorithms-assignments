@@ -2,7 +2,7 @@
 .vs
 bin
 obj
-
+.idea
 *.aux
 *.log
 *.out

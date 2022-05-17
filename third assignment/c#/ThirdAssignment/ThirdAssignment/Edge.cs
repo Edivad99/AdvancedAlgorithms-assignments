@@ -1,6 +1,6 @@
 ﻿namespace ThirdAssignment;
 
-public class Edge : IEquatable<Edge>, IComparable<Edge>
+public class Edge : IEquatable<Edge>, IComparable<Edge>, ICloneable
 {
     public Vertex U { get; init; }
     public Vertex V { get; init; }
@@ -25,5 +25,7 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
             return 1;
         return Weight.CompareTo(other.Weight);
     }
+
+    public object Clone() => new Edge(U, V, Weight);
 }
 

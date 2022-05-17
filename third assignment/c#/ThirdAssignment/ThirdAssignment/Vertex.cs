@@ -1,6 +1,6 @@
 ﻿namespace ThirdAssignment;
 
-public class Vertex : IEquatable<Vertex>
+public class Vertex : IEquatable<Vertex>, ICloneable
 {
     public string Name { get; init; }
     public double Key { get; set; }
@@ -25,6 +25,12 @@ public class Vertex : IEquatable<Vertex>
             VerticesAdjacent.Add(v.Name, v);
     }
 
+    public void AddAdjacentVertices(IEnumerable<Vertex> vertices)
+    {
+        foreach (var vertex in vertices)
+            AddAdjacentVertices(vertex);
+    }
+
     public void RemoveAdjacentVertices(Vertex v)
     {
         if (VerticesAdjacent.ContainsKey(v.Name))
@@ -38,4 +44,15 @@ public class Vertex : IEquatable<Vertex>
     }
 
     public bool Equals(Vertex? other) => other != null && Name.Equals(other.Name);
+
+    public object Clone()
+    {
+        return new Vertex(Name)
+        {
+            Key = Key,
+            Parent = Parent,
+            Visited = Visited,
+            VerticesAdjacent = new Dictionary<string, Vertex>(VerticesAdjacent)
+        };
+    }
 }

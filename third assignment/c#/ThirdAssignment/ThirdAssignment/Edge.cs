@@ -4,31 +4,18 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
 {
     public Vertex U { get; init; }
     public Vertex V { get; init; }
-    public double Distance { get; init; }
+    public int Weight { get; init; }
 
-    public Edge(Vertex u, Vertex v, Type type)
+    public Edge(Vertex u, Vertex v, int weight)
     {
         U = u;
         V = v;
-        if (type == Type.GEO)
-        {
-            const double RRR = 6378.388;
-            var q1 = Math.Cos(U.Y - V.Y);
-            var q2 = Math.Cos(U.X - V.X);
-            var q3 = Math.Cos(U.X + V.X);
-            Distance = Math.Truncate(RRR * Math.Acos(0.5 * ((1 + q1) * q2 - (1 - q1) * q3)) + 1);
-        }
-        else
-        {
-            //No coordinate conversions are needed in this case.
-            //Calculate the Euclidean distance and round the value to the nearest integer.
-            Distance = Math.Round(Math.Sqrt(Math.Pow(U.X - V.X, 2) + Math.Pow(U.Y - V.Y, 2)));
-        }
+        Weight = weight;
     }
 
     public bool Equals(Edge? other)
     {
-        return other != null && U == other.U && V == other.V && Distance == other.Distance;
+        return other != null && U == other.U && V == other.V && Weight == other.Weight;
     }
 
     public int CompareTo(Edge? other)
@@ -36,7 +23,7 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
         // If other is not a valid object reference, this instance is greater.
         if (other == null)
             return 1;
-        return Distance.CompareTo(other.Distance);
+        return Weight.CompareTo(other.Weight);
     }
 }
 

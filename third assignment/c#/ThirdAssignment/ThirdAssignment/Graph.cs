@@ -2,23 +2,15 @@
 
 namespace ThirdAssignment;
 
-public enum Type
-{
-    EUC_2D,
-    GEO
-}
-
 public class Graph
 {
     public Dictionary<string, Vertex> V { get; set; }
     public Dictionary<(string, string), Edge> E { get; set; }
-    public Type Type { get; init; }
 
-    public Graph(Type type)
+    public Graph()
     {
         V = new();
         E = new();
-        Type = type;
     }
 
     private Vertex AddVertex(Vertex newVertex)
@@ -30,24 +22,32 @@ public class Graph
         return newVertex;
     }
 
-    public void AddEdge(Vertex a, Vertex b)
+    public void AddEdge(string uName, string vName, int weight)
     {
-        var u = AddVertex(a);
-        var v = AddVertex(b);
+        var u = AddVertex(new Vertex(uName));
+        var v = AddVertex(new Vertex(vName));
 
         u.AddAdjacentVertices(v);
         v.AddAdjacentVertices(u);
 
-        var newEdge = new Edge(u, v, Type);
+        var newEdge = new Edge(u, v, weight);
         E.Add((newEdge.U.Name, newEdge.V.Name), newEdge);
+    }
+
+    public void RemoveEdge(Edge removeEdge)
+    {
+        E.Remove((removeEdge.U.Name, removeEdge.V.Name));
+
+        removeEdge.U.RemoveAdjacentVertices(removeEdge.V);
+        removeEdge.V.RemoveAdjacentVertices(removeEdge.U);
     }
 
     public double GetWeight(Vertex u, Vertex v)
     {
         if (E.ContainsKey((u.Name, v.Name)))
-            return E[(u.Name, v.Name)].Distance;
+            return E[(u.Name, v.Name)].Weight;
         if (E.ContainsKey((v.Name, u.Name)))
-            return E[(v.Name, u.Name)].Distance;
+            return E[(v.Name, u.Name)].Weight;
         throw new ArgumentException("Edge not found");
     }
 
@@ -78,57 +78,28 @@ public class Graph
 
     public static async Task<Graph> LoadFromFileAsync(string filePath)
     {
-        var points = new List<Vertex>();
+        Console.Write($"Loading: {Path.GetFileNameWithoutExtension(filePath)}");
         string[] lines = await File.ReadAllLinesAsync(filePath);
 
-        Console.Write($"Loading: {lines[0].Split(" ").Last()}");
 
-        Type type = Type.EUC_2D;
-        bool readHeader = false;
-        int dimension = 0;
+        var firstLine = lines[0].Trim().Split(' ');
+        int vertices = Convert.ToInt32(firstLine[0]);
+        int edges = Convert.ToInt32(firstLine[1]);
 
+        var graph = new Graph();
         for (int i = 1; i < lines.Length; i++)
         {
-            lines[i] = lines[i].Trim();
-            if (lines[i].Contains("EDGE_WEIGHT_TYPE"))
-            {
-                type = lines[i].Split(" ").Last().Equals("GEO") ? Type.GEO : Type.EUC_2D;
-            }
-            else if (lines[i].Contains("DIMENSION"))
-            {
-                dimension = Convert.ToInt32(lines[i].Split(" ").Last());
-            }
-            else if (lines[i].Contains("NODE_COORD_SECTION"))
-            {
-                readHeader = true;
-            }
-            else if (lines[i].Equals("EOF"))
-            {
-                break;
-            }
-            else if (readHeader)
-            {
-                var line = lines[i].Split(' ').ToList();
-                line.RemoveAll(x => x.Equals(string.Empty));
-                string name = line[0];
-                double x = Convert.ToDouble(line[1], CultureInfo.InvariantCulture);
-                double y = Convert.ToDouble(line[2], CultureInfo.InvariantCulture);
-
-                points.Add(new Vertex(name, x, y, type));
-            }
+            var line = lines[i].Trim().Split(' ');
+            string uName = line[0];
+            string vName = line[1];
+            int w = Convert.ToInt32(line[2]);
+            graph.AddEdge(uName, vName, w);
         }
 
-        if (points.Count != dimension)
+        if (graph.V.Count != vertices)
             throw new Exception("The list of vertices has a different size compared to the number read from file");
-
-        var graph = new Graph(type);
-        for(int i = 0; i < points.Count; i++)
-        {
-            for(int j = i + 1; j < points.Count; j++)
-            {
-                graph.AddEdge(points[i], points[j]);
-            }
-        }
+        if (graph.E.Count != edges)
+            throw new Exception("The list of edges has a different size compared to the number read from file");
         Console.WriteLine(" Done");
         return graph;
     }

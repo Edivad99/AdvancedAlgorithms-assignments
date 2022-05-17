@@ -126,8 +126,8 @@ public class Graph : ICloneable
 
         if (graph.V.Count != vertices)
             throw new Exception("The list of vertices has a different size compared to the number read from file");
-        //if (graph.E.Count != edges)
-          //  throw new Exception("The list of edges has a different size compared to the number read from file");
+        if (graph.E.Select(x => x.Value.Count).Sum() != edges)
+            throw new Exception("The list of edges has a different size compared to the number read from file");
         Console.WriteLine(" Done");
         return graph;
     }

@@ -112,9 +112,9 @@ public class Graph : ICloneable
         return graph;
     }
 
-    public static Graph ContractEdge(Graph graph, Edge e)
+    public static Graph ContractEdge(Graph graphCopy, Edge e)
     {
-        Graph graphCopy = (Graph)graph.Clone();
+        //Graph graphCopy = (Graph)graph.Clone();
         var uName = e.U.Name;
         var vName = e.V.Name;
 

@@ -2,17 +2,18 @@ namespace ThirdAssignment;
 
 public static class Algorithms
 {
-    private static readonly Random rnd = new Random();
+    // Fix the seed so we get the same results every time
+    private static readonly Random rnd = new Random(234);
 
     private static int FullContraction(Graph graph)
     {
         Graph newGraph = (Graph)graph.Clone();
-        for(int i = 0; i < newGraph.V.Count - 2; i++)
+        while(newGraph.V.Count > 2)
         {
-            //Edge e = graph.E.ElementAt(rnd.Next(graph.E.Count)).Value;
-            //newGraph = Graph.ContractEdge(graph, e);
+            Edge e = newGraph.E.ElementAt(rnd.Next(newGraph.E.Count)).Value.First();
+            newGraph = Graph.ContractEdge(newGraph, e);
         }
-        return newGraph.E.Count;
+        return newGraph.E.Select(x => x.Value.Count).Sum();
     }
 
     public static int Karger(Graph graph, int k)

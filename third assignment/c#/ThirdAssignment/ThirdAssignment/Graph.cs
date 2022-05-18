@@ -1,4 +1,4 @@
-﻿namespace ThirdAssignment;
+namespace ThirdAssignment;
 
 public class Graph : ICloneable
 {

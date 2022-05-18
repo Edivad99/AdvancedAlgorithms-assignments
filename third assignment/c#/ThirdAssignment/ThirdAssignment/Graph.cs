@@ -73,11 +73,15 @@ public class Graph : ICloneable
 
     public object Clone()
     {
-        return new Graph()
+        var newGraph = new Graph();
+        foreach (var kvp in E)
         {
-            E = new Dictionary<(string, string), List<Edge>>(E),
-            V = new Dictionary<string, Vertex>(V)
-        };
+            foreach (var edges in kvp.Value)
+            {
+                newGraph.AddEdge(edges.U.Name, edges.V.Name, edges.Weight);
+            }
+        }
+        return newGraph;
     }
 
     public static async Task<Graph> LoadFromFileAsync(string filePath)

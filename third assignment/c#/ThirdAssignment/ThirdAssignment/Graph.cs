@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.Design;
-using System.Globalization;
-
-namespace ThirdAssignment;
+﻿namespace ThirdAssignment;
 
 public class Graph : ICloneable
 {
@@ -31,10 +28,8 @@ public class Graph : ICloneable
         u.AddAdjacentVertices(v);
         v.AddAdjacentVertices(u);
 
-        Edge newEdge = new Edge(u, v, weight);
-        var key = (Convert.ToInt32(newEdge.U.Name) < Convert.ToInt32(newEdge.V.Name))
-            ? (newEdge.U.Name, newEdge.V.Name)
-            : (newEdge.V.Name, newEdge.U.Name);
+        var newEdge = new Edge(u, v, weight);
+        var key = (uName.CompareTo(vName) <= 0) ? (uName, vName) : (vName, uName);
         if (E.ContainsKey(key))
             E[key].Add(newEdge);
         else
@@ -43,7 +38,10 @@ public class Graph : ICloneable
 
     public void RemoveEdge(Edge removeEdge)
     {
-        E.Remove((removeEdge.U.Name, removeEdge.V.Name));
+        if (E.ContainsKey((removeEdge.U.Name, removeEdge.V.Name)))
+            E.Remove((removeEdge.U.Name, removeEdge.V.Name));
+        if (E.ContainsKey((removeEdge.V.Name, removeEdge.U.Name)))
+            E.Remove((removeEdge.V.Name, removeEdge.U.Name));
 
         removeEdge.U.RemoveAdjacentVertices(removeEdge.V);
         removeEdge.V.RemoveAdjacentVertices(removeEdge.U);
@@ -71,28 +69,6 @@ public class Graph : ICloneable
     {
         foreach(var vertex in V.Values)
             vertex.ClearStatus();
-    }
-
-    public void PrintAdjacentMatrix()
-    {
-        foreach (var i in V)
-            Console.Write($"\t{i.Key}");
-        Console.WriteLine("\n");
-        foreach(var i in V)
-        {
-            Console.Write($"{i.Key}");
-            foreach (var j in V)
-            {
-                if (i.Key == j.Key)
-                    Console.Write("\t0");
-                else
-                    if (E.ContainsKey((i.Key, j.Key)) || E.ContainsKey((j.Key, i.Key)))
-                        Console.Write($"\t{GetWeight(i.Value, j.Value)}");
-                    else
-                        Console.Write("\t-");
-            }
-            Console.WriteLine();
-        }
     }
 
     public object Clone()

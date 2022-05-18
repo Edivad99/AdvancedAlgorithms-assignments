@@ -5,7 +5,6 @@ const string FOLDER_PATH = @"/Users/davide/Sviluppo/Advanced Algorithm/third ass
 
 var graph = await Graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "test.txt"));
 
-//graph.PrintAdjacentMatrix();
 
 var graph2 = Graph.ContractEdge(graph, graph.E[("1", "2")].First());
 

@@ -1,6 +1,6 @@
 namespace ThirdAssignment;
 
-public class Graph
+public class Graph : ICloneable
 {
     public Dictionary<string, Vertex> V { get; set; }
     public Dictionary<(string, string), List<Edge>> E { get; set; }
@@ -28,10 +28,8 @@ public class Graph
         u.AddAdjacentVertices(v);
         v.AddAdjacentVertices(u);
 
-        Edge newEdge = new Edge(u, v, weight);
-        var key = newEdge.U.Name.CompareTo(newEdge.V.Name) < 0
-            ? (newEdge.U.Name, newEdge.V.Name)
-            : (newEdge.V.Name, newEdge.U.Name);
+        var newEdge = new Edge(u, v, weight);
+        var key = (uName.CompareTo(vName) <= 0) ? (uName, vName) : (vName, uName);
         if (E.ContainsKey(key))
             E[key].Add(newEdge);
         else
@@ -40,7 +38,10 @@ public class Graph
 
     public void RemoveEdge(Edge removeEdge)
     {
-        E.Remove((removeEdge.U.Name, removeEdge.V.Name));
+        if (E.ContainsKey((removeEdge.U.Name, removeEdge.V.Name)))
+            E.Remove((removeEdge.U.Name, removeEdge.V.Name));
+        if (E.ContainsKey((removeEdge.V.Name, removeEdge.U.Name)))
+            E.Remove((removeEdge.V.Name, removeEdge.U.Name));
 
         removeEdge.U.RemoveAdjacentVertices(removeEdge.V);
         removeEdge.V.RemoveAdjacentVertices(removeEdge.U);
@@ -55,32 +56,28 @@ public class Graph
         throw new ArgumentException("Edge not found");
     }
 
+    private List<Edge> GetEdge(string uName, string vName)
+    {
+        if (E.ContainsKey((uName, vName)))
+            return E[(uName, vName)];
+        if (E.ContainsKey((vName, uName)))
+            return E[(vName, uName)];
+        throw new ArgumentException("Edge not found");
+    }
+
     public void ClearVerticesStatus()
     {
         foreach(var vertex in V.Values)
             vertex.ClearStatus();
     }
 
-    public void PrintAdjacentMatrix()
+    public object Clone()
     {
-        foreach (var i in V)
-            Console.Write($"\t{i.Key}");
-        Console.WriteLine("\n");
-        foreach(var i in V)
+        return new Graph()
         {
-            Console.Write($"{i.Key}");
-            foreach (var j in V)
-            {
-                if (i.Key == j.Key)
-                    Console.Write("\t0");
-                else
-                    if (E.ContainsKey((i.Key, j.Key)) || E.ContainsKey((j.Key, i.Key)))
-                        Console.Write($"\t{GetWeight(i.Value, j.Value)}");
-                    else
-                        Console.Write("\t-");
-            }
-            Console.WriteLine();
-        }
+            E = new Dictionary<(string, string), List<Edge>>(E),
+            V = new Dictionary<string, Vertex>(V)
+        };
     }
 
     public static async Task<Graph> LoadFromFileAsync(string filePath)
@@ -105,9 +102,41 @@ public class Graph
 
         if (graph.V.Count != vertices)
             throw new Exception("The list of vertices has a different size compared to the number read from file");
-        //if (graph.E.Count != edges)
-          //  throw new Exception("The list of edges has a different size compared to the number read from file");
+        if (graph.E.Select(x => x.Value.Count).Sum() != edges)
+            throw new Exception("The list of edges has a different size compared to the number read from file");
         Console.WriteLine(" Done");
         return graph;
     }
+
+    public static Graph ContractEdge(Graph graph, Edge e)
+    {
+        Graph graphCopy = (Graph)graph.Clone();
+        var uName = e.U.Name;
+        var vName = e.V.Name;
+
+        graphCopy.RemoveEdge(e);
+        foreach(var vertex in graphCopy.V[uName].VerticesAdjacent)
+        {
+            var deleteEdges = graphCopy.GetEdge(vertex.Value.Name, uName);
+            foreach(var edge in deleteEdges)
+            {
+                graphCopy.RemoveEdge(edge);
+                graphCopy.AddEdge($"Z{uName},{vName}", vertex.Value.Name, edge.Weight);
+            }   
+        }
+        foreach (var vertex in graphCopy.V[vName].VerticesAdjacent)
+        {
+            var deleteEdges = graphCopy.GetEdge(vertex.Value.Name, vName);
+            foreach (var edge in deleteEdges)
+            {
+                graphCopy.RemoveEdge(edge);
+                graphCopy.AddEdge($"Z{uName},{vName}", vertex.Value.Name, edge.Weight);
+            }
+        }
+
+        graphCopy.V.Remove(uName);
+        graphCopy.V.Remove(vName);
+        return graphCopy;
+    }
+
 }

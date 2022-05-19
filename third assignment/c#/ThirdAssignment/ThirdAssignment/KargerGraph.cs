@@ -17,8 +17,9 @@ public class KargerGraph
         {
             for (int j = 0; j < vertices; j++)
             {
-                W[i,j] = 0;
+                W[i, j] = 0;
             }
+            D[i] = 0;
         }
     }
 
@@ -26,6 +27,8 @@ public class KargerGraph
     {
         W[u - 1, v - 1] = weight;
         W[v - 1, u - 1] = weight;
+        D[u - 1] += weight;
+        D[v - 1] += weight;
     }
 
     public void RemoveEdge(int u, int v)

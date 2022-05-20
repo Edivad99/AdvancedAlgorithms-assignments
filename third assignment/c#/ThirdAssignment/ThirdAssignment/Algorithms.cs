@@ -10,7 +10,7 @@ public static class Algorithms
     public static int Karger(KargerGraph graph)
     {
         int min = int.MaxValue;
-        int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices), 2));
+        int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices, 2), 2));
         for (int i = 0; i < k; i++)
         {
             int value = RecursiveContract(graph);
@@ -101,7 +101,7 @@ public static class Algorithms
             return graph.W[u, v];
         }
 
-        int t = Convert.ToInt32(Math.Ceiling(n / (Math.Sqrt(2) + 1)));
+        int t = Convert.ToInt32(Math.Ceiling(n / Math.Sqrt(2) + 1));
         int[] w = new int[2];
         for (int i = 0; i < 2; i++)
         {

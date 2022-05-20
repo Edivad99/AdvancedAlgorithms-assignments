@@ -27,14 +27,32 @@ public class KargerGraph
     {
         W[u - 1, v - 1] = weight;
         W[v - 1, u - 1] = weight;
-        D[u - 1] += weight;
-        D[v - 1] += weight;
     }
 
     public void RemoveEdge(int u, int v)
     {
         W[u - 1, v - 1] = 0;
         W[v - 1, u - 1] = 0;
+    }
+
+
+    public void ContractEdge(int u, int v)
+    {
+        int positionU = u - 1;
+        int positionV = v - 1;
+        D[positionU] = D[positionU] + D[positionV] - 2 * W[positionU, positionV];
+        D[positionV] = 0;
+        W[positionU, positionV] = W[positionV, positionU] = 0;
+
+        for(int w = 0; w < Vertices; w++)
+        {
+            if (w != positionU && w != positionV)
+            {
+                W[positionU, w] += W[positionV, w];
+                W[w, positionU] += W[w, positionV];
+                W[positionV, w] = W[w, positionV] = 0;
+            }
+        }
     }
 
     public static async Task<KargerGraph> LoadFromFileAsync(string filePath)
@@ -57,8 +75,19 @@ public class KargerGraph
             graph.AddEdge(u, v, w);
         }
 
-        if (graph.W.Length != vertices)
-            throw new Exception("The list of vertices has a different size compared to the number read from file");
+        graph.D = new int[vertices];
+        for (int i = 0; i < vertices; i++)
+        {
+            int sum = 0;
+            for (int j = 0; j < vertices; j++)
+            {
+                sum += graph.W[i, j];
+            }
+            graph.D[i] = sum;
+        }
+
+        //if (graph.W.GetLength(0) != vertices)
+        //    throw new Exception("The list of vertices has a different size compared to the number read from file");
         Console.WriteLine(" Done");
         return graph;
     }

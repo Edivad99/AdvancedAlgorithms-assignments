@@ -21,9 +21,9 @@ public static class Algorithms
 
     public static int RandomSelect(int[] C)
     {
-        int r = rnd.Next(C.Min(), C.Max());
+        int r = rnd.Next(0, C.Max());
 
-        int start = 0, end = C.Length, mid = 0;
+        int start = 1, end = C.Length, mid = 0;
         
         while(start < end)
         {
@@ -35,7 +35,6 @@ public static class Algorithms
             else if (C[mid] > r)
                 end = mid;
         }
-        Console.WriteLine("--------------------------------------------------------------");
         //Array.BinarySearch(C, start, end, r);
         return mid;
     }
@@ -87,10 +86,22 @@ public static class Algorithms
         if (n <= 6)
         {
             KargerGraph g = Contract(graph, 2);
-            return graph.W[0, 0];
+            int u = 0, v = 0;
+            for (int i = 0; i < g.D.Length; i++)
+            {
+                if (u == 0 && g.D[i] != 0)
+                {
+                    u = i;
+                }
+                else if (u != 0 && v == 0 && g.D[i] != 0)
+                {
+                    v = i;
+                }
+            }
+            return graph.W[u, v];
         }
 
-        int t = Convert.ToInt32(Math.Round((n / (Math.Sqrt(2) + 1)), MidpointRounding.ToPositiveInfinity));
+        int t = Convert.ToInt32(Math.Ceiling(n / (Math.Sqrt(2) + 1)));
         int[] w = new int[2];
         for (int i = 0; i < 2; i++)
         {

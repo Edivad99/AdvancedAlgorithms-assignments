@@ -2,7 +2,7 @@ namespace ThirdAssignment;
 
 public class KargerGraph
 {
-    public int Vertices { get; }
+    public int Vertices { get; private set; }
     public int Edges { get; }
     public int[,] W;
     public int[] D;
@@ -43,6 +43,7 @@ public class KargerGraph
         D[positionU] = D[positionU] + D[positionV] - 2 * W[positionU, positionV];
         D[positionV] = 0;
         W[positionU, positionV] = W[positionV, positionU] = 0;
+        Vertices--;
 
         for(int w = 0; w < Vertices; w++)
         {

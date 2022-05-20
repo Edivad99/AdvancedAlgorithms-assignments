@@ -81,7 +81,17 @@ public static class Algorithms
         }
 
         int v = RandomSelect(CW);
-        return (u, v);
+        return (u + 1, v + 1);//Name not the position
+    }
+    public static KargerGraph Contract(KargerGraph graph, int k)
+    {
+        int n = graph.Vertices;
+        for(int i = 0; i < n - k; i++)
+        {
+            (int u, int v) = EdgeSelect(graph.D, graph.W);
+            graph.ContractEdge(u, v);
+        }
+        return graph;
     }
 }
 

@@ -4,8 +4,8 @@ public class KargerGraph
 {
     public int Vertices { get; }
     public int Edges { get; }
-    private int[,] W;
-    private int[] D;
+    public int[,] W;
+    public int[] D;
 
     public KargerGraph(int vertices, int edges)
     {

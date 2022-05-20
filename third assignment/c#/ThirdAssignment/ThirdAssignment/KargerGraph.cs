@@ -35,27 +35,6 @@ public class KargerGraph
         W[v - 1, u - 1] = 0;
     }
 
-
-    public void ContractEdge(int u, int v)
-    {
-        int positionU = u - 1;
-        int positionV = v - 1;
-        D[positionU] = D[positionU] + D[positionV] - 2 * W[positionU, positionV];
-        D[positionV] = 0;
-        W[positionU, positionV] = W[positionV, positionU] = 0;
-        Vertices--;
-
-        for(int w = 0; w < Vertices; w++)
-        {
-            if (w != positionU && w != positionV)
-            {
-                W[positionU, w] += W[positionV, w];
-                W[w, positionU] += W[w, positionV];
-                W[positionV, w] = W[w, positionV] = 0;
-            }
-        }
-    }
-
     public static async Task<KargerGraph> LoadFromFileAsync(string filePath)
     {
         Console.Write($"Loading: {Path.GetFileNameWithoutExtension(filePath)}");

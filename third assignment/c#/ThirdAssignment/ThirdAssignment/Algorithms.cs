@@ -1,5 +1,3 @@
-using System.Reflection.Metadata;
-
 namespace ThirdAssignment;
 
 public static class Algorithms
@@ -13,33 +11,36 @@ public static class Algorithms
         int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices, 2), 2));
         for (int i = 0; i < k; i++)
         {
-            int value = RecursiveContract(graph);
+            int value = RecursiveContract((int[])graph.D.Clone(), (int[,])graph.W.Clone(), graph.Vertices);
+            Console.WriteLine(value);
             min = Math.Min(min, value);
         }
         return min;
     }
 
-    public static int RandomSelect(int[] C)
+    private static int RandomSelect(int[] C)
     {
         int r = rnd.Next(0, C.Max());
+        int start = 0;
+        int end = C.Length - 1;
 
-        int start = 1, end = C.Length, mid = 0;
-        
-        while(start < end)
+        while (start <= end)
         {
-            mid = (start + end) / 2;
-            if (C[mid - 1] <= r && r < C[mid])
-                break;
+            int mid = (end + start) / 2;
+
             if (C[mid] <= r)
+            {
                 start = mid + 1;
+            }
             else if (C[mid] > r)
-                end = mid;
+            {
+                end = mid - 1;
+            }
         }
-        //Array.BinarySearch(C, start, end, r);
-        return mid;
+        return start;
     }
 
-    public static (int, int) EdgeSelect(int[] D, int[,] W)
+    private static (int, int) EdgeSelect(int[] D, int[,] W)
     {
         int[] CD = new int[D.Length];
         CD[0] = D[0];
@@ -67,46 +68,66 @@ public static class Algorithms
         }
 
         int v = RandomSelect(CW);
-        return (u + 1, v + 1);//Name not the position
+        return (u, v);
     }
-    public static KargerGraph Contract(KargerGraph graph, int k)
+ 
+    private static int ContractEdge(int[] D, int[,] W, int u, int v, int n)
     {
-        int n = graph.Vertices;
-        for(int i = 0; i < n - k; i++)
+        D[u] = D[u] + D[v] - (2 * W[u, v]);
+        D[v] = 0;
+        W[u, v] = W[v, u] = 0;
+        n--;
+
+        for (int w = 0; w < W.GetLength(0); w++)
         {
-            (int u, int v) = EdgeSelect(graph.D, graph.W);
-            graph.ContractEdge(u, v);
+            if (w != u && w != v)
+            {
+                W[u, w] += W[v, w];
+                W[w, u] += W[w, v];
+                W[v, w] = W[w, v] = 0;
+            }
         }
-        return graph;
+        return n;
     }
 
-    public static int RecursiveContract(KargerGraph graph)
+    private static int Contract(int[] D, int[,] W, int k)
     {
-        int n = graph.Vertices;
+        int n = D.Where(d => d != 0).Count();
+        int n_i = 0;
+        for(int i = 0; i < n - k; i++)
+        {
+            (int u, int v) = EdgeSelect(D, W);
+            n_i = ContractEdge(D, W, u, v, n);
+        }
+        return n_i;
+    }
+
+    private static int RecursiveContract(int[] D, int[,] W, int n)
+    {
         if (n <= 6)
         {
-            KargerGraph g = Contract(graph, 2);
+            Contract(D, W, 2);
             int u = 0, v = 0;
-            for (int i = 0; i < g.D.Length; i++)
+            for (int i = 0; i < D.Length; i++)
             {
-                if (u == 0 && g.D[i] != 0)
+                if (u == 0 && D[i] != 0)
                 {
                     u = i;
                 }
-                else if (u != 0 && v == 0 && g.D[i] != 0)
+                else if (u != 0 && v == 0 && D[i] != 0)
                 {
                     v = i;
                 }
             }
-            return graph.W[u, v];
+            return W[u , v];
         }
 
         int t = Convert.ToInt32(Math.Ceiling(n / Math.Sqrt(2) + 1));
         int[] w = new int[2];
         for (int i = 0; i < 2; i++)
         {
-            KargerGraph g = Contract(graph, t);
-            w[i] = RecursiveContract(g);
+            int n_i = Contract(D, W, t);
+            w[i] = RecursiveContract(D, W, n_i);
         }
 
         return w.Min();

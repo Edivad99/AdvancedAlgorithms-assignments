@@ -23,21 +23,23 @@ public static class Algorithms
     private static int RandomSelect(int[] C)
     {
         int r = rnd.Next(0, C.Max());
+        int start = 0;
+        int end = C.Length - 1;
 
-        int start = 1, end = C.Length, mid = 0;
-        
-        while(start < end)
+        while (start <= end)
         {
-            mid = (start + end) / 2;
-            if (C[mid - 1] <= r && r < C[mid])
-                break;
+            int mid = (end + start) / 2;
+
             if (C[mid] <= r)
+            {
                 start = mid + 1;
+            }
             else if (C[mid] > r)
-                end = mid;
+            {
+                end = mid - 1;
+            }
         }
-        //Array.BinarySearch(C, start, end, r);
-        return mid;
+        return start;
     }
 
     private static (int, int) EdgeSelect(int[] D, int[,] W)
@@ -70,11 +72,9 @@ public static class Algorithms
         int v = RandomSelect(CW);
         return (u, v);//Name not the position
     }
-
+ 
     private static int ContractEdge(int[] D, int[,] W, int u, int v, int n)
     {
-        u--;
-        v--;
         D[u] = D[u] + D[v] - (2 * W[u, v]);
         D[v] = 0;
         W[u, v] = W[v, u] = 0;
@@ -94,7 +94,7 @@ public static class Algorithms
 
     private static (int[] D, int [,] W, int n) Contract(int[] D, int[,] W, int k)
     {
-        int n = D.Where(x => x != 0).Count();
+        int n = D.Where(d => d != 0).Count();
         int n_i = 0;
         for(int i = 0; i < n - k; i++)
         {
@@ -108,7 +108,7 @@ public static class Algorithms
     {
         if (n <= 6)
         {
-            (int[] D_prime, int[,] W_prime, _) =  Contract(D, W, 2);
+            (int[] D_prime, int[,] W_prime, _) = Contract(D, W, 2);
             int u = 0, v = 0;
             for (int i = 0; i < D_prime.Length; i++)
             {

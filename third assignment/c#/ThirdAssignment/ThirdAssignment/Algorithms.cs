@@ -1,5 +1,3 @@
-using System.Reflection.Metadata;
-
 namespace ThirdAssignment;
 
 public static class Algorithms
@@ -70,7 +68,7 @@ public static class Algorithms
         }
 
         int v = RandomSelect(CW);
-        return (u, v);//Name not the position
+        return (u, v);
     }
  
     private static int ContractEdge(int[] D, int[,] W, int u, int v, int n)
@@ -92,7 +90,7 @@ public static class Algorithms
         return n;
     }
 
-    private static (int[] D, int [,] W, int n) Contract(int[] D, int[,] W, int k)
+    private static int Contract(int[] D, int[,] W, int k)
     {
         int n = D.Where(d => d != 0).Count();
         int n_i = 0;
@@ -101,35 +99,35 @@ public static class Algorithms
             (int u, int v) = EdgeSelect(D, W);
             n_i = ContractEdge(D, W, u, v, n);
         }
-        return (D, W, n_i);
+        return n_i;
     }
 
     private static int RecursiveContract(int[] D, int[,] W, int n)
     {
         if (n <= 6)
         {
-            (int[] D_prime, int[,] W_prime, _) = Contract(D, W, 2);
+            Contract(D, W, 2);
             int u = 0, v = 0;
-            for (int i = 0; i < D_prime.Length; i++)
+            for (int i = 0; i < D.Length; i++)
             {
-                if (u == 0 && D_prime[i] != 0)
+                if (u == 0 && D[i] != 0)
                 {
                     u = i;
                 }
-                else if (u != 0 && v == 0 && D_prime[i] != 0)
+                else if (u != 0 && v == 0 && D[i] != 0)
                 {
                     v = i;
                 }
             }
-            return W_prime[u , v];
+            return W[u , v];
         }
 
         int t = Convert.ToInt32(Math.Ceiling(n / Math.Sqrt(2) + 1));
         int[] w = new int[2];
         for (int i = 0; i < 2; i++)
         {
-            (int[] D_i, int[,] W_i, int n_i) = Contract(D, W, t);
-            w[i] = RecursiveContract(D_i, W_i, n_i);
+            int n_i = Contract(D, W, t);
+            w[i] = RecursiveContract(D, W, n_i);
         }
 
         return w.Min();

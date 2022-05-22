@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace ThirdAssignment;
 
 public static class Algorithms
@@ -7,15 +9,16 @@ public static class Algorithms
 
     public static int Karger(KargerGraph graph)
     {
-        int min = int.MaxValue;
         int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices, 2), 2));
-        for (int i = 0; i < k; i++)
+        Console.WriteLine("K: " + k);
+        var intBag = new ConcurrentBag<int>();
+        Parallel.For(0, k, i =>
         {
             int value = RecursiveContract((int[])graph.D.Clone(), (int[,])graph.W.Clone(), graph.Vertices);
-            Console.WriteLine(value);
-            min = Math.Min(min, value);
-        }
-        return min;
+            //Console.WriteLine(value);
+            intBag.Add(value);
+        });
+        return intBag.Min();
     }
 
     private static int RandomSelect(int[] C)

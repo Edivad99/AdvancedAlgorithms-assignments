@@ -12,7 +12,7 @@ public static class Algorithms
         int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices, 2), 2));
         Console.WriteLine("K: " + k);
         var intBag = new ConcurrentBag<int>();
-        Parallel.For(0, k, i =>
+        Parallel.For(0, k, _ =>
         {
             int value = RecursiveContract((int[])graph.D.Clone(), (int[,])graph.W.Clone(), graph.Vertices);
             //Console.WriteLine(value);
@@ -45,31 +45,12 @@ public static class Algorithms
 
     private static (int, int) EdgeSelect(int[] D, int[,] W)
     {
-        int[] CD = new int[D.Length];
-        CD[0] = D[0];
-        for (int i = 1; i < D.Length; i++)
-        {
-            int sum = 0;
-            for (int j = 0; j <= i; j++)
-            {
-                sum += D[j];
-            }
-            CD[i] = sum;
-        }
+        int sum = 0;
+        var CD = D.Select(x => sum += x).ToArray();
         int u = RandomSelect(CD);
 
-        int[] CW = new int[D.Length];
-        CW[0] = W[u, 0];
-        for (int i = 1; i < D.Length; i++)
-        {
-            int sum = 0;
-            for (int j = 0; j <= i; j++)
-            {
-                sum += W[u, j];
-            }
-            CW[i] = sum;
-        }
-
+        sum = 0;
+        var CW = D.Select((_, index) => sum += W[u, index]).ToArray();
         int v = RandomSelect(CW);
         return (u, v);
     }

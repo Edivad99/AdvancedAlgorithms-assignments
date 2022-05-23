@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace ThirdAssignment;
 
-public class Results
+public class Result
 {
     public int Minimum { get; set; } = int.MaxValue;
     public TimeSpan DiscoveryTime { get; set; }
@@ -21,12 +21,12 @@ public static class KargerAlgorithm
     // Fix the seed so we get the same results every time
     private static readonly Random rnd = new Random(234);
 
-    public static Results Execute(KargerGraph graph)
+    public static Result Execute(KargerGraph graph)
     {
         int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices, 2), 2));
         //Console.WriteLine("K: " + k);
 
-        var result = new Results();
+        var result = new Result();
         var stopWatch = new Stopwatch();
         stopWatch.Start();
         for (int i = 0; i < k; i++)

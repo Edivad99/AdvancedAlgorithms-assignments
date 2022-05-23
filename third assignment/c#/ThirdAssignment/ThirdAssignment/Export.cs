@@ -6,7 +6,7 @@ public static class Export
 {
     private static readonly CultureInfo IT = new("it-it");
 
-    private async static Task<List<string>> TestAlgorithmAsync(string folderPath, Func<KargerGraph, Results> algorithm)
+    private async static Task<List<string>> TestAlgorithmAsync(string folderPath, Func<KargerGraph, Result> algorithm)
     {
         var csv = new List<string>() { "file;min cut;k repetition;discovery time (ms);discovery iteration;execution time (ms);N execution in 1 sec" };
 

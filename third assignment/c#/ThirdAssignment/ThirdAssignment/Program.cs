@@ -14,7 +14,7 @@ var graph = await KargerGraph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "input
 //Algorithms.Test(new int[] { 1, 1, 1, 1 });
 // 1 3 7 12
 
-Console.WriteLine("RISULTATO: " + Algorithms.Karger(graph));
+//Console.WriteLine("RISULTATO: " + KargerAlgorithm.Execute(graph));
 //Console.WriteLine(Search(new int[] { 40, 50, 70 }, 41));
 
 Console.WriteLine("END");

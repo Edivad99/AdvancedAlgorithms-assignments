@@ -35,7 +35,7 @@ public static class KargerAlgorithm
             stopWatch.Stop();
             if(value < result.Minimum)
             {
-                result.Minimum = Math.Min(result.Minimum, value);
+                result.Minimum = value;
                 result.DiscoveryTime = stopWatch.Elapsed;
                 result.DiscoveryIteration = i + 1;
             }

@@ -66,8 +66,8 @@ public class KargerGraph
             graph.D[i] = sum;
         }
 
-        //if (graph.W.GetLength(0) != vertices)
-        //    throw new Exception("The list of vertices has a different size compared to the number read from file");
+        if (graph.W.GetLength(0) != vertices)
+            throw new Exception("The list of vertices has a different size compared to the number read from file");
         Console.WriteLine(" Done");
         return graph;
     }

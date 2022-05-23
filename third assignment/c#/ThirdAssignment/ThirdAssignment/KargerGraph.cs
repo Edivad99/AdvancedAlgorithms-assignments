@@ -13,8 +13,8 @@ public class KargerGraph
         Edges = edges;
         W = new int[vertices, vertices];
         D = new int[vertices];
-        Array.Clear(W, 0, W.Length);
-        Array.Clear(D, 0, D.Length);
+        Array.Clear(W);
+        Array.Clear(D);
     }
 
     public void AddEdge(int u, int v, int weight)

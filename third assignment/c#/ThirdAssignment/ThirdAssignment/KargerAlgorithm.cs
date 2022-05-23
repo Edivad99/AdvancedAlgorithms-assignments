@@ -1,24 +1,51 @@
-using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace ThirdAssignment;
 
-public static class Algorithms
+public class Results
+{
+    public int Minimum { get; set; } = int.MaxValue;
+    public TimeSpan DiscoveryTime { get; set; }
+    public TimeSpan ExecutionTime { get; set; }
+    public int DiscoveryIteration { get; set; }
+    public int KRepetition { get; set; }
+
+    public override string ToString()
+    {
+        return $"Minimum: {Minimum}, Discovery time: {DiscoveryTime}, Execution time: {ExecutionTime}, Discovery iteration: {DiscoveryIteration}; K repetition: {KRepetition}";
+    }
+}
+
+public static class KargerAlgorithm
 {
     // Fix the seed so we get the same results every time
     private static readonly Random rnd = new Random(234);
 
-    public static int Karger(KargerGraph graph)
+    public static Results Execute(KargerGraph graph)
     {
         int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices, 2), 2));
-        Console.WriteLine("K: " + k);
-        var intBag = new ConcurrentBag<int>();
-        Parallel.For(0, k, _ =>
+        //Console.WriteLine("K: " + k);
+
+        var result = new Results();
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        for (int i = 0; i < k; i++)
         {
             int value = RecursiveContract((int[])graph.D.Clone(), (int[,])graph.W.Clone(), graph.Vertices);
+            stopWatch.Stop();
+            if(value < result.Minimum)
+            {
+                result.Minimum = Math.Min(result.Minimum, value);
+                result.DiscoveryTime = stopWatch.Elapsed;
+                result.DiscoveryIteration = i + 1;
+            }
+            stopWatch.Start();
             //Console.WriteLine(value);
-            intBag.Add(value);
-        });
-        return intBag.Min();
+        }
+        stopWatch.Stop();
+        result.ExecutionTime = stopWatch.Elapsed;
+        result.KRepetition = k;
+        return result;
     }
 
     private static int RandomSelect(int[] C)

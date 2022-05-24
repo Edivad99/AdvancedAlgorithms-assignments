@@ -33,7 +33,7 @@ public static class KargerAlgorithm
         {
             int value = RecursiveContract((int[])graph.D.Clone(), (int[,])graph.W.Clone(), graph.Vertices);
             stopWatch.Stop();
-            if(value < result.Minimum)
+            if (value < result.Minimum)
             {
                 result.Minimum = value;
                 result.DiscoveryTime = stopWatch.Elapsed;
@@ -81,7 +81,7 @@ public static class KargerAlgorithm
         int v = RandomSelect(CW);
         return (u, v);
     }
- 
+
     private static int ContractEdge(int[] D, int[,] W, int u, int v, int n)
     {
         D[u] = D[u] + D[v] - (2 * W[u, v]);
@@ -105,7 +105,7 @@ public static class KargerAlgorithm
     {
         int n = D.Where(d => d != 0).Count();
         int n_i = 0;
-        for(int i = 0; i < n - k; i++)
+        for (int i = 0; i < n - k; i++)
         {
             (int u, int v) = EdgeSelect(D, W);
             n_i = ContractEdge(D, W, u, v, n);
@@ -130,7 +130,7 @@ public static class KargerAlgorithm
                     v = i;
                 }
             }
-            return W[u , v];
+            return W[u, v];
         }
 
         int t = Convert.ToInt32(Math.Ceiling(n / Math.Sqrt(2) + 1));

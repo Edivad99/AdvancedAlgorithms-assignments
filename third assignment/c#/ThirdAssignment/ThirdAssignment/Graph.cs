@@ -52,7 +52,7 @@ public class Graph : ICloneable
         if (E.ContainsKey((u.Name, v.Name)))
             return E[(u.Name, v.Name)].Select(x => x.Weight);
         if (E.ContainsKey((v.Name, u.Name)))
-            return E[(u.Name, v.Name)].Select(x => x.Weight);
+            return E[(v.Name, u.Name)].Select(x => x.Weight);
         throw new ArgumentException("Edge not found");
     }
 

@@ -1,9 +1,9 @@
 ﻿namespace ThirdAssignment;
 
-public class Vertex : IEquatable<Vertex>
+public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
 {
     public string Name { get; init; }
-    public double Key { get; set; }
+    public int Key { get; set; }
     public Vertex? Parent { get; set; }
     public Dictionary<string, Vertex> VerticesAdjacent { get; set; }
     private bool Visited { get; set; }
@@ -44,4 +44,22 @@ public class Vertex : IEquatable<Vertex>
     }
 
     public bool Equals(Vertex? other) => other != null && Name.Equals(other.Name);
+
+    public int CompareTo(Vertex? other)
+    {
+        // If other is not a valid object reference, this instance is greater.
+        if (other == null)
+            return 1;
+
+        if(int.TryParse(other.Name, out int otherNumName) && int.TryParse(Name, out int NumName))
+        {
+            return otherNumName.CompareTo(NumName);
+        }
+        return other.Name.CompareTo(Name);
+    }
+
+    public override string ToString()
+    {
+        return $"Name: {Name}, Visited: {Visited}, Key: {Key}";
+    }
 }

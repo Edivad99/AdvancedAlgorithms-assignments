@@ -3,10 +3,17 @@
 const string FOLDER_PATH = @"/Users/davide/Sviluppo/Advanced Algorithm/third assignment/mincut_dataset";
 //const string FOLDER_PATH = @"C:\Users\crist\Desktop\Advanced Algorithm\AdvancedAlgorithms-assignments\third assignment\mincut_dataset";
 
-var graph = await KargerGraph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "input_random_56_500.txt"));
+var graph = await KargerGraph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "input_random_01_10.txt"));
 
-Console.WriteLine("RISULTATO: " + KargerAlgorithm.Execute(graph));
+var graph2 = await Graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "test.txt"));
+
+//StoerWagnerAlgorithm.StMinCut(graph2);
+StoerWagnerAlgorithm.ContractGraph(graph2, graph2.V["1"], graph2.V["2"]);
+StoerWagnerAlgorithm.ContractGraph(graph2, graph2.V["5"], graph2.V["4"]);
+
+//Console.WriteLine("RISULTATO: " + KargerAlgorithm.Execute(graph));
 
 //await Export.ExportKargerAsync(FOLDER_PATH);
+
 Console.WriteLine("END");
 Console.ReadKey();

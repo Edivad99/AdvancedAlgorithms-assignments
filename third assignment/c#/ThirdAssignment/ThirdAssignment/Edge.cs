@@ -4,7 +4,7 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
 {
     public Vertex U { get; init; }
     public Vertex V { get; init; }
-    public int Weight { get; init; }
+    public int Weight { get; set; }
 
     public Edge(Vertex u, Vertex v, int weight)
     {
@@ -26,6 +26,6 @@ public class Edge : IEquatable<Edge>, IComparable<Edge>
         return Weight.CompareTo(other.Weight);
     }
 
-    public override string ToString() => $"{U.Name},{V.Name} -> {Weight}";
+    public override string ToString() => $"({U.Name};{V.Name}) -> {Weight}";
 }
 

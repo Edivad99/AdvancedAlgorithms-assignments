@@ -46,11 +46,12 @@ public static class StoerWagnerAlgorithm
     }
 
 
-    public static (IEnumerable<Vertex>?, Vertex?, Vertex?) StMinCut(Graph graph)
+    public static (IEnumerable<Vertex>, Vertex, Vertex) StMinCut(Graph graph)
     {
         var Q = new SortedSet<Vertex>(new CustomVertexComparer());
         foreach (var u in graph.V.Values)
         {
+            u.Key = 0; //For safety
             Q.Add(u);
         }
 
@@ -77,7 +78,7 @@ public static class StoerWagnerAlgorithm
             }
         }
         var V_Diff = graph.V.Values.Where(x => x != t);
-        return (V_Diff, s, t); //TODO: Capire se possiamo togliere un t
+        return (V_Diff!, s!, t!); //TODO: Capire se possiamo togliere un t
     }
 }
 
@@ -90,7 +91,7 @@ internal class CustomVertexComparer : IComparer<Vertex>
             return 0;
         var value = -x!.Key.CompareTo(y!.Key);
         if (value == 0)
-            return x.CompareTo(y);
+            return -x.CompareTo(y);
         return value;
     }
 }

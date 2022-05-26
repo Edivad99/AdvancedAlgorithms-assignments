@@ -7,7 +7,7 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
     public Vertex? Parent { get; set; }
     public Dictionary<string, Vertex> VerticesAdjacent { get; set; }
     private bool Visited { get; set; }
-    
+
     public Vertex(string name)
     {
         Name = name;
@@ -51,7 +51,7 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
         if (other == null)
             return 1;
 
-        if(int.TryParse(other.Name, out int otherNumName) && int.TryParse(Name, out int NumName))
+        if (int.TryParse(other.Name, out int otherNumName) && int.TryParse(Name, out int NumName))
         {
             return otherNumName.CompareTo(NumName);
         }

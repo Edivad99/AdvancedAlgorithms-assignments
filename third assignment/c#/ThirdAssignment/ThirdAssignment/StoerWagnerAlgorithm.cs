@@ -36,7 +36,6 @@ public static class StoerWagnerAlgorithm
         var edge = graph.GetEdge(s.Name, t.Name);
         var uName = edge.U.Name;
         var vName = edge.V.Name;
-
         graph.RemoveEdge(edge);
         foreach (var vertex in graph.V[uName].VerticesAdjacent)
         {
@@ -61,7 +60,7 @@ public static class StoerWagnerAlgorithm
         var Q = new SortedSet<Vertex>(new CustomVertexComparer());
         foreach (var u in graph.V.Values)
         {
-            u.Key = 0; //For safety
+            u.Key = 0;
             Q.Add(u);
         }
 
@@ -70,9 +69,7 @@ public static class StoerWagnerAlgorithm
         while (Q.Any())
         {
             var u = Q.First();
-            if (!Q.Remove(u)) //TODO: Elimina quando siamo sicuri che funziona
-                throw new Exception($"Unable to remove the element {u}");
-
+            Q.Remove(u);
             s = t;
             t = u;
 
@@ -80,15 +77,14 @@ public static class StoerWagnerAlgorithm
             {
                 if (Q.Contains(v))
                 {
-                    if (!Q.Remove(v)) //TODO: Elimina quando siamo sicuri che funziona
-                        throw new Exception($"Unable to remove the element {v}");
+                    Q.Remove(v);
                     v.Key += graph.GetWeight(u, v);
                     Q.Add(v);
                 }
             }
         }
         //var V_Diff = graph.V.Values.Where(x => x != t).ToList();
-        return (s!, t!, graph.GetWeight(s!, t!));
+        return (s!, t!, t.Key);
     }
 }
 

@@ -2,21 +2,32 @@
 
 public static class StoerWagnerAlgorithm
 {
-    public static void Execute(Graph graph)
+    public static int Execute(Graph graph)
     {
         Graph graphCopy = (Graph)graph.Clone();
+        var result = GlobalMinCut(graphCopy);
+        return result.Item3;
     }
 
-    public static void GlobalMinCut(Graph graph)
+    public static (Vertex, Vertex, int) GlobalMinCut(Graph graph)
     {
         if (graph.V.Count == 2)
         {
-
+            var v1 = graph.V.First().Value;
+            var v2 = graph.V.Last().Value;
+            var w = graph.GetWeight(v1, v2);
+            return (v1, v2, w);
         }
         else
         {
-            (IEnumerable<Vertex>? C1, Vertex? s, Vertex? t) = StMinCut(graph);
-            ContractGraph(graph, s!, t!);
+            (var v1Cut1, var v2Cut1, var weightCut1) = StMinCut(graph);
+            ContractGraph(graph, v1Cut1!, v2Cut1!);
+
+            (var v1Cut2, var v2Cut2, var weightCut2) = GlobalMinCut(graph);
+            if (weightCut1 <= weightCut2)
+                return (v1Cut1, v2Cut1, weightCut1);
+            else
+                return (v1Cut2, v2Cut2, weightCut2);
         }
     }
 
@@ -25,19 +36,20 @@ public static class StoerWagnerAlgorithm
         var edge = graph.GetEdge(s.Name, t.Name);
         var uName = edge.U.Name;
         var vName = edge.V.Name;
+        var newVertexName = uName.CompareTo(vName) > 0 ? $"{vName},{uName}" : $"{uName},{vName}";
 
         graph.RemoveEdge(edge);
         foreach (var vertex in graph.V[uName].VerticesAdjacent)
         {
             var deleteEdges = graph.GetEdge(vertex.Value.Name, uName);
             graph.RemoveEdge(deleteEdges);
-            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
+            graph.AddEdge(newVertexName, vertex.Value.Name, deleteEdges.Weight);
         }
         foreach (var vertex in graph.V[vName].VerticesAdjacent)
         {
             var deleteEdges = graph.GetEdge(vertex.Value.Name, vName);
             graph.RemoveEdge(deleteEdges);
-            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
+            graph.AddEdge(newVertexName, vertex.Value.Name, deleteEdges.Weight);
         }
 
         graph.V.Remove(uName);
@@ -46,7 +58,7 @@ public static class StoerWagnerAlgorithm
     }
 
 
-    public static (IEnumerable<Vertex>, Vertex, Vertex) StMinCut(Graph graph)
+    public static (Vertex, Vertex, int) StMinCut(Graph graph)
     {
         var Q = new SortedSet<Vertex>(new CustomVertexComparer());
         foreach (var u in graph.V.Values)
@@ -77,8 +89,8 @@ public static class StoerWagnerAlgorithm
                 }
             }
         }
-        var V_Diff = graph.V.Values.Where(x => x != t);
-        return (V_Diff!, s!, t!); //TODO: Capire se possiamo togliere un t
+        //var V_Diff = graph.V.Values.Where(x => x != t).ToList();
+        return (s!, t!, graph.GetWeight(s!, t!));
     }
 }
 
@@ -89,9 +101,9 @@ internal class CustomVertexComparer : IComparer<Vertex>
         //Console.WriteLine($"X:({x})\tY:({y})");
         if (x!.Equals(y))
             return 0;
-        var value = -x!.Key.CompareTo(y!.Key);
+        var value = x!.Key.CompareTo(y!.Key);
         if (value == 0)
-            return -x.CompareTo(y);
-        return value;
+            return x.CompareTo(y);
+        return -value;
     }
 }

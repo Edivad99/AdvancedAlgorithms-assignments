@@ -31,30 +31,28 @@ public static class StoerWagnerAlgorithm
         }
     }
 
-    public static Graph ContractGraph(Graph graph, Vertex s, Vertex t)
+    public static void ContractGraph(Graph graph, Vertex s, Vertex t)
     {
         var edge = graph.GetEdge(s.Name, t.Name);
         var uName = edge.U.Name;
         var vName = edge.V.Name;
-        var newVertexName = uName.CompareTo(vName) > 0 ? $"{vName},{uName}" : $"{uName},{vName}";
 
         graph.RemoveEdge(edge);
         foreach (var vertex in graph.V[uName].VerticesAdjacent)
         {
             var deleteEdges = graph.GetEdge(vertex.Value.Name, uName);
             graph.RemoveEdge(deleteEdges);
-            graph.AddEdge(newVertexName, vertex.Value.Name, deleteEdges.Weight);
+            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
         }
         foreach (var vertex in graph.V[vName].VerticesAdjacent)
         {
             var deleteEdges = graph.GetEdge(vertex.Value.Name, vName);
             graph.RemoveEdge(deleteEdges);
-            graph.AddEdge(newVertexName, vertex.Value.Name, deleteEdges.Weight);
+            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
         }
 
         graph.V.Remove(uName);
         graph.V.Remove(vName);
-        return graph;
     }
 
 

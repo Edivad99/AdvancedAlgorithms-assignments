@@ -53,9 +53,9 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
 
         if (int.TryParse(other.Name, out int otherNumName) && int.TryParse(Name, out int NumName))
         {
-            return otherNumName.CompareTo(NumName);
+            return NumName.CompareTo(otherNumName);
         }
-        return other.Name.CompareTo(Name);
+        return Name.CompareTo(other.Name);
     }
 
     public override string ToString()

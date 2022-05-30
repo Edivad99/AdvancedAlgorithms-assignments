@@ -8,9 +8,6 @@ var graph = await KargerGraph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "input
 var graph2 = await Graph.LoadFromFileAsync(Path.Combine(FOLDER_PATH, "test.txt"));
 int res = StoerWagnerAlgorithm.Execute(graph2);
 Console.WriteLine(res);
-//(IEnumerable<Vertex> V_Diff, Vertex s, Vertex t) = StoerWagnerAlgorithm.StMinCut(graph2);
-//StoerWagnerAlgorithm.ContractGraph(graph2, graph2.V["1"], graph2.V["2"]);
-//StoerWagnerAlgorithm.ContractGraph(graph2, graph2.V["5"], graph2.V["4"]);
 
 //Console.WriteLine("RISULTATO: " + KargerAlgorithm.Execute(graph));
 

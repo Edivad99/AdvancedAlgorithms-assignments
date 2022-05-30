@@ -8,7 +8,7 @@ public static class StoerWagnerAlgorithm
         return GlobalMinCut(graphCopy).weight;
     }
 
-    public static (Vertex u, Vertex v, int weight) GlobalMinCut(Graph graph)
+    private static (Vertex u, Vertex v, int weight) GlobalMinCut(Graph graph)
     {
         if (graph.V.Count == 2)
         {
@@ -30,7 +30,7 @@ public static class StoerWagnerAlgorithm
         }
     }
 
-    public static void ContractGraph(Graph graph, Vertex s, Vertex t)
+    private static void ContractGraph(Graph graph, Vertex s, Vertex t)
     {
         string uName, vName;
 
@@ -55,7 +55,7 @@ public static class StoerWagnerAlgorithm
     }
 
 
-    public static (Vertex, Vertex, int) StMinCut(Graph graph)
+    private static (Vertex, Vertex, int) StMinCut(Graph graph)
     {
         var Q = new SortedSet<Vertex>(new CustomVertexComparer());
         foreach (var u in graph.V.Values)

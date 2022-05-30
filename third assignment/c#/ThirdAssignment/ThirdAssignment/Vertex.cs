@@ -34,9 +34,9 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
         if (other == null)
             return 1;
 
-        if (int.TryParse(other.Name, out int otherNumName) && int.TryParse(Name, out int NumName))
+        if (int.TryParse(Name, out int numName) && int.TryParse(other.Name, out int otherNumName))
         {
-            return NumName.CompareTo(otherNumName);
+            return numName.CompareTo(otherNumName);
         }
         return Name.CompareTo(other.Name);
     }

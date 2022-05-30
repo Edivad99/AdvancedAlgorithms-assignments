@@ -33,10 +33,21 @@ public static class StoerWagnerAlgorithm
 
     public static void ContractGraph(Graph graph, Vertex s, Vertex t)
     {
-        var edge = graph.GetEdge(s.Name, t.Name);
-        var uName = edge.U.Name;
-        var vName = edge.V.Name;
-        graph.RemoveEdge(edge);
+        string uName, vName;
+
+        try
+        {
+            var edge = graph.GetEdge(s.Name, t.Name);
+            uName = edge.U.Name;
+            vName = edge.V.Name;
+            graph.RemoveEdge(edge);
+        }
+        catch
+        {
+            uName = s.Name;
+            vName = t.Name;
+        }
+        
         foreach (var vertex in graph.V[uName].VerticesAdjacent)
         {
             var deleteEdges = graph.GetEdge(vertex.Value.Name, uName);

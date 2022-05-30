@@ -5,11 +5,10 @@ public static class StoerWagnerAlgorithm
     public static int Execute(Graph graph)
     {
         Graph graphCopy = (Graph)graph.Clone();
-        var result = GlobalMinCut(graphCopy);
-        return result.Item3;
+        return GlobalMinCut(graphCopy).weight;
     }
 
-    public static (Vertex, Vertex, int) GlobalMinCut(Graph graph)
+    public static (Vertex u, Vertex v, int weight) GlobalMinCut(Graph graph)
     {
         if (graph.V.Count == 2)
         {
@@ -45,12 +44,6 @@ public static class StoerWagnerAlgorithm
             (uName, vName) = (s.Name, t.Name);
         }
 
-        /*foreach (var vertex in graph.V[uName].VerticesAdjacent)
-        {
-            graph.TryGetEdge(vertex.Value.Name, uName, out Edge deleteEdges);
-            graph.RemoveEdge(deleteEdges!);
-            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
-        }*/
         foreach (var vertex in graph.V[vName].VerticesAdjacent)
         {
             graph.TryGetEdge(vertex.Value.Name, vName, out Edge? deleteEdges);
@@ -58,7 +51,6 @@ public static class StoerWagnerAlgorithm
             graph.AddEdge(uName, vertex.Value.Name, deleteEdges!.Weight);
         }
 
-        //graph.V.Remove(uName);
         graph.V.Remove(vName);
     }
 
@@ -91,7 +83,6 @@ public static class StoerWagnerAlgorithm
                 }
             }
         }
-        //var V_Diff = graph.V.Values.Where(x => x != t).ToList();
         return (s!, t!, t!.Key);
     }
 }
@@ -100,7 +91,6 @@ internal class CustomVertexComparer : IComparer<Vertex>
 {
     public int Compare(Vertex? x, Vertex? y)
     {
-        //Console.WriteLine($"X:({x})\tY:({y})");
         if (x!.Equals(y))
             return 0;
         var value = x!.Key.CompareTo(y!.Key);

@@ -20,12 +20,6 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
             VerticesAdjacent.Add(v.Name, v);
     }
 
-    public void AddAdjacentVertices(IEnumerable<Vertex> vertices)
-    {
-        foreach (var vertex in vertices)
-            AddAdjacentVertices(vertex);
-    }
-
     public void RemoveAdjacentVertices(Vertex v)
     {
         if (VerticesAdjacent.ContainsKey(v.Name))

@@ -6,18 +6,13 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
     public int Key { get; set; }
     public Vertex? Parent { get; set; }
     public Dictionary<string, Vertex> VerticesAdjacent { get; set; }
-    private bool Visited { get; set; }
 
     public Vertex(string name)
     {
         Name = name;
         Key = 0;
         VerticesAdjacent = new();
-        Visited = false;
     }
-
-    public bool IsVisited() => Visited;
-    public void SetVisited(bool value) => Visited = value;
 
     public void AddAdjacentVertices(Vertex v)
     {
@@ -37,12 +32,6 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
             VerticesAdjacent.Remove(v.Name);
     }
 
-    public void ClearStatus()
-    {
-        Visited = false;
-        Key = 0;
-    }
-
     public bool Equals(Vertex? other) => other != null && Name.Equals(other.Name);
 
     public int CompareTo(Vertex? other)
@@ -60,6 +49,6 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
 
     public override string ToString()
     {
-        return $"Name: {Name}, Visited: {Visited}, Key: {Key}";
+        return $"Name: {Name}, Key: {Key}";
     }
 }

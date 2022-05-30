@@ -55,19 +55,20 @@ public class Graph : ICloneable
         throw new ArgumentException("Edge not found");
     }
 
-    public Edge GetEdge(string uName, string vName)
+    public bool TryGetEdge(string uName, string vName, out Edge? edge)
     {
         if (E.ContainsKey((uName, vName)))
-            return E[(uName, vName)];
+        {
+            edge = E[(uName, vName)];
+            return true;
+        }
         if (E.ContainsKey((vName, uName)))
-            return E[(vName, uName)];
-        throw new ArgumentException("Edge not found");
-    }
-
-    public void ClearVerticesStatus()
-    {
-        foreach (var vertex in V.Values)
-            vertex.ClearStatus();
+        {
+            edge = E[(vName, uName)];
+            return true;
+        }
+        edge = null;
+        return false;
     }
 
     public object Clone()

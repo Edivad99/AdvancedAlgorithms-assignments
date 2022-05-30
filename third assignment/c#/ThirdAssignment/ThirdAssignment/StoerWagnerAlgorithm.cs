@@ -35,33 +35,30 @@ public static class StoerWagnerAlgorithm
     {
         string uName, vName;
 
-        try
+        if (graph.TryGetEdge(s.Name, t.Name, out Edge? edge))
         {
-            var edge = graph.GetEdge(s.Name, t.Name);
-            uName = edge.U.Name;
-            vName = edge.V.Name;
+            (uName, vName) = (edge!.U.Name, edge.V.Name);
             graph.RemoveEdge(edge);
         }
-        catch
+        else
         {
-            uName = s.Name;
-            vName = t.Name;
-        }
-        
-        foreach (var vertex in graph.V[uName].VerticesAdjacent)
-        {
-            var deleteEdges = graph.GetEdge(vertex.Value.Name, uName);
-            graph.RemoveEdge(deleteEdges);
-            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
-        }
-        foreach (var vertex in graph.V[vName].VerticesAdjacent)
-        {
-            var deleteEdges = graph.GetEdge(vertex.Value.Name, vName);
-            graph.RemoveEdge(deleteEdges);
-            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
+            (uName, vName) = (s.Name, t.Name);
         }
 
-        graph.V.Remove(uName);
+        /*foreach (var vertex in graph.V[uName].VerticesAdjacent)
+        {
+            graph.TryGetEdge(vertex.Value.Name, uName, out Edge deleteEdges);
+            graph.RemoveEdge(deleteEdges!);
+            graph.AddEdge($"{uName},{vName}", vertex.Value.Name, deleteEdges.Weight);
+        }*/
+        foreach (var vertex in graph.V[vName].VerticesAdjacent)
+        {
+            graph.TryGetEdge(vertex.Value.Name, vName, out Edge? deleteEdges);
+            graph.RemoveEdge(deleteEdges!);
+            graph.AddEdge(uName, vertex.Value.Name, deleteEdges!.Weight);
+        }
+
+        //graph.V.Remove(uName);
         graph.V.Remove(vName);
     }
 
@@ -95,7 +92,7 @@ public static class StoerWagnerAlgorithm
             }
         }
         //var V_Diff = graph.V.Values.Where(x => x != t).ToList();
-        return (s!, t!, t.Key);
+        return (s!, t!, t!.Key);
     }
 }
 

@@ -24,7 +24,6 @@ public static class KargerAlgorithm
     public static Result Execute(KargerGraph graph)
     {
         int k = Convert.ToInt32(Math.Pow(Math.Log(graph.Vertices, 2), 2));
-        //Console.WriteLine("K: " + k);
 
         var result = new Result();
         var stopWatch = new Stopwatch();
@@ -40,7 +39,6 @@ public static class KargerAlgorithm
                 result.DiscoveryIteration = i + 1;
             }
             stopWatch.Start();
-            //Console.WriteLine(value);
         }
         stopWatch.Stop();
         result.ExecutionTime = stopWatch.Elapsed;
@@ -48,6 +46,9 @@ public static class KargerAlgorithm
         return result;
     }
 
+    /*
+     * Complexity: O(log(n))
+     */
     private static int RandomSelect(int[] C)
     {
         int r = rnd.Next(0, C.Max());
@@ -70,11 +71,14 @@ public static class KargerAlgorithm
         return start;
     }
 
+    /*
+     * Complexity: O(n)
+     */
     private static (int, int) EdgeSelect(int[] D, int[,] W)
     {
         int sum = 0;
-        var CD = D.Select(x => sum += x).ToArray();
-        int u = RandomSelect(CD);
+        var CD = D.Select(x => sum += x).ToArray(); // O(n)
+        int u = RandomSelect(CD); // O(log(n))
 
         sum = 0;
         var CW = D.Select((_, index) => sum += W[u, index]).ToArray();
@@ -82,6 +86,9 @@ public static class KargerAlgorithm
         return (u, v);
     }
 
+    /*
+     * Complexity: O(n)
+     */
     private static int ContractEdge(int[] D, int[,] W, int u, int v, int n)
     {
         D[u] = D[u] + D[v] - (2 * W[u, v]);
@@ -101,18 +108,24 @@ public static class KargerAlgorithm
         return n;
     }
 
+    /*
+     * Complexity: O(n^2)
+     */
     private static int Contract(int[] D, int[,] W, int k)
     {
-        int n = D.Where(d => d != 0).Count();
+        int n = D.Where(d => d != 0).Count(); // O(n)
         int n_i = 0;
         for (int i = 0; i < n - k; i++)
         {
-            (int u, int v) = EdgeSelect(D, W);
-            n_i = ContractEdge(D, W, u, v, n);
+            (int u, int v) = EdgeSelect(D, W); // O(n)
+            n_i = ContractEdge(D, W, u, v, n); // O(n)
         }
         return n_i;
     }
 
+    /*
+     * Complexity: O(n^2 * log(n))
+     */
     private static int RecursiveContract(int[] D, int[,] W, int n)
     {
         if (n <= 6)

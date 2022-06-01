@@ -4,10 +4,13 @@ public static class StoerWagnerAlgorithm
 {
     public static int Execute(Graph graph)
     {
-        Graph graphCopy = (Graph)graph.Clone();
+        Graph graphCopy = (Graph)graph.Clone(); // O(n)
         return GlobalMinCut(graphCopy).weight;
     }
 
+    /*
+     * Complexity: O(m * n * log(n))
+     */
     private static (Vertex u, Vertex v, int weight) GlobalMinCut(Graph graph)
     {
         if (graph.V.Count == 2)
@@ -19,8 +22,8 @@ public static class StoerWagnerAlgorithm
         }
         else
         {
-            (var v1Cut1, var v2Cut1, var weightCut1) = StMinCut(graph);
-            ContractGraph(graph, v1Cut1!, v2Cut1!);
+            (var v1Cut1, var v2Cut1, var weightCut1) = StMinCut(graph); // O(m * log(n))
+            ContractGraph(graph, v1Cut1!, v2Cut1!); // O(n)
 
             (var v1Cut2, var v2Cut2, var weightCut2) = GlobalMinCut(graph);
             if (weightCut1 <= weightCut2)
@@ -30,14 +33,17 @@ public static class StoerWagnerAlgorithm
         }
     }
 
+    /*
+     * Complexity: O(n)
+     */
     private static void ContractGraph(Graph graph, Vertex s, Vertex t)
     {
         string uName, vName;
 
-        if (graph.TryGetEdge(s.Name, t.Name, out Edge? edge))
+        if (graph.TryGetEdge(s.Name, t.Name, out Edge? edge)) // O(1)
         {
             (uName, vName) = (edge!.U.Name, edge.V.Name);
-            graph.RemoveEdge(edge);
+            graph.RemoveEdge(edge); // O(1)
         }
         else
         {
@@ -48,13 +54,15 @@ public static class StoerWagnerAlgorithm
         {
             graph.TryGetEdge(vertex.Value.Name, vName, out Edge? deleteEdges);
             graph.RemoveEdge(deleteEdges!);
-            graph.AddEdge(uName, vertex.Value.Name, deleteEdges!.Weight);
+            graph.AddEdge(uName, vertex.Value.Name, deleteEdges!.Weight); // O(1)
         }
 
-        graph.V.Remove(vName);
+        graph.V.Remove(vName); // O(1)
     }
 
-
+    /*
+     * Complexity: O(m * log(n))
+     */
     private static (Vertex, Vertex, int) StMinCut(Graph graph)
     {
         var Q = new SortedSet<Vertex>(new CustomVertexComparer());

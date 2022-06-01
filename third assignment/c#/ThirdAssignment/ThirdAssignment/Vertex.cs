@@ -41,8 +41,5 @@ public class Vertex : IEquatable<Vertex>, IComparable<Vertex>
         return Name.CompareTo(other.Name);
     }
 
-    public override string ToString()
-    {
-        return $"Name: {Name}, Key: {Key}";
-    }
+    public override string ToString() => $"Name: {Name}, Key: {Key}";
 }

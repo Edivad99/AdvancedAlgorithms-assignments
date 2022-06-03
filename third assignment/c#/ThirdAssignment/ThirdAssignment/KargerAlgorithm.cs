@@ -51,7 +51,7 @@ public static class KargerAlgorithm
      */
     private static int RandomSelect(int[] C)
     {
-        int r = rnd.Next(0, C.Max());
+        int r = rnd.Next(0, C.Last());
         int start = 0;
         int end = C.Length - 1;
 

@@ -1,0 +1,324 @@
+\section{Description of the algorithms}
+
+\subsection{Data structures}
+In the following subsections, we will illustrate the main data structures used for the two algorithms for solving the \textbf{Minimum Cut Problem}.
+
+\subsubsection{Data structure for a vertex}
+The data structure for a vertex was implemented as follows:
+\begin{enumerate}
+    \item \verb|Name| of the vertex;
+    \item \verb|Key| is a kind of weight of a vertex;
+    \item \verb|Parent| indicates the parent of a vertex;
+    \item \verb|VerticesAdjacent| is a set which contains all adjacent nodes.
+\end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|AddAdjacentVertices|: adds an adjacent vertex to the \verb|VerticesAdjacent| of a node;
+    \item \verb|RemoveAdjacentVertices|: removes an adjacent vertex to the \verb|VerticesAdjacent|;
+    \item \verb|Equals|: checks if two vertices have the same name;
+    \item \verb|CompareTo|: compares the name of two different edges and returns an indication of which one is the greater.
+\end{enumerate}
+These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
+
+\subsubsection{Data structure for an edge}
+The data structure for an edge is the following one:
+\begin{enumerate}
+    \item \verb|U| represents one end of the edge;
+    \item \verb|V| represents one end of the edge;
+    \item \verb|Weight| indicates the weight of the edge.
+    \end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|CompareTo|: compares the weight of two different edges and returns an indication of which one is the greater;
+    \item \verb|Equals|: checks if two edges have the same ends and weight.
+\end{enumerate}
+These operations have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
+
+\subsubsection{Data structure for a Stoer-Wagner graph}
+The data structure for a graph was implemented as follows:
+\begin{enumerate}
+    \item \verb|V| is a dictionary of vertices, with key the name of the vertex;
+    \item \verb|E| is a dictionary of edges, with key the tuple of the names of the two vertices.
+\end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|AddVertex|: adds a vertex to the graph;
+    \item \verb|AddEdge|: adds an edge to the graph;
+    \item \verb|RemoveEdge|: removes an edge from the dictionary \verb|E|;
+    \item \verb|GetWeight|: returns the weight of an edge given two vertices;
+    \item \verb|TryGetWeight|: returns a boolean indicating if exists an edge that link two vertices. If the edge is present, it return the edge;
+    \item \verb|Clone|: return a new graph object that is the clone of the current one;
+    \item \verb|LoadFromFileAsync|: creates the graph starting from the selected file.
+\end{enumerate}
+These operations (except \verb|LoadFromFileAsync| and \verb|Clone|) have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
+The complexity of the method \verb|Clone| is $\mathcal{O}(|E|)$.
+
+\subsubsection{Data structure for a Karger and Stein graph}
+The data structure for a graph was implemented as follows:
+\begin{enumerate}
+    \item \verb|W| is a weighted adjacency matrix;
+    \item \verb|D| is an array of weighted degree of the vertices.
+\end{enumerate}
+\noindent
+The implemented methods were:
+\begin{enumerate}
+    \item \verb|AddEdge|: adds an edge to the graph;
+    \item \verb|RemoveEdge|: removes an edge from the dictionary \verb|E|;
+    \item \verb|LoadFromFileAsync|: creates the graph starting from the selected file.
+\end{enumerate}
+These operations (except \verb|LoadFromFileAsync|) have been implemented in order to have a constant computational complexity $\mathcal{O}(1)$.
+
+\subsection{Stoer-Wagner's algorithms}
+
+\subsubsection{Introduction}
+The Stoer-Wagner's algorithm is a recursive algorithm for solving the minimum cut problem of undirected, weighted and non-negative edge-weighted graphs. This algorithm is deterministic, so there is no randomness component in it.
+The base idea is the following:
+\begin{itemize}
+    \item At each stage the algorithm find a \textit{s-t minimum cut} between two vertices;
+    \item The algorithm contracts the graph respect to the edge $\{s,t\}$ in order to find a different cut respect to \textit{s-t};
+    \item The minimum cut found in every algorithm iteration is the result of the algorithm and coincide with the \textit{minimum cut} of the graph.
+\end{itemize}
+
+\subsubsection{Algorithm}
+The algorithm consists of two functions:
+\begin{itemize}
+    \item \verb|GlobalMinCut|: recursive function that takes care of calling \verb|stMinCut| and return the lowest global \textit{minimum cut};
+    \item \verb|stMinCut|: function that takes care of finding a \textit{s-t minimum cut}. 
+\end{itemize}
+\noindent
+We now show the pseudo-code:
+\begin{verbatim}
+GlobalMinCut(G = (V, E))
+    if V = {a,b} then
+      return({a}, {b})
+    else
+      (C1, s, t) <- stMinCut(G)
+      C2 <- GlobalMinCut(G/{s,t})
+      if w(C1) <= w(C2) then
+        return C1
+      else
+        return C2
+\end{verbatim}
+\begin{verbatim}
+stMinCut(G = (V, E, w))
+    A <- {a}
+    while A != V do
+      Let v in V be such that w(A, {v}) is maximized
+      A <- A U {v}
+    Let s and t be the last two vertices added to A
+    return (V-{t},{t}), s, t
+\end{verbatim}
+\noindent
+Since finding the maximizing node \(w(A, \{v\})\) can be a computationally heavy operation, the algorithm can be easily optimized through the use of a priority queue; this in fact allows to obtain the maximum weight vertex in time constant (with the exception of operations for maintaining ownership of the max-heap, which have complexity logarithmic). The \verb|stMinCut| function can be modified as follows.
+\begin{verbatim}
+stMinCut(G = (V, E, w))
+    Q <- empty
+    for all u in V do
+      key[u] <- 0
+      Insert(Q, u, key[u])
+    s, t <- null
+    while Q != empty do
+      u <- ExtractMax(Q)
+      s <- t; t <- u
+      for all (u,v) in E do
+        if v in Q then
+          key[v] <- key[v] + w(u,v)
+          IncreaseKey(Q, v, key[v])
+    return (V-{t},{t}), s, t
+\end{verbatim}
+
+\noindent
+The complexity of the algorithm is strictly related to the data structure that is being used. The function \verb|stMinCut| has complexity $O(|E|\cdot log|V|)$ if implemented with \textit{MaxHeap} and  $O(|E| + |V| \cdot log|V|)$ if implemented with \textit{Fibonacci Heap}.\\
+Consequently, the \verb|GlobalMinCut| function, and therefore the algorithm, has complexity $O(|E| \cdot |V| \cdot log|V|)$ if implemented through \textit {MaxHeap} and $O(|E| \cdot |V| + |V| ^ 2 \cdot log|V|)$ if implemented via \textit {Fibonacci Heap}. In our implementation, having used the \textit{MaxHeap} data structure, we expect the theoretical complexity to be $O(|E| \cdot |V| \cdot log|V|)$.
+
+\subsubsection{Implementation}
+For the implementation of Stoer-Wagner's algorithm we create a class \verb|StoerWagnerAlgorithm| that define the methods for the correct execution of the algorithm.
+
+\begin{itemize}
+    \item \verb|Execute|: run the algorithm based on the input graph;
+    \item \verb|GlobalMinCut|: it recursively searches for a global min-cut starting from the input graph and if the graph contains only two vertices, returns the vertices present as a tuple;
+    \item \verb|ContractGraph|: contract the graph, in an iterative way, based to the vertices \textit{s} and \textit{t};
+    \item \verb|StMinCut|: search for a min-cut \((s, t)\) using a \textit {sorted set} from which to extract the vertex with greater weight of the edges, thus identifying the vertices $s$ and $t$ to return.
+\end{itemize}
+
+\subsubsection{Optimizations implemented}
+The main optimization that we made is the use of the \verb|SortedSet| as substitute of \textit{Priority Queue}. Thanks to this choice we are being able to remove a \textit{Vertex} from the \verb|SortedSet| in $O(log(n))$ time. This time we don't use a \verb|PriorityQueue| data structure because it does not implement a method for removing items that are not based on their key.\\
+The methods used in the \verb|SortedSet| are the following:
+\begin{itemize}
+    \item \verb|Add|: O(log(n))
+    \item \verb|Remove|: O(log(n))
+    \item \verb|Contains|: O(log(n))
+\end{itemize}
+\noindent
+Since we didn't want to change the graph passed as input, we implemented a method that execute a copy of the graph in linear time, more precisely in $O(|E|)$ time.\\ \noindent
+An important variation that our implementation has with respect to the pseudo-code is the non-use of the $S$ and $T$ sets to identify the cut but simply returning in the \verb|StMinCut| and \verb|GlobalMinCut| methods the last and the previous node visited and the weight of the cut. In this way, we simplify the calculation of the weight of the cut and we avoided the creation of sets that we would not have used in any method. \\ \noindent
+The implementation of all these small optimizations allowed us not to have to insert a maximum time threshold within which the algorithm had to be performed.
+
+\subsection{Karger-Stein's algorithms}
+
+\subsubsection{Introduction}
+Before explaining the Karger-Stein algorithm, let's introduce its naive version: Karger's algorithm.
+This algorithm cannot be used for weighted graphs and its complexity is  $\mathcal{O}(n^4 \cdot log(n))$.
+\begin{enumerate}
+    \item An edge is chosen at random;
+    \item The two relative vertices contract, eliminating all edges incident on both. In this way the algorithm is able to determine a minimum cut with probability greater than or equal to $\frac{2}{n^2}$. These operations are called \verb|FullContraction|;
+    \item Repeat the previous steps until there are only two vertices left;
+    \item Returns the edges connecting the two vertices.
+\end{enumerate}
+Going to repeat the procedure \verb|FullContraction| for $n^2 \cdot log(n)$ times, the error probability is less or equal to $\frac{1}{n}$.\\
+\noindent
+The Karger-Stein's algorithm is a recursive randomized algorithm that belong to Monte Carlo's algorithms category. This algorithm version assure better performance in compare to Karger's Algorithm and can be used in weighted graph.
+To do so, the \verb|FullContraction| operation need to be refined, in order to:
+\begin{enumerate}
+    \item Choose an edge with probability proportional to the weight of the edge itself;
+    \item Choose the edge to contract in linear time;
+    \item Perform the contraction in linear time.
+\end{enumerate}
+
+The \verb|KargerGraph| data structure includes two other data structures within it:
+\begin{enumerate}
+    \item \verb|W| \textbf{weighted adjacency matrix} $n \times n$, such that: 
+    \[
+        W[u,v] = w(u,v) \textnormal{ if } (u,v) \in E \textnormal{, otherwise } 0
+    \]
+    \item \verb|D| \textbf{weighted degree} of the vertices:
+    \[
+        D[u] = \sum_{v \in \mathcal{V}} W[u,v]
+    \]
+\end{enumerate}
+\noindent
+The \verb|FullContraction| procedure is divide into two phases: in the first phase the edge is determined and subsequently the contraction.\\ 
+This algorithm works with a very low probability. However, that probability it can be significantly increased by repeating this process for a while number of times.\\
+\noindent The Karger-Stein algorithm consists of the following steps:
+\begin{enumerate}
+    \item \textbf{Random select}
+    \item \textbf{Edge select}
+    \item \textbf{Contract edge}
+    \item \textbf{Contract}
+    \item \textbf{Recursive contract}
+\end{enumerate}
+
+\subsubsection*{Random select}
+We want to pick an edge with a probability proportional to the weight of the edge itself. To do so, we introduce the \textbf{cumulative weight}. Given $m$ edges $e_1, e_2, \cdots , e_m$ of weight $w_1, w_2, \cdots , w_m$, the cumulative weights are defined as:
+\[
+    C[k] = \sum_{i = 1}^{k} w_i
+\]
+At position $k$ of the \textit{cumulative weights array}, we'll have the sum of the weights of the first $k$ edges. Therefore, in $C[m]$ we'll have the sum of the weights of all the edges of the graph $G$.\\
+At this point:
+\begin{enumerate}
+    \item An integer value with \textbf{uniform probability} is chosen between $0 \le r \le C[m]$;
+    \item \textit{Binary search} is used to determine the edge $e_i$ such that $C[i - 1] \le r \le C[i]$. The probability that the edge $e_i$ is chosen is equal to:
+    \[
+        Pr[e_i \textnormal{ is chosen}] = Pr[C[i - 1] \le r \le C[i]] = \frac{C[i] - C[i - 1]}{C[m]} = \frac{w(e_i)}{\sum_{e \in E} w(e)}
+    \]
+    therefore, the probability is the weight of the edge divided by the sum of the total weights of the graph $G$. Consequently, it is proportional to the weight of the edge $w(e_i)$.
+\end{enumerate}
+\noindent
+From computational point of view:
+\begin{enumerate}
+    \item Choice of $r$ value: $\mathcal{O}(1)$;
+    \item Determine the edge $e_i$ with binary search in $C$: $\mathcal{O}(log(m))$.
+\end{enumerate}
+\noindent
+The total complexity of this method is $\mathcal{O}(log(m))$.
+
+\subsubsection*{Edge select}
+Using the \verb|RandomSelect| method it will determine the vertex $u$ and then vertex $v$, so that the probability of choosing an edge is proportional to the weight of the edge itself. The \verb|EdgeSelect| method takes \verb|W| as input and the vector of the weighted degrees of the vertices \verb|D| and performs the following operations:
+\begin{enumerate}
+    \item We choose a vertex $u$ with a probability proportional to $D[u]$:
+    \begin{enumerate}
+        \item We construct the vector of the cumulative weights of $D[u]$;
+        \item The \verb|RandomSelect| method is called to choose the first vertex;
+    \end{enumerate}
+    \item We choose a vertex $v$ with a probability proportional to $W[u,v]$:
+    \begin{enumerate}
+        \item We construct the vector of the cumulative weights of $W[u]$;
+        \item The \verb|RandomSelect| method is called to choose the second vertex;
+    \end{enumerate}
+    \item Return the edge $(u,v)$.
+\end{enumerate}
+The complexity of this method is $\mathcal{O}(n)$ as $D$ and $W[u]$ have a size equal to $\mathcal{O}(n)$ and consequently \verb|RandomSelect| will operate in $\mathcal{O}(n)$ in both cases (remember that \verb|W| is $n \times n$).
+
+\[
+    Pr[(u,v) \textnormal{ chose}] = Pr[u \textnormal{ chose}] \cdot 
+    Pr[v \textnormal{ chose} | u] + Pr[v \textnormal{ chose}] \cdot 
+    Pr[u \textnormal{ chose} | v]
+\]
+\[
+    = \frac{D[u]}{\sum_v D[v]} \cdot \frac{W[u,v]}{D[u]} + \frac{D[v]}{\sum_v D[v]} 
+    \cdot \frac{W[v,u]}{D[v]}
+\]
+\[
+    = \frac{2 \cdot W[u,v]}{\sum_v D[v]} \textnormal{ and is proportional to the weight of the edge } W[u,v]
+\]
+
+\subsubsection*{Contract edge}
+On the \verb|W| matrix, the row and the column corresponding to the vertex $v$ (which will be contracted) are reset. Resetting $v$ means deleting the vertex from the graph. The \verb|W| matrix is updated in order to have only the weights on the matrix that correspond to the remaining vertices after the contraction.\\
+The pseudo-code is illustrated below:
+\begin{verbatim}
+ContractEdge(u, v)
+    D[u] = D[u] + D[v] - 2W[u,v]
+    D[v] = 0
+    W[u,v] = W[v,u] = 0
+    for w in V, except u and v do
+        W[u,w] = W[u,w] + W[v,w]
+        W[w,u] = W[w,u] + W[w,v]
+        W[v,w] = W[w,v] = 0
+\end{verbatim}
+This method operates in $\mathcal{O}(n)$ time.
+
+\subsubsection*{Contract}
+This method returns a contraction of $k$ vertices of the graph $\mathcal{G}$ represented with the \verb|W| matrix and the vector \verb|D|. Its complexity is $\mathcal{O}(n^2)$.\\
+The pseudo-code is illustrated below:
+\begin{verbatim}
+Contract(G = (D, W), k)
+    n = number of vertices in G
+    for i = 1 to n - k do
+        (u,v) = edge_select(D,W)
+        contract_edge(u,v)
+    return D,W
+\end{verbatim}
+When the graph has $n$ vertex, the probability of failure, or rather to contract an edge that belongs to min-cut, is very low. Instead, when the graph reach three vertices the probability of choose the wrong edge is $\frac{2}{3}$.
+
+\subsubsection*{Recursive contract}
+A single contraction phase is carried out for the first vertices, to ensure that the probability of failure is less than 50\%. At the next stage, when we are going to contract a smaller graph, where the probability of be wrong is bigger then 50\%, instead of contract in a random way, we do two contract attempts, obtaining two distinct solution and choosing the best one (so, the one of minimum weight).\\
+Even if the error probability in this second phase is higher, as the best solution is chosen between two random choices, the error probability remains low.\\
+In the case of \verb|FullContraction| of the Karger's algorithm, the error probability is less than $\frac{2}{n^2}$, while in the case of \verb|Contract| the error probability is less than $(\frac{k}{n})^2$.
+For establish the contractions number $k$, we want that $(\frac{k}{n})^2 \le \frac{1}{2}$. So, $k = \frac{n}{\sqrt2}$.
+The pseudo-code is illustrated below:
+\begin{verbatim}
+RecursiveContract(G = (D,W))
+    n = number of vertices in G 
+    if n <= 6 then
+        G' = contract(G,2)
+        return weight of the only edge (u, v) in G'
+    t = ceil(n/sqrt(2) + 1)
+    for i = 1 to 2 do
+        G_i = contract(G,t)
+        w_i = recursive_contract(G_i)
+    return min(w_1,w_2)
+\end{verbatim}
+\noindent
+The complexity of this method is $\mathcal{O}(n^2 \cdot log(n))$ and finds a minimum cut with probability greater than or equal to $\frac{1}{log(n)}$. So with $log^2(n)$ repetitions of \verb|RecursiveContract|, the error probability is less than or equal to $\frac{1}{n}$.\\
+The complexity of Karger-Stein is $\mathcal{O}(n^2 \cdot log^3(n))$.
+
+\subsubsection{Implementation}
+For the implementation of Karger-Stein's algorithm we create a class \verb|KargerAlgorithm| that define the methods for the correct execution of the algorithm.
+
+\begin{itemize}
+    \item \verb|Execute|: run the algorithm based on the input graph;
+    \item \verb|RandomSelect|: it randomly chooses a certain value $r$ and returns, through the binary search, the position of this value in the cumulative weight vector $C$;
+    \item \verb|EdgeSelect|: choose an edge of the graph in linear time with respect to the number of vertices of the graph. To determine the vertices, this method uses \verb|RandomSelect|;
+    \item \verb|ContractEdge|: contracts the edge given $u$ and $v$;
+    \item \verb|Contract|: it deals with doing the full contraction;
+    \item \verb|RecursiveContract|: it is similar to the \verb|FullContraction| method of the Karger algorithm, but has the possibility of being applied for weighted graphs;
+\end{itemize}
+
+\subsubsection{Optimizations implemented}
+We haven't done huge optimization for this algorithm. However, we have created a new data structure called \verb|KargerGraph|, which contains only the necessary supporting variables and data structures. This approach helped on keeping the clean the method \verb|Execute| in the \verb|KargerAlgorithm| file.\\
+In this method before calling \verb|RecursiveContract|, it was necessary to create, at each iteration, a new copy of the array $D$ and $W$.
+To do this, C\# and in particular the \verb|Array| class provide the \verb|Clone| method which takes care of creating a shallow copy of the array. The computation time is $\mathcal{O}(n)$. \\ \noindent
+The creation of this new data structure as well as the way the methods were implemented allowed us not to have to set a maximum time threshold within which the algorithm had to be performed.

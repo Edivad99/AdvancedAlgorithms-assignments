@@ -1,0 +1,81 @@
+\section{Introduction}
+
+\subsection{Abstract}
+In this brief report we will show comparisons between two algorithms for solving the \textbf{Minimum cut} problem, looking at the execution times, the number of repetitions of each algorithms and the correctness of the found solutions. \\ \noindent
+The Minimum cut problem which is an optimization problem, can be defined as follows: \\ \noindent
+\textit{Given a multigraph $G = (V,E)$, find a set $E' \subseteq E$ such that $E'$ is minimum, that is it contains the least number of edges.} \\
+\noindent
+In our specific case, the problem has been extended to weighted graphs; so the problem become: \\ \noindent
+\textit{Given a weighted undirected graph $G = (V, E, w)$ with positive weights, and a cut $(S,T)$ of $G$, the weight of the cut $(S,T)$ is defined as
+\[
+    w(S,T) = \sum_{e \in E(S,T)} w(e)
+\]
+}\noindent
+In order to solve this problem we have implemented two different type of algorithms: \textbf{Stoer-Wagner}'s deterministic algorithm and \textbf{Karger and Stein}'s randomized algorithm.
+
+\subsection{Useful definitions}
+
+\subsubsection*{Undirected multigraph}
+A multigraph is a graph that can have more than one edge between a pair of vertices. Given a graph $G = (V, E)$ is a multigraph if $V$ is a finite set of vertices and $E$ is a multiset of doubleton subsets of $V$, that means that $E$ contains elements of the type ${u,v}: u \neq v$.
+
+\subsubsection*{Path in a multigraph}
+A path in a multigraph consists in a sequence of vertices $v_1 \dots v_t$ where for each single couple of nodes ${v_i, v_{i+1}}$ there exists an edge $e_j$ which interconnect them.
+
+\subsubsection*{Connectivity of a multigraph}
+A multigraph is connected if for each single couple of vertices $v_i, v_j$ there exists a path between them.
+
+\subsubsection*{Cut}
+Given a connected multigraph $G = (V, E)$, a cut $C \subseteq E$ is a multiset of edges such that $G' = (\mathcal{V}', E-C)$ is not connected or, equivalently, $G'$ has at least two different connected components.
+
+\subsubsection*{Contraction of a multigraph with respect to an edge $e$}
+\label{definition_contraction}
+Given a multigraph $G = (V, E)$ and an edge $e={u,w} \in E$, a contraction of $G$ with respect to $e$,  $\mathcal{G}/e=(\mathcal{V}', \mathcal{E}')$ is the multigraph with:
+\begin{itemize}
+    \item[] $\mathcal{V}' = V \setminus u,  w  \cup z_{u,w}$
+    \item[] $\mathcal{E}' = E \setminus \{x, y\}: (x=u) \vee (x=w) \cup \{z_{u,w}, y\}: (\{u,y\} \in E) \vee (\{w,y\} \in E), (y\neq u) \wedge (y \neq w)$
+\end{itemize}
+\noindent
+When two vertices are contracted, the edges, if present, between them are canceled and a new vertex is created that includes them, inheriting all their old incident edges. We can observe:
+\begin{enumerate}
+    \item $|\mathcal{V}'| = |V| - 1$ ($= |V| - 2 + 1$);
+    \item $|\mathcal{E}'| = |E| - m(e) \le |E| - 1$, that is, we remove the edge,  if it is present, between the two vertices which must be contracted. $m(\cdot)$ is the multiplicity that means how many copies there are of an edge.
+\end{enumerate}
+
+\subsubsection*{High probability}
+In order to proceed with the analysis of the Karger and Stein's algorithm, we provide the following definitions:
+\begin{enumerate}
+    \item \textbf{High probability}: given $\Pi \subseteq \mathcal{I} \times \mathcal{S}$, where $\Pi$ is a decision problem, an algorithm $\mathcal{A}_{\Pi}$ has a complexity $\mathcal{T}(n) = \mathcal{O}(f(n))$ with \textit{high probability} if $\exists c, d > 0$ such that $\forall i \in \mathcal{I}$, $|i| = n$, $Pr(\mathcal{A}_{\Pi}(i)$ terminates in $\ge c \dot f(n)$ steps $) \le \frac{1}{n^d}$, so the probability that the algorithm exceeds the complexity $\mathcal{O}(f(n))$ is very low $\Bigl(\frac{1}{n^d}\Bigr)$.
+    \item \textbf{Correctness with high probability of an algorithm}: given $\Pi \subseteq \mathcal{I} \times \mathcal{S}$, where $\Pi$ is a decision problem, 
+    an algorithm $\mathcal{A}_{\Pi}$ is correct with high probability if $\exists d > 0$ such that $\forall i \in \mathcal{I}$, $|i| = n$, $Pr((i, \mathcal{A}_{\Pi}) \notin \Pi) \le \frac{1}{n^d}$.
+\end{enumerate}
+
+\subsubsection*{Introduction to the randomized algorithms}
+A randomized algorithm is an algorithm that includes a certain degree of randomness. The behavior of a randomized algorithm is not uniquely determines by the input but it also depends by a random factor. The algorithm's performances, including execution time or the output, will be random themselves.\\ \noindent
+Typically, the algorithm uses some random variables as auxiliary input to lead its own behavior to aim, in average, good performances. \\ \noindent
+According to the use made of the random variables, the algorithm could be design to return always the correct answer (\textit{Las Vegas algorithm}), obviously paying in terms of computation time, or to predict that the computed result may be wrong with a certain probability (\textit{Monte Carlo algorithm}). Once the random factor has been obtain, the behavior of the algorithm is determine only by the input so it could be seen as deterministic algorithm.
+
+\subsubsection*{Las Vegas algorithms}
+All the randomized algorithms that return always the correct solution belong to this category.
+\[
+    \forall i \in \mathcal{I}, \mathcal{A}_{R}(i) = s:(i,s) \in \Pi
+\]
+\noindent
+where $\Pi \subset \mathcal{I} \times \mathcal{S}$ represents the decision problem, $i \in \mathcal{I}$ is an input, $\mathcal{I}$ is the set of inputs, $\mathcal{S}$ is the set of solutions, $\mathcal{A}_{R}(i) = s$ is a random algorithm that, once the input instance is applied $i$, it produces a solution $s$ such that the couple $(i,s) \in \Pi$. That is, $s$ is a solution of the instance $i$ of the decision problem $\Pi$ ($s$ is not always the same $\forall i$). The randomness is exploited in the complexity analysis of the algorithm. $\forall n, \mathcal{T}(n)$ is a random variable in which:
+\begin{enumerate}
+    \item $E[\mathcal{T}(n)]$ or
+    \item $Pr(\mathcal{T}(n) \ge c \cdot f(n)) \le \frac{1}{n^k}$ 
+    high probability. If we can show this, then we say that the algorithm has a complexity of $\mathcal{O}(f(n))$ with high probability.
+\end{enumerate}
+
+\subsubsection*{Monte Carlo algorithms}
+Given an input instance, it is possible that the algorithm's output on that instance is a solution $s$ which is not the correct one:
+\[
+    \exists i \in \mathcal{I}, \mathcal{A}_{R}(i) = s:(i,s) \notin \Pi
+\]
+\noindent
+With this sort of algorithms, we study $Pr((i,s) \notin \Pi)$ in function of $|i| = n$. We have a set of binary random variable that indicate when the algorithm is correct or not (a variable $\forall$ input). \\ \noindent
+This category of algorithms for decision problem can be divided in:
+\begin{enumerate}
+    \item \textit{one-sided}: the algorithm is wrong only on one answer. For example, the algorithm is right in all the \textit{Yes} instances, but it can be wrong in the \textit{No} instances;
+    \item \textit{two-sided}: the algorithm could be wrong in both the answers. That means, the algorithm could be wrong both in the \textit{Yes} instances and in the \textit{No} instances.
+\end{enumerate}

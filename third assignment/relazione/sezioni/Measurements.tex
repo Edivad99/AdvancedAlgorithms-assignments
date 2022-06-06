@@ -1,0 +1,52 @@
+\section{Program's features and measurements}
+
+\subsection{Program's features}
+
+\subsubsection{Introduction and setting up}
+The program was written entirely in C\# mainly for convenience, in fact from the standard library, it's possible to use several useful data structures such as \textbf{SortedSet} used in Stoer and Wagner's algorithm.
+Before running the program, follow these steps:
+\begin{enumerate}
+    \item Install \textbf{.NET 6.0};
+    \item Be sure to change the \verb|PATH_FOLDER| variable inside \textit{Program.cs} with the own relative path to the dataset folder;
+    \item Open a terminal and type the following command:\\
+        \centerline{\textbf{dotnet run --project ThirdAssignment.csproj --configuration Release}}
+\end{enumerate}
+
+\subsubsection{Technical characteristics of the computer for measurements}
+The execution of the program and the relative measurements were carried out on the following machine:
+\begin{itemize}
+    \item \textbf{CPU}: Apple M1 Pro;
+    \item \textbf{RAM}: 16 GB.
+\end{itemize}
+
+\subsection{Introduction to measurements}
+The measurements were made through the implementation of two distinct methods, one for each algorithm. \\ \noindent
+The measurements were made after retrieving and loading the entire dataset into the graph data structure, as mentioned 
+previously. Each method saves the results of the program in a different file, one for each algorithm.\\
+\noindent
+The single measurement is organized sequentially by running the entire dataset based on the type of algorithm. 
+The method \verb|ExportKargerAsync| applies the \textit{Karger} algorithm to the input graph and proceeds as follows:
+\begin{enumerate}
+    \item Executes once the Karger's algorithm to the graph and save the following information:
+        \begin{itemize}
+            \item Number of vertices;
+            \item Number of edges;
+            \item Minimum cut;
+            \item K repetition;
+            \item Discovery time;
+            \item Discovery iteration;
+            \item Execution time;
+            \item Number of execution in 1 second.
+        \end{itemize}
+    \item Continue to run the algorithm until the total execution time became greater or equal to 1 second;
+    \item Calculate the final execution time as an average between the total sum of the execution time and the number of repetitions of the same algorithm;
+    \item Save in append to the output file in \textbf{csv} format.
+\end{enumerate}
+We also implemented \verb|ExportStoerWagnerAsync| where we do the same process and we save the following information:
+\begin{itemize}
+    \item Number of vertices;
+    \item Number of edges;
+    \item Minimum cut;
+    \item Execution time;
+    \item Number of execution in 1 second.
+\end{itemize}
